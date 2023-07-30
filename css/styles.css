@@ -1,0 +1,60 @@
+/* sidebar */
+#sidebar {
+    position : fixed;
+    left : 0px;
+    top : 0px;
+    z-index : 9999;
+    width : 4rem;
+    height : 100%;
+    background-color: #3b8f89;
+    padding-top : 64px;
+}
+
+div.profileSlot {
+    position : fixed;
+    display : inline-block;
+    width :  3rem;
+    height : 3rem;
+    left : 0.5rem;
+    border-radius: 0.75rem;
+    background-color : #3b8f89;
+    background-size : cover;
+}
+
+div.profileSlot + div.profileSlot {
+    margin-top : 50px;
+}
+
+a.profileSlot {
+    position : fixed;
+    display : inline-block;
+    width :  3rem;
+    height : 3rem;
+    left : 0.5rem;
+    border-radius: 0.75rem;
+    background-color : transparent;
+}
+
+/* removes premium ad banner */
+.jss6 {
+    display: none;
+}
+
+/* improvements to search bar */
+#search {
+    height: 90%;
+    margin-top: 0.2rem;
+    border-radius: 1.5rem;
+    background: #272a2b;
+    color: #bbb;
+}
+
+#search:hover {
+    background: #2c2f30;
+    transition: 0.2s;
+}
+
+.input-field input[type=search] ~ .label-icon {
+    color: #bbb !important;
+}
+
