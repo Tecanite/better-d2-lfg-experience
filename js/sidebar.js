@@ -55,19 +55,19 @@ async function sidebarProfilesAdd(sidebarProfiles) {
                       await fetch(api_url + "/Destiny2/" + platform + "/Profile/"+ id +"/?components=200", requestOptions)
                             .then(response => response.json())
                             .then(result => {
-                                  console.log(result)
+                                  // console.log(result)
                                   var timestamps = []
                                   let charactersData = Object.entries(result.Response.characters.data)
-                                  console.log(charactersData)
+                                  // console.log(charactersData)
                                   charactersData.forEach(character => {
                                         let timestamp = character[1].dateLastPlayed
                                         timestamp = timestamp.replace(/\D/g,'')
                                         timestamps.push(parseInt(timestamp))
                                   })
-                                  console.log(timestamps)
+                                  // console.log(timestamps)
                                   var lastPlayedCharacter = timestamps.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
                                   emblemUrl = charactersData[lastPlayedCharacter][1].emblemPath
-                                  console.log(emblemUrl)
+                                  // console.log(emblemUrl)
                                   profileSlot.style.backgroundImage = "url('https://www.bungie.net" + emblemUrl + "')"
                             })
                             .catch(error => console.log('error', error));
