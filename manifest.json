@@ -29,6 +29,7 @@
             "js": [
                 "js/jquery-3.7.0.min.js",
                 "js/sidebar.js",
+                "js/container.js",
                 "js/content_script.js"
             ]
         }
@@ -36,10 +37,11 @@
     "web_accessible_resources": [
         {
             "resources": [
-                "js/sidebar.js"
+                "js/sidebar.js",
+                "js/container.js"
             ],
             "matches": [
-                "<all_urls>"
+                "*://raid.report/*"
             ]
         }
     ]
