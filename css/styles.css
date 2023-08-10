@@ -34,9 +34,30 @@ a.profileSlot {
     background-color: transparent;
 }
 
-/* removes premium ad banner */
-.jss6 {
-    display: none;
+a.profileSlot:before {
+    content: attr(data-hover);
+    visibility: hidden;
+    opacity: 0;
+    width: fit-content;
+    max-width: 300px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px 5px;
+    transition: opacity 0.5s ease-in-out;
+
+    white-space: nowrap;
+
+    position: absolute;
+    z-index: 1;
+    left: 110%;
+    top: 5px;
+}
+
+a.profileSlot:hover:before {
+    opacity: 1;
+    visibility: visible;
 }
 
 /* improvements to search bar */
@@ -87,40 +108,62 @@ a.profileSlot {
     font-weight: 400 !important;
 }
 
-.raid-card-image {
+.card .raid-card-image {
     padding-top: 33% !important;
 }
 
-table {
+.card table {
     font-size: 0.6vw !important;
 }
 
-.key-stats {
+.card .key-stats {
     font-size: 0.6vw !important;
     padding: 0 0.1vw !important;
 }
 
-.small-bottom-margin {
+.card .small-bottom-margin {
     margin-bottom: 0.1rem !important;
 }
 
-.row {
+.card .row {
     margin-bottom: 5px !important;
 }
 
-td,
-th {
+.card td,
+.card th {
     padding: 0.2rem 0.2rem 0 0 !important;
 }
 
-.drr-badges {
+.card .drr-badges {
     z-index: 1;
     position: relative;
     top: -2vh;
 }
 
-span.badge {
+.card span.badge {
     line-height: 2vh !important;
     height: 2vh !important;
     border: 0.1rem;
+}
+
+.card hr.row-bottom-margin {
+    margin-bottom: 0.2rem !important;
+}
+
+/* weekly characters */
+
+.card div.top-spacing {
+    margin-top: 0.2rem !important;
+}
+
+.card div.top-spacing i.material-icons {
+    font-size: 16px;
+}
+
+.card div.top-spacing label.label-heading {
+    font-size: 0.7rem !important;
+}
+
+.card div.top-spacing div.col label {
+    font-size: 0.6rem !important;
 }

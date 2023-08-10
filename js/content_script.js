@@ -8,15 +8,25 @@ scriptEl.src = chrome.runtime.getURL('./js/container.js');
 document.head.appendChild(scriptEl);
 
 
-/* update layout of page */
-var removeUselessStats = true;
+/* update layout of page with observer */
+const removeUselessStats = true;
+
+const targetNode = document.getElementById("root");
+const config = { attributes: true, childList: true, subtree: true };
+const callback = (mutationList, observer) => {
+    updatePage()
+    updateLayout(removeUselessStats)
+}
+
+const observer = new MutationObserver(callback)
+
 updatePage()
-updateLayout()
-padNonMasterOrPrestigeRaids()
-removeUselessStats ? removeStats() : 0
+updateLayout(removeUselessStats)
+
 
 
 /* adding of sidebar */
 var sidebarProfiles = ["Tecanite#2848", "MiNico#1510", "Schnakeee#8573", "Blitzy#8475", "Xim Apex ez Clap#2290"]
 sidebarProfilesAdd(sidebarProfiles)
 
+observer.observe(targetNode, config)

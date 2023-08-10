@@ -3,18 +3,33 @@ function updatePage() {
     $('body').css({
         'padding-left': '4rem'
     });
-    var sidebar = document.createElement('div')
-    sidebar.id = "sidebar"
-    $('body').append(sidebar);
+    
+    var sidebar = document.getElementById("sidebar")
+
+    if (sidebar == null) {
+        var sidebar = document.createElement('div')
+        sidebar.id = "sidebar"
+        $('body').append(sidebar);
+    }
 
     /* remove ad banner */
     var adBanner = document.querySelector("div.jss6")
-    adBanner.parentElement.removeChild(adBanner)
+    if (adBanner != null) {
+        adBanner.parentElement.removeChild(adBanner)
+    }
+    var adBanner = document.querySelector("div.jss12")
+    if (adBanner != null) {
+        adBanner.parentElement.removeChild(adBanner)
+    }
 }
 
-function updateLayout() {
+function updateLayout(removeUselessStats) {
     /* add id to all raid cards and (3x4) => (2x6) */
     var rows = document.getElementsByClassName("row raid-row")
+
+    if (rows.length < 4) {
+        return
+    }
 
     rows[0].childNodes[0].id = "ron"
     rows[0].childNodes[1].id = "kf"
@@ -48,7 +63,10 @@ function updateLayout() {
     lev.id = "lev"
     rows[1].appendChild(lev)
 
-    rows[3].parentElement.removeChild(rows[3])
+    rows[2].parentElement.removeChild(rows[2])
+
+    padNonMasterOrPrestigeRaids()
+    removeStats(removeUselessStats)
 }
 
 function padNonMasterOrPrestigeRaids() {
@@ -62,9 +80,13 @@ function padNonMasterOrPrestigeRaids() {
     }
 }
 
-function removeStats() {
+function removeStats(removeUselessStats) {
+    if(!removeUselessStats) {
+        return
+    }
     tables = document.getElementsByClassName("centered")
     for (let i = 1; i < tables.length; i += 1) {
         tables[i].parentElement.removeChild(tables[i])
     }
 }
+
