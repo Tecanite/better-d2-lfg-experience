@@ -3,7 +3,7 @@ function updatePage() {
     $('body').css({
         'padding-left': '4rem'
     });
-    
+
     var sidebar = document.getElementById("sidebar")
 
     if (sidebar == null) {
@@ -81,7 +81,7 @@ function padNonMasterOrPrestigeRaids() {
 }
 
 function removeStats(removeUselessStats) {
-    if(!removeUselessStats) {
+    if (!removeUselessStats) {
         return
     }
     tables = document.getElementsByClassName("centered")
