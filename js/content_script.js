@@ -26,7 +26,7 @@ updateLayout(removeUselessStats)
 
 
 /* adding of sidebar */
-var sidebarProfiles = ['Tecanite#2848', 'MiNico#1510', 'Schnakeee#8573', 'Blitzy#8475',  'Failure By Design#5983', 'Xim Apex ez Clap#2290', 'Oryx\'s onlyfans#5947']
+var sidebarProfiles = ['Tecanite#2848', 'MiNico#1510', 'Schnakeee#8573', 'Blitzy#8475', 'Failure By Design#5983', 'Dr.Honk#4473','Xim Apex ez Clap#2290', 'Oryx\'s onlyfans#5947']
 sidebarProfilesAdd(sidebarProfiles)
 
 observer.observe(targetNode, config)
