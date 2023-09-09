@@ -27,25 +27,29 @@ function updateLayout(removeUselessStats) {
     /* add id to all raid cards and (3x4) => (2x6) */
     var rows = document.getElementsByClassName("row raid-row")
 
-    if (rows.length < 4) {
+    if (rows.length < 5) {
         return
     }
 
-    rows[0].childNodes[0].id = "ron"
-    rows[0].childNodes[1].id = "kf"
-    rows[0].childNodes[2].id = "vow"
-    rows[0].childNodes[3].id = "vog"
+    rows[0].childNodes[0].id = "ce"
+    rows[0].childNodes[1].id = "ron"
+    rows[0].childNodes[2].id = "kf"
+    rows[0].childNodes[3].id = "vow"
+
+    var vog = rows[1].firstElementChild;
+    vog.id = "vog"
+    rows[0].appendChild(vog)
 
     var dsc = rows[1].firstElementChild;
     dsc.id = "dsc"
     rows[0].appendChild(dsc)
 
-    var gos = rows[1].firstElementChild;
-    gos.id = "gos"
-    rows[0].appendChild(gos)
+    rows[1].childNodes[0].id = "gos"
+    rows[1].childNodes[1].id = "lw"
 
-    rows[1].childNodes[0].id = "lw"
-    rows[1].childNodes[1].id = "cos"
+    var cos = rows[2].firstElementChild;
+    cos.id = "cos"
+    rows[1].appendChild(cos)
 
     var sotp = rows[2].firstElementChild;
     sotp.id = "sotp"
@@ -59,12 +63,12 @@ function updateLayout(removeUselessStats) {
     eow.id = "eow"
     rows[1].appendChild(eow)
 
-    var lev = rows[2].firstElementChild;
+    var lev = rows[3].firstElementChild;
     lev.id = "lev"
-    rows[1].appendChild(lev)
+    rows[2].appendChild(lev)
 
-    rows[2].parentElement.removeChild(rows[2])
-
+    rows[3].parentNode.removeChild(rows[3])
+    
     padNonMasterOrPrestigeRaids()
     removeStats(removeUselessStats)
 }
