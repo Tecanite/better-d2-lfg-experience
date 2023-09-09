@@ -68,7 +68,7 @@ function updateLayout(removeUselessStats) {
     rows[2].appendChild(lev)
 
     rows[3].parentNode.removeChild(rows[3])
-    
+
     padNonMasterOrPrestigeRaids()
     removeStats(removeUselessStats)
 }
