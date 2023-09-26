@@ -11,13 +11,18 @@
 }
 
 .FireteamListItem_itemFireteam__23iIE {
-    width: 50% !important;
+    width: 49.75% !important;
+    border-radius: 12px !important;
+    margin: 0.125%;
+}
+.FireteamListItem_itemFireteam__23iIE .FireteamListItem_itemFireteamCard__2dqPO:hover {
+    border-radius: 12px;
 }
 
-.FireteamListItem_itemFireteam__23iIE:nth-child(2n) {
-    border-left: 1px solid #2d3440;
+.FireteamListItem_itemFireteamCard__2dqPO {
+    border-bottom: initial !important;
 }
 
-.FireteamListItem_itemFireteam__23iIE:nth-last-child(2) .FireteamListItem_itemFireteamCard__2dqPO {
-    border-bottom: initial;
+.Fireteams_resultsSearchFireteams___FKF9 {
+    box-shadow: none !important;
 }
