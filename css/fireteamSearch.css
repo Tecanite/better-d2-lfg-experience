@@ -1,0 +1,23 @@
+.Grid_grid__3pTmE {
+    max-width: 95% !important;
+}
+
+.Grid_grid__3pTmE [class*=gridCol] {
+    max-width: 20% !important;
+}
+
+.Grid_grid__3pTmE .Grid_gridCol3__1gQSY {
+    min-width: 20% !important;
+}
+
+.FireteamListItem_itemFireteam__23iIE {
+    width: 50% !important;
+}
+
+.FireteamListItem_itemFireteam__23iIE:nth-child(2n) {
+    border-left: 1px solid #2d3440;
+}
+
+.FireteamListItem_itemFireteam__23iIE:nth-last-child(2) .FireteamListItem_itemFireteamCard__2dqPO {
+    border-bottom: initial;
+}

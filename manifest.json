@@ -32,6 +32,14 @@
                 "js/container.js",
                 "js/content_script.js"
             ]
+        },
+        {
+            "matches": [
+                "*://www.bungie.net/7/en/Fireteams/Search?*"
+            ],
+            "css": [
+                "css/fireteamSearch.css"
+            ]
         }
     ],
     "web_accessible_resources": [
