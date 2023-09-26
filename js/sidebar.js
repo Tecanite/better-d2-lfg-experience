@@ -37,8 +37,8 @@ async function sidebarProfilesAdd(sidebarProfiles) {
                               platform = result.Response[0].membershipType
                         }
                         id = result.Response[0].membershipId
-
-                        profileSlot.innerHTML = "<a href='https://raid.report/" + platforms[platform] + "/" + id + "' class='profileSlot'></a>"
+                        profileIdConverted = sidebarProfiles[i].replace("\'", "&#39;")
+                        profileSlot.innerHTML = "<a href='/" + platforms[platform] + "/" + id + "' class='profileSlot' data-hover = '" + profileIdConverted + "'></a>"
                         profileSlot.className = "profileSlot"
                         profileSlot.id = "profileSlot" + i
 
