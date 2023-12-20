@@ -39,7 +39,7 @@ async function sidebarProfilesAdd(sidebarProfiles) {
                               profileSlot.className = "profileSlot";
                               profileSlot.id = "profileSlot" + i;
                               profileSlot.style.backgroundImage = currentProfile[1];
-                              document.getElementById('sidebar').appendChild(profileSlot);
+                              document.getElementById("sidebar").appendChild(profileSlot);
                         } else {
                               console.log("cache miss :(");
                               var cache = [];
@@ -55,16 +55,16 @@ async function sidebarProfilesAdd(sidebarProfiles) {
                               });
                   
                               var requestOptions = {
-                                    method: 'POST',
+                                    method: "POST",
                                     headers: myHeaders,
                                     body: raw,
-                                    redirect: 'follow'
+                                    redirect: "follow"
                               };
                   
                               await fetch(api_url + "/Destiny2/SearchDestinyPlayerByBungieName/All/", requestOptions)
                                     .then(response => response.json())
                                     .then(async result => {
-                                          let platform, id
+                                          let platform, id;
                                           if (result.Response[0].crossSaveOverride != 0) {
                                                 platform = result.Response[0].crossSaveOverride
                                           } else {
@@ -72,7 +72,7 @@ async function sidebarProfilesAdd(sidebarProfiles) {
                                           }
                                           id = result.Response[0].membershipId
                                           profileIdConverted = sidebarProfiles[i].replace("\'", "&#39;")
-                                          profileSlot.innerHTML = "<a href='/" + platforms[platform] + "/" + id + "' class='profileSlot' data-hover = '" + profileIdConverted + "' onclick='return false;'></a>"
+                                          profileSlot.innerHTML = "<a href='/" + platforms[platform] + "/" + id + "' class='profileSlot' data-hover = '" + profileIdConverted + "'></a>"
                                           profileSlot.className = "profileSlot";
                                           profileSlot.id = "profileSlot" + i;
 
@@ -82,9 +82,9 @@ async function sidebarProfilesAdd(sidebarProfiles) {
                                           myInnerHeaders.append("x-api-key", "41bf571cea84481eb853af82101e7230");
                   
                                           var requestOptions = {
-                                                method: 'GET',
+                                                method: "GET",
                                                 headers: myInnerHeaders,
-                                                redirect: 'follow'
+                                                redirect: "follow"
                                           };
                   
                                           var emblemUrl;
@@ -97,7 +97,7 @@ async function sidebarProfilesAdd(sidebarProfiles) {
                                                       // console.log(charactersData)
                                                       charactersData.forEach(character => {
                                                             let timestamp = character[1].dateLastPlayed
-                                                            timestamp = timestamp.replace(/\D/g, '')
+                                                            timestamp = timestamp.replace(/\D/g, "")
                                                             timestamps.push(parseInt(timestamp))
                                                       })
                                                       // console.log(timestamps)
@@ -108,13 +108,13 @@ async function sidebarProfilesAdd(sidebarProfiles) {
 
                                                       cache.push(profileSlot.style.backgroundImage);
                                                 })
-                                                .catch(error => console.log('error', error));
+                                                .catch(error => console.log("error", error));
                                     })
                                     .then(() => {
-                                          document.getElementById('sidebar').appendChild(profileSlot);
+                                          document.getElementById("sidebar").appendChild(profileSlot);
                                           sidebarCache.set(sidebarProfiles[i], cache);
                                     })
-                                    .catch(error => console.log('error', error))
+                                    .catch(error => console.log("error", error))
                               }
                   }
             })

@@ -63,19 +63,40 @@ const restoreOptions = () => {
 
 
 const addProfile = () => {
-    let sidebarList = document.getElementById('rr-sidebar-profiles');
-    let profile = document.createElement('li');
+    let sidebarList = document.getElementById("rr-sidebar-profiles");
+    let profile = document.createElement("li");
     profile.contentEditable = "true";
-    profile.innerHTML = "Edit ME!";
+    profile.innerHTML = "BungieName#id";
     sidebarList.appendChild(profile);
 };
 
 const removeLastProfile = () => {
-    let sidebarList = document.getElementById('rr-sidebar-profiles');
+    let sidebarList = document.getElementById("rr-sidebar-profiles");
     sidebarList.removeChild(sidebarList.lastChild);
 };
+
+const clearSidebarCache = () => {
+    console.log("clearing sidebar cache...")
+    chrome.storage.local.get(["sidebarCache"])
+            .then((result) => {
+                  if (result.sidebarCache != null) {
+                        sidebarCache = new Map(Object.entries(result.sidebarCache));
+                  } else {
+                        sidebarCache = new Map();
+                  }
+            })
+            .then(() => {
+                sidebarCache.clear()
+            })
+            .then(() => {
+                chrome.storage.local.set({sidebarCache: Object.fromEntries(sidebarCache)}).then(() => {
+                    console.log("cleared sidebar cache!");
+              });
+            })
+}
   
-document.addEventListener('DOMContentLoaded', restoreOptions);
-document.getElementById('save').addEventListener('click', saveOptions);
-document.getElementById('addProfile').addEventListener('click', addProfile);
-document.getElementById('removeProfile').addEventListener('click', removeLastProfile);
+document.addEventListener("DOMContentLoaded", restoreOptions);
+document.getElementById("save").addEventListener("click", saveOptions);
+document.getElementById("addProfile").addEventListener("click", addProfile);
+document.getElementById("removeProfile").addEventListener("click", removeLastProfile);
+document.getElementById("clearSidebarCache").addEventListener("click", clearSidebarCache);
