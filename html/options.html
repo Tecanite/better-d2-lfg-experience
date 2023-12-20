@@ -1,0 +1,26 @@
+<!--src: https://developer.chrome.com/docs/extensions/develop/ui/options-page?hl=d-->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="../css/options.css" />
+    <title>My Test Extension Options</title>
+  </head>
+  <body>
+    <div>
+      <b>raid.report sidebar profiles</b>
+      <div></div>
+      <button id="addProfile"> Add profile </button>
+      <button id="removeProfile"> Remove last profile </button>
+      <ul id="rr-sidebar-profiles">
+      </ul>
+    </div>
+    
+
+    <div id="status"></div>
+    <button id="save">Save</button>
+    
+    <script src="../js/options.js"></script>
+    <script src="../js/jquery-3.7.0.min.js"></script>
+  </body>
+</html>

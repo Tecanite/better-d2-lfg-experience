@@ -1,23 +1,25 @@
 {
     "manifest_version": 3,
     "name": "Better raid.report",
-    "description": "Adds useful features to Destiny 2 raid.report",
+    "description": "Adds useful features to Destiny 2 raid.report and Bungie fireteam search",
     "version": "0.1",
     "permissions": [
         "contextMenus",
         "scripting",
         "activeTab",
         "tabs",
-        "webRequest"
+        "webRequest",
+        "storage"
     ],
     "host_permissions": [
         "https://www.bungie.net/Platform/*"
     ],
     "icons": {
-        "16": "/images/rr16.png",
-        "48": "/images/rr48.png",
-        "128": "/images/rr128.png"
+        "16": "images/rr16.png",
+        "48": "images/rr48.png",
+        "128": "images/rr128.png"
     },
+    "options_page": "html/options.html",
     "content_scripts": [
         {
             "matches": [
@@ -28,14 +30,14 @@
             ],
             "js": [
                 "js/jquery-3.7.0.min.js",
-                "js/sidebar.js",
-                "js/container.js",
-                "js/content_script.js"
+                "js/rr-sidebar.js",
+                "js/rr-layout.js",
+                "js/rr-script.js"
             ]
         },
         {
             "matches": [
-                "*://www.bungie.net/7/en/Fireteams/Search?*"
+                "*://www.bungie.net/7/*/Fireteams/Search?*"
             ],
             "css": [
                 "css/fireteamSearch.css"
@@ -45,8 +47,8 @@
     "web_accessible_resources": [
         {
             "resources": [
-                "js/sidebar.js",
-                "js/container.js"
+                "js/rr-sidebar.js",
+                "js/rr-layout.js"
             ],
             "matches": [
                 "*://raid.report/*"

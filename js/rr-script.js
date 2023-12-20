@@ -1,10 +1,10 @@
 /* add scripts to page */
 var scriptEl = document.createElement('script');
-scriptEl.src = chrome.runtime.getURL('./js/sidebar.js');
+scriptEl.src = chrome.runtime.getURL('./js/rr-sidebar.js');
 document.head.appendChild(scriptEl);
 
 var scriptEl = document.createElement('script');
-scriptEl.src = chrome.runtime.getURL('./js/container.js');
+scriptEl.src = chrome.runtime.getURL('./js/rr-layout.js');
 document.head.appendChild(scriptEl);
 
 
@@ -26,7 +26,11 @@ updateLayout(removeUselessStats)
 
 
 /* adding of sidebar */
-var sidebarProfiles = ['Tecanite#2848', 'MiNico#1510', 'Schnakeee#8573', 'Blitzy#8475', 'Failure By Design#5983', 'Dr.Honk#4473', 'Xim Apex ez Clap#2290', 'Oryx\'s onlyfans#5947']
-sidebarProfilesAdd(sidebarProfiles)
+chrome.storage.local.get(["sidebarProfiles"]).then((result) => {
+    let sidebarProfiles = result.sidebarProfiles;
+    sidebarProfilesAdd(sidebarProfiles)
+    
+
+});
 
 observer.observe(targetNode, config)

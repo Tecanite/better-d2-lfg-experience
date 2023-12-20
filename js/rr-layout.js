@@ -24,7 +24,7 @@ function updatePage() {
 }
 
 function updateLayout(removeUselessStats) {
-    /* add id to all raid cards and (3x4) => (2x6) */
+    /* add id to all raid cards and (3x4) => (3x6) */
     var rows = document.getElementsByClassName("row raid-row")
 
     if (rows.length < 5) {
