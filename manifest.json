@@ -1,8 +1,8 @@
 {
     "manifest_version": 3,
-    "name": "Better raid.report",
-    "description": "Adds useful features to Destiny 2 raid.report and Bungie fireteam search",
-    "version": "0.1",
+    "name": "better d2 lfg experience",
+    "description": "adds useful features to destiny 2 raid.report and bungie fireteam search",
+    "version": "0.2",
     "permissions": [
         "contextMenus",
         "scripting",
@@ -26,6 +26,7 @@
                 "*://raid.report/*/*"
             ],
             "css": [
+                "css/sidebar.css",
                 "css/styles.css"
             ],
             "js": [
@@ -48,7 +49,8 @@
         {
             "resources": [
                 "js/rr-sidebar.js",
-                "js/rr-layout.js"
+                "js/rr-layout.js",
+                "css/sidebar.css"
             ],
             "matches": [
                 "*://raid.report/*"
