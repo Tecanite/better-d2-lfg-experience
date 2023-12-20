@@ -7,6 +7,13 @@ var scriptEl = document.createElement('script');
 scriptEl.src = chrome.runtime.getURL('./js/rr-layout.js');
 document.head.appendChild(scriptEl);
 
+/* get saved settings */
+chrome.storage.local.get(["dynamicLayout", "minimalLayout", "compactLayout", "modernLayout", "sidebarEnabled", "removeKDA", "sidebarProfiles"]).then((settings) => {
+    if (settings.sidebarEnabled) {
+        addSidebar()
+        sidebarProfilesAdd(settings.sidebarProfiles)
+    }
+});
 
 /* update layout of page with observer */
 const removeUselessStats = true;
@@ -23,14 +30,6 @@ const observer = new MutationObserver(callback)
 updatePage()
 updateLayout(removeUselessStats)
 
-
-
-/* adding of sidebar */
-chrome.storage.local.get(["sidebarProfiles"]).then((result) => {
-    let sidebarProfiles = result.sidebarProfiles;
-    sidebarProfilesAdd(sidebarProfiles)
-    
-
-});
+// });
 
 observer.observe(targetNode, config)
