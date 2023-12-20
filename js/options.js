@@ -4,19 +4,30 @@
 
 // Saves options to chrome.storage
 const saveOptions = () => {
-    let profileList = document.getElementById('rr-sidebar-profiles');
-    let profileElements = profileList.getElementsByTagName('li')
+    var dynamic = document.getElementById("layout-dynamic").checked;
+    var minimal = document.getElementById("layout-minimal").checked;
+    var compact = document.getElementById("layout-compact").checked;
+    var modern = document.getElementById("layout-modern").checked;
+
+    var sidebarEnabled = document.getElementById("sidebar-toggle").checked;
+    console.log(sidebarEnabled);
+    var removeKDA = document.getElementById("remove-kda").checked;
+    
+    let profileList = document.getElementById("rr-sidebar-profiles");
+    let profileElements = profileList.getElementsByTagName("li");
     var profiles = [];
     for (let i = 0; i < profileElements.length; i++) {
-        profiles.push(profileElements[i].innerHTML);
+        if (profileElements[i].innerHTML != "") {
+            profiles.push(profileElements[i].innerHTML);
+        }
     }
     
-    chrome.storage.local.set({ sidebarProfiles: profiles }).then(() => {
-        console.log("Value is set");
-        const status = document.getElementById('status');
-        status.textContent = 'Options saved.';
+    chrome.storage.local.set({dynamicLayout: dynamic, minimalLayout: minimal, compactLayout: compact, modernLayout: modern, sidebarEnabled: sidebarEnabled, removeKDA: removeKDA, sidebarProfiles: profiles}).then(() => {
+        console.log("Saved Options!");
+        const status = document.getElementById("status");
+        status.textContent = "Options saved.";
         setTimeout(() => {
-            status.textContent = '';
+            status.textContent = "";
         }, 1000);
     });
 
@@ -25,11 +36,20 @@ const saveOptions = () => {
 // Restores select box and checkbox state using the preferences
 // stored in chrome.storage.
 const restoreOptions = () => {
-    chrome.storage.local.get(["sidebarProfiles"]).then((result) => {
+    chrome.storage.local.get(["dynamicLayout", "minimalLayout", "compactLayout", "modernLayout", "sidebarEnabled", "removeKDA", "sidebarProfiles"]).then((result) => {
+        console.log(result);
+        document.getElementById("layout-dynamic").checked = result.dynamicLayout;
+        document.getElementById("layout-minimal").checked = result.minimalLayout;
+        document.getElementById("layout-compact").checked = result.compactLayout;
+        document.getElementById("layout-modern").checked = result.modernLayout;
+
+        document.getElementById("sidebar-toggle").checked = result.sidebarEnabled;
+        document.getElementById("remove-kda").checked = result.removeKDA;
+
         let sidebarProfiles = result.sidebarProfiles;
-        let profileList = document.getElementById('rr-sidebar-profiles');
+        let profileList = document.getElementById("rr-sidebar-profiles");
         for (let i = 0; i < sidebarProfiles.length; i++) {
-            let profile = document.createElement('li');
+            let profile = document.createElement("li");
             profile.contentEditable = "true";
             profile.innerHTML = sidebarProfiles[i];
             profileList.appendChild(profile);
