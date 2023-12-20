@@ -1,17 +1,4 @@
 function updatePage() {
-    /* make room for sidebar and add it */
-    $('body').css({
-        'padding-left': '4rem'
-    });
-
-    var sidebar = document.getElementById("sidebar")
-
-    if (sidebar == null) {
-        var sidebar = document.createElement('div')
-        sidebar.id = "sidebar"
-        $('body').append(sidebar);
-    }
-
     /* remove ad banner */
     var adBanner = document.querySelector("div.jss6")
     if (adBanner != null) {
