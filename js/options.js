@@ -22,7 +22,10 @@ const saveOptions = () => {
         }
     }
     
-    chrome.storage.local.set({dynamicLayout: dynamic, minimalLayout: minimal, compactLayout: compact, modernLayout: modern, sidebarEnabled: sidebarEnabled, removeKDA: removeKDA, sidebarProfiles: profiles}).then(() => {
+    var fireteamGrid = document.getElementById("fireteam-grid").checked;
+    var fireteamReports = document.getElementById("fireteam-report-buttons").checked;
+
+    chrome.storage.local.set({dynamicLayout: dynamic, minimalLayout: minimal, compactLayout: compact, modernLayout: modern, sidebarEnabled: sidebarEnabled, removeKDA: removeKDA, sidebarProfiles: profiles, fireteamSearchGrid: fireteamGrid, fireteamProfileReports: fireteamReports}).then(() => {
         console.log("Saved Options!");
         const status = document.getElementById("status");
         status.textContent = "Options saved.";
@@ -36,7 +39,7 @@ const saveOptions = () => {
 // Restores select box and checkbox state using the preferences
 // stored in chrome.storage.
 const restoreOptions = () => {
-    chrome.storage.local.get(["dynamicLayout", "minimalLayout", "compactLayout", "modernLayout", "sidebarEnabled", "removeKDA", "sidebarProfiles"]).then((result) => {
+    chrome.storage.local.get(null).then((result) => {
         console.log(result);
         document.getElementById("layout-dynamic").checked = result.dynamicLayout;
         document.getElementById("layout-minimal").checked = result.minimalLayout;
@@ -55,11 +58,10 @@ const restoreOptions = () => {
             profileList.appendChild(profile);
         }
 
+        document.getElementById("fireteam-grid").checked = result.fireteamSearchGrid;
+        document.getElementById("fireteam-report-buttons").checked = result.fireteamProfileReports;
     });
 };
-
-
-
 
 
 const addProfile = () => {
