@@ -6,15 +6,23 @@ var platforms = {
       3: "pc"
 }
 
-function addSidebar() {
+function addSidebar(profiles) {
       let main = document.getElementsByTagName("main");
-      main[0].firstChild.style.paddingLeft = "4rem";
+      if (main != null) {
+            main[0].firstChild.style.paddingLeft = "4rem";
+      }
       
       let sidebar = document.getElementById("sidebar");
       if (sidebar == null) {
             sidebar = document.createElement("div")
             sidebar.id = "sidebar"
             main[0].appendChild(sidebar);
+
+            if (profiles == null) {
+                  sidebarProfilesAdd([]);
+            } else {
+                  sidebarProfilesAdd(profiles)
+            }
       }
 }
 

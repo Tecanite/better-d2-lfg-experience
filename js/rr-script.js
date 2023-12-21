@@ -9,29 +9,21 @@ document.head.appendChild(scriptEl);
 
 /* get saved settings */
 chrome.storage.local.get(["dynamicLayout", "minimalLayout", "compactLayout", "modernLayout", "sidebarEnabled", "removeKDA", "sidebarProfiles"]).then((settings) => {
-    if (settings.sidebarEnabled) {
-        addSidebar()
-        if (settings.sidebarProfiles == null) {
-            sidebarProfilesAdd([]);
-        } else {
-            sidebarProfilesAdd(settings.sidebarProfiles)
+    /* update layout of page with observer */
+    const targetNode = document.getElementById("root");
+    const config = { attributes: true, childList: true, subtree: true };
+    const rrLayoutCallback = (mutationList, observer) => {
+        if (settings.sidebarEnabled) {
+            addSidebar(settings.sidebarProfiles)
         }
+        
+        updatePage();
+        updateLayout(settings.compactLayout);
     }
+
+    const rrLayoutObserver = new MutationObserver(rrLayoutCallback);
+    rrLayoutObserver.observe(targetNode, config);
 });
 
-/* update layout of page with observer */
-const removeUselessStats = true;
 
-const targetNode = document.getElementById("root");
-const config = { attributes: true, childList: true, subtree: true };
-const callback = (mutationList, observer) => {
-    updatePage()
-    updateLayout(removeUselessStats)
-}
 
-const observer = new MutationObserver(callback)
-
-updatePage()
-updateLayout(removeUselessStats)
-
-observer.observe(targetNode, config)
