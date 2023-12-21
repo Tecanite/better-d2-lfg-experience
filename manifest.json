@@ -31,8 +31,8 @@
             ],
             "js": [
                 "js/jquery-3.7.0.min.js",
-                "js/rr-sidebar.js",
                 "js/rr-layout.js",
+                "js/rr-sidebar.js",
                 "js/rr-script.js"
             ]
         },
@@ -40,8 +40,9 @@
             "matches": [
                 "*://www.bungie.net/7/*/Fireteams/Search?*"
             ],
-            "css": [
-                "css/fireteamSearch.css"
+            "js": [
+                "js/fireteam-quickactions.js",
+                "js/fireteam-script.js"
             ]
         }
     ],
@@ -54,6 +55,17 @@
             ],
             "matches": [
                 "*://raid.report/*"
+            ]
+        },
+        {
+            "resources": [
+                "js/fireteam-quickactions.js",
+                "css/fireteamSearch.css",
+                "css/fireteam-player-reports.css",
+                "css/fireteam-search-grid.css"
+            ],
+            "matches": [
+                "*://www.bungie.net/*"
             ]
         }
     ]
