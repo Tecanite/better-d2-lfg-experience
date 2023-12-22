@@ -8,26 +8,41 @@
   </head>
   <body>
     <h1>better-d2-lfg-experience settings</h1>
-
     <h2>raid.report options</h2>
-
+    <h3>raid.report sidebar</h3>
     <label>
       <input type="checkbox" id="sidebar-toggle">
       Enable raid.report sidebar
     </label>
+
+    <h3>raid.report sidebar profiles</h3> 
+      <button id="addProfile"> Add profile </button>
+      <button id="removeProfile"> Remove last profile </button>
+      <ul id="rr-sidebar-profiles">
+      </ul>
+
+    <h3>raid.report runs together badge</h3>
+    <label>
+      <input type="checkbox" id="runs-together-enable">
+      Enable raid.report runs together badge
+    </label>
+    <br>
+    <br>
+    <label for="own-bungie-id">
+      Your Bungie ID: 
+      <input type="text" id="own-bungie-id" name="own-bungie-id">
+    </label>
+    <div id="runs-together-warn" style="color: red"> 
+      please load your own raid.report once to cache runs 
+    </div>
+
+
+
+    <h3>raid.report layout</h3>
     <label>
       <input type="checkbox" id="remove-kda">
-      Remove K/D/A-Stats from raid.report
+      Remove K/D/A-Stats
     </label>
-
-    <h3>raid.report sidebar profiles</h3>
-    <button id="addProfile"> Add profile </button>
-    <button id="removeProfile"> Remove last profile </button>
-    <ul id="rr-sidebar-profiles">
-    
-    </ul>
-    
-    <h3>raid.report layout</h3>
     <label>
       <input type="checkbox" id="layout-dynamic">
       Dynamic Layout
@@ -54,7 +69,8 @@
       <input type="checkbox" id="fireteam-report-buttons">
       Enable raid.report and dungeon.report shortcuts 
     </label>
-
+    <br>
+    <br>
     <div id="status"></div>
     <button id="save">Save</button>
 

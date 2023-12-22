@@ -4,14 +4,8 @@
 
 // Saves options to chrome.storage
 const saveOptions = () => {
-    var dynamic = document.getElementById("layout-dynamic").checked;
-    var minimal = document.getElementById("layout-minimal").checked;
-    var compact = document.getElementById("layout-compact").checked;
-    var modern = document.getElementById("layout-modern").checked;
-
+    // sidebar options
     var sidebarEnabled = document.getElementById("sidebar-toggle").checked;
-    console.log(sidebarEnabled);
-    var removeKDA = document.getElementById("remove-kda").checked;
     
     let profileList = document.getElementById("rr-sidebar-profiles");
     let profileElements = profileList.getElementsByTagName("li");
@@ -21,11 +15,28 @@ const saveOptions = () => {
             profiles.push(profileElements[i].innerHTML);
         }
     }
+
+    // runs together options
+    var enableRunsTogether = document.getElementById("runs-together-enable").checked;
+    var ownProfile = document.getElementById("own-bungie-id").value;
+
+    // raid.report layout options
+    var removeKDA = document.getElementById("remove-kda").checked;
+    var dynamic = document.getElementById("layout-dynamic").checked;
+    var minimal = document.getElementById("layout-minimal").checked;
+    var compact = document.getElementById("layout-compact").checked;
+    var modern = document.getElementById("layout-modern").checked;
     
+    // fireteam search layout options
     var fireteamGrid = document.getElementById("fireteam-grid").checked;
     var fireteamReports = document.getElementById("fireteam-report-buttons").checked;
 
-    chrome.storage.local.set({dynamicLayout: dynamic, minimalLayout: minimal, compactLayout: compact, modernLayout: modern, sidebarEnabled: sidebarEnabled, removeKDA: removeKDA, sidebarProfiles: profiles, fireteamSearchGrid: fireteamGrid, fireteamProfileReports: fireteamReports}).then(() => {
+
+    // saving
+    chrome.storage.local.set({  sidebarEnabled: sidebarEnabled, sidebarProfiles: profiles, 
+                                enableRunsTogether: enableRunsTogether, ownProfileID: ownProfile,
+                                removeKDA: removeKDA, dynamicLayout: dynamic, minimalLayout: minimal, compactLayout: compact, modernLayout: modern, 
+                                fireteamSearchGrid: fireteamGrid, fireteamProfileReports: fireteamReports}).then(() => {
         console.log("Saved Options!");
         const status = document.getElementById("status");
         status.textContent = "Options saved.";
@@ -39,16 +50,15 @@ const saveOptions = () => {
 // Restores select box and checkbox state using the preferences
 // stored in chrome.storage.
 const restoreOptions = () => {
-    chrome.storage.local.get(null).then((result) => {
+    chrome.storage.local.get({  sidebarEnabled: false, sidebarProfiles: [], 
+                                enableRunsTogether: false, ownProfileID: "Bungie#ID", cachedActivities: null,
+                                removeKDA: false, dynamicLayout: false, minimalLayout: false, compactLayout: false, modernLayout: false, 
+                                fireteamSearchGrid: false, fireteamProfileReports: false}).then((result) => {
         console.log(result);
-        document.getElementById("layout-dynamic").checked = result.dynamicLayout;
-        document.getElementById("layout-minimal").checked = result.minimalLayout;
-        document.getElementById("layout-compact").checked = result.compactLayout;
-        document.getElementById("layout-modern").checked = result.modernLayout;
 
+        // sidebar options
         document.getElementById("sidebar-toggle").checked = result.sidebarEnabled;
-        document.getElementById("remove-kda").checked = result.removeKDA;
-
+        
         let sidebarProfiles = result.sidebarProfiles;
         let profileList = document.getElementById("rr-sidebar-profiles");
         for (let i = 0; i < sidebarProfiles.length; i++) {
@@ -58,6 +68,22 @@ const restoreOptions = () => {
             profileList.appendChild(profile);
         }
 
+        // runs together options
+        document.getElementById("runs-together-enable").checked = result.enableRunsTogether;
+        document.getElementById("own-bungie-id").value = result.ownProfileID;
+        if (result.cachedActivities != null) {
+            let warnDiv= document.getElementById("runs-together-warn");
+            warnDiv.parentElement.removeChild(warnDiv);
+        }
+
+        // raid.report layout options
+        document.getElementById("remove-kda").checked = result.removeKDA;
+        document.getElementById("layout-dynamic").checked = result.dynamicLayout;
+        document.getElementById("layout-minimal").checked = result.minimalLayout;
+        document.getElementById("layout-compact").checked = result.compactLayout;
+        document.getElementById("layout-modern").checked = result.modernLayout;
+        
+        // fireteam search layout options
         document.getElementById("fireteam-grid").checked = result.fireteamSearchGrid;
         document.getElementById("fireteam-report-buttons").checked = result.fireteamProfileReports;
     });
