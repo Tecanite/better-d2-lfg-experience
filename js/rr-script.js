@@ -1,14 +1,14 @@
 /* add scripts to page */
 var scriptEl = document.createElement("script");
-scriptEl.src = chrome.runtime.getURL("./js/rr-sidebar.js");
-document.head.appendChild(scriptEl);
-
-var scriptEl = document.createElement("script");
 scriptEl.src = chrome.runtime.getURL("./js/rr-layout.js");
 document.head.appendChild(scriptEl);
 
+var scriptEl = document.createElement("script");
+scriptEl.src = chrome.runtime.getURL("./js/rr-sidebar.js");
+document.head.appendChild(scriptEl);
+
 /* get saved settings */
-chrome.storage.local.get(["dynamicLayout", "minimalLayout", "compactLayout", "modernLayout", "sidebarEnabled", "removeKDA", "sidebarProfiles"]).then((settings) => {
+chrome.storage.local.get(["sidebarEnabled", "sidebarProfiles", "removeKDA", "dynamicLayout", "minimalLayout", "compactLayout", "modernLayout"]).then((settings) => {
     /* update layout of page with observer */
     const targetNode = document.getElementById("root");
     const config = { attributes: true, childList: true, subtree: true };
@@ -18,12 +18,9 @@ chrome.storage.local.get(["dynamicLayout", "minimalLayout", "compactLayout", "mo
         }
         
         updatePage();
-        updateLayout(settings.compactLayout);
+        updateLayout(settings.removeKDA);
     }
 
     const rrLayoutObserver = new MutationObserver(rrLayoutCallback);
     rrLayoutObserver.observe(targetNode, config);
 });
-
-
-

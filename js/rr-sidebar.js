@@ -7,15 +7,17 @@ var platforms = {
 }
 
 function addSidebar(profiles) {
-      let main = document.getElementsByTagName("main");
-      if (main[0].firstChild != null) {
-            main[0].firstChild.style.paddingLeft = "4rem";
+      var main = document.getElementsByTagName("main");
+      var container = document.getElementsByClassName("side-container")
+      if(container[0] != null) {
+            container[0].style.paddingLeft = "4rem"
       }
-      
+
       let sidebar = document.getElementById("sidebar");
       if (sidebar == null) {
             sidebar = document.createElement("div")
             sidebar.id = "sidebar"
+            sidebar.className = "drr-color"
             main[0].appendChild(sidebar);
 
             if (profiles == null) {
