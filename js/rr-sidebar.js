@@ -8,7 +8,7 @@ var platforms = {
 
 function addSidebar(profiles) {
       let main = document.getElementsByTagName("main");
-      if (main != null) {
+      if (main[0].firstChild != null) {
             main[0].firstChild.style.paddingLeft = "4rem";
       }
       
