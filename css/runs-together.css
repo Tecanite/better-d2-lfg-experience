@@ -1,0 +1,17 @@
+.no-margin.card-row, .card-length {
+    max-width: 45rem;
+}
+
+.row .col.s6 {
+    width: 33%;
+}
+
+.col.s6.speed-rank-padding {
+    padding-right: 0.5rem!important;
+    padding-left: 0.5rem!important;
+}
+
+.col.s6.runs-together-padding {
+    padding-right: 0!important;
+    padding-left: 0.5rem!important;
+}

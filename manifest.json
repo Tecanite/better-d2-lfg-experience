@@ -12,7 +12,8 @@
         "storage"
     ],
     "host_permissions": [
-        "https://www.bungie.net/Platform/*"
+        "https://www.bungie.net/Platform/*",
+        "https://raid.report/*"
     ],
     "icons": {
         "16": "images/rr16.png",
@@ -30,11 +31,20 @@
                 "css/styles.css"
             ],
             "js": [
-                "js/jquery-3.7.0.min.js",
                 "js/rr-layout.js",
                 "js/rr-sidebar.js",
                 "js/rr-script.js"
             ]
+        },
+        {
+            "matches": [
+                "*://raid.report/*/*"
+            ],
+            "js": [
+                "js/rr-runs-together.js"
+            ],
+            "run_at": "document_start",
+            "all_frames": true
         },
         {
             "matches": [
@@ -51,7 +61,9 @@
             "resources": [
                 "js/rr-sidebar.js",
                 "js/rr-layout.js",
-                "css/sidebar.css"
+                "js/rr-runs-together-inject.js",
+                "css/sidebar.css",
+                "css/runs-together.css"
             ],
             "matches": [
                 "*://raid.report/*"
