@@ -10,8 +10,8 @@ document.head.appendChild(scriptEl);
 /* get saved settings */
 chrome.storage.local.get(["sidebarEnabled", "sidebarProfiles", "removeKDA", "dynamicLayout", "minimalLayout", "compactLayout", "modernLayout"]).then((settings) => {
     /* update layout of page with observer */
-    const targetNode = document.getElementById("root");
-    const config = { attributes: true, childList: true, subtree: true };
+    const rrLayoutTargetNode = document.getElementById("root");
+    const rrLayoutConfig = { attributes: false, childList: true, subtree: true };
     const rrLayoutCallback = (mutationList, observer) => {
         if (settings.sidebarEnabled) {
             addSidebar(settings.sidebarProfiles)
@@ -22,5 +22,5 @@ chrome.storage.local.get(["sidebarEnabled", "sidebarProfiles", "removeKDA", "dyn
     }
 
     const rrLayoutObserver = new MutationObserver(rrLayoutCallback);
-    rrLayoutObserver.observe(targetNode, config);
+    rrLayoutObserver.observe(rrLayoutTargetNode, rrLayoutConfig);
 });

@@ -1,5 +1,5 @@
 /**
- * TODO recolor dots blue
+ * TODO fix non-reload link breaking the thing
  * TODO fix hover on new badge
  */
 
@@ -226,7 +226,7 @@ function computeRunsTogether() {
             color = "rgb(158, 163, 176)";
         } else if (countRunsTogether >= 1) {
             tier = "Bronze";
-            title = "That name sound familiar";
+            title = "That name sounds familiar";
             color = "rgb(106, 91, 63)";
         } else {
             tier = "Unranked";
@@ -252,5 +252,45 @@ function computeRunsTogether() {
         runsTogetherCard.appendChild(innerDiv);
 
         cards[0].appendChild(runsTogetherCard);
+
+        recolorActivityDots();
     }
+}
+
+function recolorActivityDots() {
+    // get all dots and color
+    let activityDots = document.getElementsByTagName("svg");
+    console.log(activityDots);
+    for(let raidDots of activityDots) {
+        for(let node of raidDots.childNodes) {
+            if(node.nodeName == "a") {
+                console.log(node.nodeName);
+                let dotInstanceID = (node.href.baseVal.split("/")).at(2);
+                if(runsTogether.includes(dotInstanceID)) {
+                    node.firstChild.attributes.fill.value = "#03b6fc";
+                }
+            }
+            continue;
+        }
+    }
+
+    // observer to recolor changing activity dots
+    const recolorActivityDotsTargetNode = document.getElementById("side-container");
+    const recolorActivityDotsConfig = { attributes: true, childList: true, subtree: true };
+    const recolorActivityDotsCallback = (mutationList, observer) => {
+        for (let mutation of mutationList) {
+            if(mutation.type == "childList" && mutation.target.nodeName == "svg") {
+                for(let node of mutation.addedNodes) {
+                    let dotInstanceID = (node.href.baseVal.split("/")).at(2);
+                    if(runsTogether.includes(dotInstanceID)) {
+                        node.firstChild.attributes.fill.value = "#03b6fc";
+                    }
+                }
+            }
+        }
+        return;
+    }
+
+    const recolorActivityDotsObserver = new MutationObserver(recolorActivityDotsCallback);
+    recolorActivityDotsObserver.observe(recolorActivityDotsTargetNode, recolorActivityDotsConfig);
 }

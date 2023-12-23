@@ -10,7 +10,8 @@ function addSidebar(profiles) {
       var main = document.getElementsByTagName("main");
       var container = document.getElementsByClassName("side-container")
       if(container[0] != null) {
-            container[0].style.paddingLeft = "4rem"
+            container[0].style.paddingLeft = "4rem";
+            container[0].id = "side-container";
       }
 
       let sidebar = document.getElementById("sidebar");
