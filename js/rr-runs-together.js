@@ -253,11 +253,11 @@ function computeRunsTogether() {
 
         cards[0].appendChild(runsTogetherCard);
 
-        recolorActivityDots();
+        recolorActivityDots(runsTogether);
     }
 }
 
-function recolorActivityDots() {
+function recolorActivityDots(runsTogether) {
     // get all dots and color
     let activityDots = document.getElementsByTagName("svg");
     console.log(activityDots);
