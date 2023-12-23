@@ -2,6 +2,8 @@
     src: https://developer.chrome.com/docs/extensions/develop/ui/options-page?hl=d
 */
 
+//TODO remove cached activities
+
 // Saves options to chrome.storage
 const saveOptions = () => {
     // sidebar options
