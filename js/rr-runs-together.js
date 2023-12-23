@@ -226,7 +226,7 @@ function computeRunsTogether() {
             color = "rgb(158, 163, 176)";
         } else if (countRunsTogether >= 1) {
             tier = "Bronze";
-            title = "Heard that name somehere";
+            title = "That name sound familiar";
             color = "rgb(106, 91, 63)";
         } else {
             tier = "Unranked";
