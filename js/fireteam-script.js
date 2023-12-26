@@ -1,6 +1,6 @@
-/* get saved settings and add css / call functions accordingly*/
+/* get saved settings and add css / call functions accordingly */
 chrome.storage.local.get(["fireteamSearchGrid", "fireteamProfileReports"]).then((settings) => {
-    if(settings.fireteamSearchGrid) {
+    if (settings.fireteamSearchGrid) {
         var styleEl = document.createElement("link");
         styleEl.rel = "stylesheet";
         styleEl.type = "text/css";
@@ -8,7 +8,7 @@ chrome.storage.local.get(["fireteamSearchGrid", "fireteamProfileReports"]).then(
         document.head.appendChild(styleEl);
     }
 
-    if(settings.fireteamProfileReports) {
+    if (settings.fireteamProfileReports) {
         var scriptEl = document.createElement("script");
         scriptEl.src = chrome.runtime.getURL("./js/fireteam-quickactions.js");
         document.head.appendChild(scriptEl);
@@ -24,7 +24,7 @@ chrome.storage.local.get(["fireteamSearchGrid", "fireteamProfileReports"]).then(
         const addReportLinkButtonsCallback = (mutationList, observer) => {
             addReportLinkButtons();
         }
-    
+
         const addReportLinkButtonsObserver = new MutationObserver(addReportLinkButtonsCallback);
         addReportLinkButtonsObserver.observe(targetNode, config);
     }

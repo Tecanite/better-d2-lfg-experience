@@ -9,7 +9,7 @@ var platforms = {
 function addSidebar(profiles) {
       var main = document.getElementsByTagName("main");
       var container = document.getElementsByClassName("side-container")
-      if(container[0] != null) {
+      if (container[0] != null) {
             container[0].style.paddingLeft = "4rem";
             container[0].id = "side-container";
       }
@@ -43,7 +43,7 @@ async function sidebarProfilesAdd(sidebarProfiles) {
                   for (let i = 0; i < sidebarProfiles.length; ++i) {
                         var profileSlot = document.createElement('div')
 
-                        if(sidebarCache != null && sidebarCache.has(sidebarProfiles[i])) {
+                        if (sidebarCache != null && sidebarCache.has(sidebarProfiles[i])) {
                               console.log("cache hit :)");
                               let currentProfile = sidebarCache.get(sidebarProfiles[i]);
                               profileSlot.innerHTML = currentProfile[0];
@@ -55,23 +55,23 @@ async function sidebarProfilesAdd(sidebarProfiles) {
                               console.log("cache miss :(");
                               var cache = [];
                               const splitUsername = sidebarProfiles[i].split("#")
-            
+
                               var myHeaders = new Headers();
                               myHeaders.append("x-api-key", api_key);
                               myHeaders.append("Content-Type", "application/json");
-                  
+
                               var raw = JSON.stringify({
                                     "displayName": splitUsername[0],
                                     "displayNameCode": splitUsername[1]
                               });
-                  
+
                               var requestOptions = {
                                     method: "POST",
                                     headers: myHeaders,
                                     body: raw,
                                     redirect: "follow"
                               };
-                  
+
                               await fetch(api_url + "/Destiny2/SearchDestinyPlayerByBungieName/All/", requestOptions)
                                     .then(response => response.json())
                                     .then(async result => {
@@ -88,16 +88,16 @@ async function sidebarProfilesAdd(sidebarProfiles) {
                                           profileSlot.id = "profileSlot" + i;
 
                                           cache.push(profileSlot.innerHTML);
-                  
+
                                           var myInnerHeaders = new Headers();
                                           myInnerHeaders.append("x-api-key", "41bf571cea84481eb853af82101e7230");
-                  
+
                                           var requestOptions = {
                                                 method: "GET",
                                                 headers: myInnerHeaders,
                                                 redirect: "follow"
                                           };
-                  
+
                                           var emblemUrl;
                                           await fetch(api_url + "/Destiny2/" + platform + "/Profile/" + id + "/?components=200", requestOptions)
                                                 .then(response => response.json())
@@ -126,13 +126,13 @@ async function sidebarProfilesAdd(sidebarProfiles) {
                                           sidebarCache.set(sidebarProfiles[i], cache);
                                     })
                                     .catch(error => console.log("error", error))
-                              }
+                        }
                   }
             })
             .then(() => {
-                  chrome.storage.local.set({sidebarCache: Object.fromEntries(sidebarCache)}).then(() => {
+                  chrome.storage.local.set({ sidebarCache: Object.fromEntries(sidebarCache) }).then(() => {
                         console.log("saved sidebar cache!");
-                  });  
+                  });
             })
-              
+
 }

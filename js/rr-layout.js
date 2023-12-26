@@ -1,3 +1,8 @@
+/**
+ * TODO add all raid cards to single div, dynamic fitting with css if possible,
+ * TODO maybe change order
+ */
+
 function updatePage() {
     /* remove ad banner */
     var adBanner = document.querySelector("div.jss6")

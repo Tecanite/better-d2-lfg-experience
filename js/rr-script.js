@@ -16,7 +16,7 @@ chrome.storage.local.get(["sidebarEnabled", "sidebarProfiles", "removeKDA", "dyn
         if (settings.sidebarEnabled) {
             addSidebar(settings.sidebarProfiles)
         }
-        
+
         updatePage();
         updateLayout(settings.removeKDA);
     }
