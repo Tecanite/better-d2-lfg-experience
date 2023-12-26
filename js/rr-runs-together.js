@@ -3,6 +3,61 @@
  * TODO fix hover on new badge
  */
 
+// hashmap for efficient lookups
+class CustomHashMap {
+    constructor() {
+        this._buckets = new Array(128);
+    }
+  
+    _hash(key) {
+        let hash = 0;
+        for (let i = 0; i < key.length; i++) {
+            hash = (hash + key.charCodeAt(i)) % this._buckets.length;
+        }
+        return hash;
+    }
+  
+    set(key) {
+        const index = this._hash(key);
+        if (!this._buckets[index]) {
+            this._buckets[index] = [];
+        }
+  
+        const bucket = this._buckets[index];
+        bucket.push(key);
+    }
+  
+    contains(key) {
+        const index = this._hash(key);
+        const bucket = this._buckets[index];
+        if (!bucket) {
+            return undefined;
+        }
+  
+        for (let i = 0; i < bucket.length; i++) {
+            if (bucket[i] === key) {
+                return true;
+            }
+        }
+        return false;
+    }
+  
+    remove(key) {
+        const index = this._hash(key);
+        const bucket = this._buckets[index];
+        if (!bucket) {
+            return;
+        }
+  
+        for (let i = 0; i < bucket.length; i++) {
+            if (bucket[i] === key) {
+                bucket.splice(i, 1);
+                return;
+            }
+        }
+    }
+}
+
 var debug = false;
 
 var scriptEl = document.createElement("script");
@@ -16,7 +71,7 @@ var cachedActivities;
 var ownerID;
 var enableRunsTogether;
 
-/* get saved settings */
+// get saved settings
 chrome.storage.local.get(["ownProfileID", "cachedActivities", "enableRunsTogether"]).then((settings) => {
     ownerID = settings.ownProfileID;
     enableRunsTogether = settings.enableRunsTogether;
@@ -25,7 +80,6 @@ chrome.storage.local.get(["ownProfileID", "cachedActivities", "enableRunsTogethe
     } else {
         cachedActivities = null;
     }
-    // console.log(cachedActivities);
 });
 
 var allActivities;
@@ -124,7 +178,7 @@ function sortActivities() {
     activitiesMap.set("sos", sos);
     activitiesMap.set("eow", eow);
     activitiesMap.set("lev", lev);
-    // console.log(activitiesMap);
+ 
 
     if(debug) {
         console.log("ce:", ce);
@@ -141,6 +195,8 @@ function sortActivities() {
         console.log("eow:", eow);
         console.log("lev:", lev);
 
+        console.log(activitiesMap);
+
         filteredAllActivities = allActivities.filter(item => {
             var hash = item.activityDetails.directorActivityHash;
             var existing = [4179289725,1507509200,4103176774,156253568,2381413764,2918919505,1191701339,1374392663,2964135793,3257594522,2897223272,
@@ -151,7 +207,7 @@ function sortActivities() {
                             1875726950,3004605630,287649202];
             return !existing.includes(hash);
         })
-        console.log("not classified:", filteredAllActivities);
+        console.log("not filtered:", filteredAllActivities);
     }
 
     computeRunsTogether();
@@ -159,7 +215,6 @@ function sortActivities() {
 
 function computeRunsTogether() {
     if(ownerID == userID) {
-        //save map
         chrome.storage.local.set({cachedActivities: Object.fromEntries(activitiesMap)}).then(() => {
             console.log("saved activities!");  
         }); 
@@ -177,7 +232,7 @@ function computeRunsTogether() {
         
         
         var countRunsTogether = 0;
-        var runsTogether = [];
+        var runsTogether = new CustomHashMap();
         
         if(cachedActivities == null) {
             alert("Please visit own raid.report once and let it fully load to cache activities")
@@ -188,14 +243,11 @@ function computeRunsTogether() {
             value.forEach(item => {
                 if(cachedActivities.get(key).includes(item)) {
                     countRunsTogether++;
-                    runsTogether.push(item);
+                    runsTogether.set(item);
                 }
             })
         })
         
-        // console.log(countRunsTogether);
-        // console.log(runsTogether);
-
         let tier;
         let title;
         let color;
@@ -260,13 +312,11 @@ function computeRunsTogether() {
 function recolorActivityDots(runsTogether) {
     // get all dots and color
     let activityDots = document.getElementsByTagName("svg");
-    console.log(activityDots);
     for(let raidDots of activityDots) {
         for(let node of raidDots.childNodes) {
             if(node.nodeName == "a") {
-                console.log(node.nodeName);
                 let dotInstanceID = (node.href.baseVal.split("/")).at(2);
-                if(runsTogether.includes(dotInstanceID)) {
+                if(runsTogether.contains(dotInstanceID)) {
                     node.firstChild.attributes.fill.value = "#03b6fc";
                 }
             }
@@ -276,13 +326,13 @@ function recolorActivityDots(runsTogether) {
 
     // observer to recolor changing activity dots
     const recolorActivityDotsTargetNode = document.getElementById("side-container");
-    const recolorActivityDotsConfig = { attributes: true, childList: true, subtree: true };
+    const recolorActivityDotsConfig = { attributes: false, childList: true, subtree: true };
     const recolorActivityDotsCallback = (mutationList, observer) => {
         for (let mutation of mutationList) {
             if(mutation.type == "childList" && mutation.target.nodeName == "svg") {
                 for(let node of mutation.addedNodes) {
                     let dotInstanceID = (node.href.baseVal.split("/")).at(2);
-                    if(runsTogether.includes(dotInstanceID)) {
+                    if(runsTogether.contains(dotInstanceID)) {
                         node.firstChild.attributes.fill.value = "#03b6fc";
                     }
                 }
