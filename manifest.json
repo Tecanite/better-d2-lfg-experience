@@ -30,8 +30,7 @@
                 "*://raid.report/*/*"
             ],
             "css": [
-                "css/sidebar.css",
-                "css/styles.css"
+                "css/rr-layout.css"
             ],
             "js": [
                 "js/rr-layout.js",
@@ -65,8 +64,10 @@
                 "js/rr-sidebar.js",
                 "js/rr-layout.js",
                 "js/rr-runs-together-inject.js",
-                "css/sidebar.css",
-                "css/runs-together.css"
+                "css/rr-layout-dynamic-single-row.css",
+                "css/rr-layout-modern.css",
+                "css/rr-runs-together.css",
+                "css/rr-sidebar.css"
             ],
             "matches": [
                 "*://raid.report/*"
