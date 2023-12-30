@@ -1,3 +1,4 @@
+// TODO even if cached, make requests afterwards and save potentially new profile pics
 var api_key = "41bf571cea84481eb853af82101e7230"
 var api_url = "https://www.bungie.net/Platform"
 var platforms = {
