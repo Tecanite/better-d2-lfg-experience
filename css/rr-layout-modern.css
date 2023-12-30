@@ -1,31 +1,5 @@
-/* improvements to search bar */
-#search {
-    height: 90%;
-    margin-top: 0.2rem;
-    border-radius: 1.5rem;
-    background: #272a2b;
-    color: #bbb;
-}
-
-#search:hover {
-    background: #2c2f30;
-    transition: 0.2s;
-}
-
-.input-field input[type=search]~.label-icon {
-    color: #bbb !important;
-}
-
-/* main raid-report container */
-.drr-container {
-    max-width: 95% !important;
-}
-
-.row .col.l3 {
-    width: 16.6666% !important;
-}
-
 /* raid report cards*/
+/* TODO remove options that make more compact, fix text size when window gets smaller*/
 .card {
     border-radius: 0.75rem !important;
 }
@@ -47,7 +21,7 @@
 }
 
 .card .raid-card-image {
-    padding-top: 33% !important;
+    padding-top: 33%;
 }
 
 .card table {

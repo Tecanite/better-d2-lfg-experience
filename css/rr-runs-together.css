@@ -15,3 +15,13 @@
     padding-right: 0!important;
     padding-left: 0.5rem!important;
 }
+
+.total-completions {
+    height: 60%;
+}
+
+.together-completions {
+    height: 40%;
+    font-size: 0.75rem;
+    color: #03b6fc;
+}
