@@ -42,7 +42,7 @@ window.addEventListener("message", function (e) {
         let activities = e.data.data.Response.activities;
         if (activities[0].period != null) {
             clearTimeout(timeoutID);
-            timeoutID = setTimeout(sortActivities, 3000);
+            timeoutID = setTimeout(sortFetchedActivities, 3000);
             activities.forEach(element => {
                 allActivities.push(element);
             });
@@ -50,8 +50,13 @@ window.addEventListener("message", function (e) {
     }
 });
 
-
-function sortActivities() {
+/**
+ * This function sorts all fetched activities by raids.
+ * @author Tecanite
+ * @name sortFetchedActivities
+ * @returns {void}
+ */
+function sortFetchedActivities() {
     if (!enableRunsTogether) {
         return;
     }
@@ -156,7 +161,16 @@ function sortActivities() {
     computeRunsTogether(activitiesMap);
 }
 
+
+/**
+ * This function computes how many runs were done together by comparing instance ids.
+ * @author Tecanite
+ * @name sidebarProfilesAdd
+ * @param {Map<string, int>} activitiesMap
+ * @returns {void}
+ */
 function computeRunsTogether(activitiesMap) {
+    // cache activityMap if own profile
     if (ownerID == userID) {
         chrome.storage.local.set({ cachedActivities: Object.fromEntries(activitiesMap) }).then(() => {
             console.log("saved activities!");
@@ -265,6 +279,13 @@ function computeRunsTogether(activitiesMap) {
     }
 }
 
+/**
+ * This functions adds runs together number to every raid card.
+ * @author Tecanite
+ * @name addRunsTogetherNumbers
+ * @param {Map<string, int[]>} runsTogether
+ * @returns {void}
+ */
 function addRunsTogetherNumbers(runsTogether) {
     let clearDivs = document.querySelectorAll(".total-completions");
 
@@ -287,6 +308,13 @@ function addRunsTogetherNumbers(runsTogether) {
 
 }
 
+/**
+ * This functions changes color of activitiy dots that were completed together.
+ * @author Tecanite
+ * @name recolorActivityDots
+ * @param {Map<string, int[]>} runsTogether
+ * @returns {void}
+ */
 function recolorActivityDots(runsTogether) {
     // get all dots and color
     let activityDots = document.getElementsByTagName("svg");

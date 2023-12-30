@@ -1,3 +1,9 @@
+/**
+ * This function adds *.report buttons to player in a bungie.net fireteam.
+ * @author Tecanite
+ * @name addReportLinkButtons
+ * @returns {void}
+ */
 function addReportLinkButtons() {
     let fireteam = document.getElementsByClassName("modalContainer");
     if (fireteam.length != 0) {
@@ -29,7 +35,14 @@ function addReportLinkButtons() {
     }
 }
 
-
+/**
+ * This function returns link to *.report page with valid platform and id.
+ * @author Tecanite
+ * @name sidebarProfilesAdd
+ * @param {string} id
+ * @param {string} href
+ * @returns {string} 
+ */
 function getReportLink(id, href) {
     let frags = href.split('/')
     if (id == "rr") {

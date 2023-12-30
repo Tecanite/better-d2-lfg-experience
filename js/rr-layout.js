@@ -1,8 +1,12 @@
 /**
- * TODO add all raid cards to single div, dynamic fitting with css if possible,
  * TODO maybe change order
  */
 
+/**
+ * This functions removes ad banner elements from the raid.report page.
+ * @name removeAds
+ * @returns {void}
+ */
 function removeAds() {
     /* remove ad banner */
     let adBanner1 = document.querySelector("div.jss6");
@@ -23,6 +27,13 @@ var runAlertOnce = false;
 var runOnce = false;
 var raidsPerRow = 4;
 
+/**
+ * This is the main function to alter the raid.report layout.
+ * @name updateLayout
+ * @param {boolean} removeUselessStats
+ * @param {boolean} enableSingleRow
+ * @returns {void}
+ */
 function updateLayout(removeUselessStats, enableSingleRow) {
     if (enableSingleRow) {
         var singleRow = document.getElementById("single-raid-row");
@@ -60,19 +71,11 @@ function updateLayout(removeUselessStats, enableSingleRow) {
             
             let lastRaidsPerRow = raidsPerRow;
             raidsPerRow = getElementsPerRow();
-            console.log(lastRaidsPerRow, raidsPerRow)
             if(!(lastRaidsPerRow == raidsPerRow)) {
-                console.log("here");
                 adjustRowBreaks(raidsPerRow);
             }
             
         });
-    } else {
-        let raids = ["ce", "ron", "kf", "vow", "vog", "dsc", "gos", "lw", "cos", "sotp", "sos", "eow", "lev"];
-        let cards = document.getElementsByClassName("col l3 m6 s12");
-        if (cards[0].id == raids[0]) {
-            // return;
-        }
     }
 
     var raids = ["ce", "ron", "kf", "votd", "vog", "dsc", "gos", "lw", "cos", "sotp", "sos", "eow", "lev"];
@@ -97,6 +100,11 @@ function updateLayout(removeUselessStats, enableSingleRow) {
     }
 }
 
+/**
+ * This functions returns the number of raids that should be displayed per row according to window width.
+ * @name getElementsPerRow
+ * @returns {int}
+ */
 function getElementsPerRow() {
     var width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
     if (width >= 1810) {
@@ -110,6 +118,12 @@ function getElementsPerRow() {
     }
 }
 
+/**
+ * This function adjusts position of break elements according to how many raids should be displayed per row.
+ * @name adjustRowBreaks
+ * @param {int} raidsPerRow
+ * @returns {void}
+ */
 function adjustRowBreaks(raidsPerRow) {
     document.querySelectorAll(".break").forEach((breakEl) => {
         breakEl.remove();
@@ -125,7 +139,11 @@ function adjustRowBreaks(raidsPerRow) {
     }
 }
 
-
+/**
+ * This function adds a padding line to the clear table to align raid cards properly.
+ * @name padNonMasterOrPrestigeRaids
+ * @returns {void}
+ */
 function padNonMasterOrPrestigeRaids() {
     tables = document.querySelectorAll("div.card-content > table.centered ");
     for (let i = 0; i < tables.length; i++) {
@@ -137,6 +155,11 @@ function padNonMasterOrPrestigeRaids() {
     }
 }
 
+/**
+ * This function removes the KDA-Stats table from all raid cards.
+ * @name removeStats
+ * @returns {void}
+ */
 function removeStats() {
     tables = document.querySelectorAll("table.col.s8.centered");
     for(let i = tables.length - 1; i >= 0; i--) {
