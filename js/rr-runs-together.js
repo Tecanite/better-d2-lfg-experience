@@ -3,61 +3,6 @@
  * TODO fix hover on new badge
  */
 
-// hashmap for efficient lookups
-class CustomHashMap {
-    constructor() {
-        this._buckets = new Array(128);
-    }
-
-    _hash(key) {
-        let hash = 0;
-        for (let i = 0; i < key.length; i++) {
-            hash = (hash + key.charCodeAt(i)) % this._buckets.length;
-        }
-        return hash;
-    }
-
-    set(key) {
-        const index = this._hash(key);
-        if (!this._buckets[index]) {
-            this._buckets[index] = [];
-        }
-
-        const bucket = this._buckets[index];
-        bucket.push(key);
-    }
-
-    contains(key) {
-        const index = this._hash(key);
-        const bucket = this._buckets[index];
-        if (!bucket) {
-            return undefined;
-        }
-
-        for (let i = 0; i < bucket.length; i++) {
-            if (bucket[i] === key) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    remove(key) {
-        const index = this._hash(key);
-        const bucket = this._buckets[index];
-        if (!bucket) {
-            return;
-        }
-
-        for (let i = 0; i < bucket.length; i++) {
-            if (bucket[i] === key) {
-                bucket.splice(i, 1);
-                return;
-            }
-        }
-    }
-}
-
 var debug = false;
 
 var scriptEl = document.createElement("script");
@@ -106,13 +51,11 @@ window.addEventListener("message", function (e) {
 });
 
 
-var activitiesMap;
-
 function sortActivities() {
     if (!enableRunsTogether) {
         return;
     }
-    activitiesMap = new Map();
+    var activitiesMap = new Map();
     var ce = [], ron = [], kf = [], votd = [], vog = [], dsc = [], gos = [], lw = [], cos = [], sotp = [], sos = [], eow = [], lev = [];
     allActivities.forEach(function (item, index, object) {
         // filter only completed activities
@@ -210,10 +153,10 @@ function sortActivities() {
         console.log("not filtered:", filteredAllActivities);
     }
 
-    computeRunsTogether();
+    computeRunsTogether(activitiesMap);
 }
 
-function computeRunsTogether() {
+function computeRunsTogether(activitiesMap) {
     if (ownerID == userID) {
         chrome.storage.local.set({ cachedActivities: Object.fromEntries(activitiesMap) }).then(() => {
             console.log("saved activities!");
@@ -222,17 +165,29 @@ function computeRunsTogether() {
         var styleEl = document.createElement("link");
         styleEl.rel = "stylesheet";
         styleEl.type = "text/css";
-        styleEl.href = chrome.runtime.getURL("./css/runs-together.css");
+        styleEl.href = chrome.runtime.getURL("./css/rr-runs-together.css");
         document.head.appendChild(styleEl);
-
 
         let runsTogetherCard = document.createElement("div");
         runsTogetherCard.className = "col s6 runs-together-padding"
         let cards = document.getElementsByClassName("card-length");
 
-
         var countRunsTogether = 0;
-        var runsTogether = new CustomHashMap();
+        var runsTogether = new Map();
+
+        runsTogether.set("ce", []);
+        runsTogether.set("ron", []);
+        runsTogether.set("kf", []);
+        runsTogether.set("votd", []);
+        runsTogether.set("vog", []);
+        runsTogether.set("dsc", []);
+        runsTogether.set("gos", []);
+        runsTogether.set("lw", []);
+        runsTogether.set("cos", []);
+        runsTogether.set("sotp", []);
+        runsTogether.set("sos", []);
+        runsTogether.set("eow", []);
+        runsTogether.set("lev", []);
 
         if (cachedActivities == null) {
             alert("Please visit own raid.report once and let it fully load to cache activities")
@@ -243,7 +198,7 @@ function computeRunsTogether() {
             value.forEach(item => {
                 if (cachedActivities.get(key).includes(item)) {
                     countRunsTogether++;
-                    runsTogether.set(item);
+                    runsTogether.get(key).push(item);
                 }
             })
         })
@@ -305,8 +260,31 @@ function computeRunsTogether() {
 
         cards[0].appendChild(runsTogetherCard);
 
+        addRunsTogetherNumbers(runsTogether);
         recolorActivityDots(runsTogether);
     }
+}
+
+function addRunsTogetherNumbers(runsTogether) {
+    let clearDivs = document.querySelectorAll(".total-completions");
+
+    for(let node of clearDivs) {
+        node.classList.remove("total-completions", "center", "centered-content");
+        let key = node.closest(".col.l3.m6.s12").id;
+        
+        let totalClearDiv = document.createElement("div");
+        totalClearDiv.className = "total-completions center";
+        totalClearDiv.innerHTML = node.innerHTML;
+
+        node.firstChild.remove();
+        node.append(totalClearDiv)
+
+        let runsTogetherDiv = document.createElement("div");
+        runsTogetherDiv.className = "together-completions center";
+        runsTogetherDiv.innerHTML = "<span>(" + runsTogether.get(key).length + ")</span>";
+        node.append(runsTogetherDiv);
+    }
+
 }
 
 function recolorActivityDots(runsTogether) {
@@ -315,12 +293,13 @@ function recolorActivityDots(runsTogether) {
     for (let raidDots of activityDots) {
         for (let node of raidDots.childNodes) {
             if (node.nodeName == "a") {
+                let key = node.closest(".col.l3.m6.s12").id;
                 let dotInstanceID = (node.href.baseVal.split("/")).at(2);
-                if (runsTogether.contains(dotInstanceID)) {
+
+                if (runsTogether.get(key).includes(dotInstanceID)) {
                     node.firstChild.attributes.fill.value = "#03b6fc";
                 }
             }
-            continue;
         }
     }
 
@@ -329,16 +308,18 @@ function recolorActivityDots(runsTogether) {
     const recolorActivityDotsConfig = { attributes: false, childList: true, subtree: true };
     const recolorActivityDotsCallback = (mutationList, observer) => {
         for (let mutation of mutationList) {
+            if (!document.body.contains(mutation.addedNodes[0])) {
+                continue;
+            }
             if (mutation.type == "childList" && mutation.target.nodeName == "svg") {
-                for (let node of mutation.addedNodes) {
-                    let dotInstanceID = (node.href.baseVal.split("/")).at(2);
-                    if (runsTogether.contains(dotInstanceID)) {
-                        node.firstChild.attributes.fill.value = "#03b6fc";
-                    }
+                let node = mutation.addedNodes[0] 
+                let key = node.closest(".col.l3.m6.s12").id;
+                let dotInstanceID = (node.href.baseVal.split("/")).at(2);
+                if (runsTogether.get(key).includes(dotInstanceID)) {
+                    node.firstChild.attributes.fill.value = "#03b6fc";
                 }
             }
         }
-        return;
     }
 
     const recolorActivityDotsObserver = new MutationObserver(recolorActivityDotsCallback);
