@@ -146,11 +146,13 @@ function adjustRowBreaks(raidsPerRow) {
  */
 function padNonMasterOrPrestigeRaids() {
     tables = document.querySelectorAll("div.card-content > table.centered ");
-    for (let i = 0; i < tables.length; i++) {
-        if (tables[i].childNodes[1].childNodes.length < 3) {
-            let padding = document.createElement('tr');
-            padding.innerHTML = "<th><p style='visibility: hidden;'>|</p></th><td><span class=''></span></td><td><span class=''></span></td>";
-            tables[i].childNodes[1].append(padding);
+    if (tables != null) {
+        for (let i = 0; i < tables.length; i++) {
+            if (tables[i].childNodes[1].childNodes.length < 3) {
+                let padding = document.createElement('tr');
+                padding.innerHTML = "<th><p style='visibility: hidden;'>|</p></th><td><span class=''></span></td><td><span class=''></span></td>";
+                tables[i].childNodes[1].append(padding);
+            }
         }
     }
 }
@@ -162,8 +164,10 @@ function padNonMasterOrPrestigeRaids() {
  */
 function removeStats() {
     tables = document.querySelectorAll("table.col.s8.centered");
-    for(let i = tables.length - 1; i >= 0; i--) {
-        tables[i].remove();
+    if (tables != null) {
+        for(let i = tables.length - 1; i >= 0; i--) {
+            tables[i].remove();
+        }
     }
 }
 
