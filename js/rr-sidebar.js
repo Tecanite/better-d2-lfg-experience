@@ -43,62 +43,21 @@ function addSidebar(profiles) {
  * @param {String[]} sidebarProfiles
  * @returns {void}
  */
-async function sidebarProfilesAdd(sidebarProfiles) {
-      var sidebarCache;
-      chrome.storage.local.get(["sidebarCache"])
-            .then((result) => {
-                  if (result.sidebarCache != null) {
-                        sidebarCache = new Map(Object.entries(result.sidebarCache));
-                  } else {
-                        sidebarCache = new Map();
-                  }
-            })
-            .then(async () => {
-                  var toUpdate = [];
-                  for (let i = 0; i < sidebarProfiles.length; ++i) {
-                        var profileSlot = document.createElement("div")
+function sidebarProfilesAdd(sidebarProfiles) {
+      for (let i = 0; i < sidebarProfiles.length; ++i) {
+            let profileSlot = document.createElement("div");
+            profileSlot.id = "profileSlot" + i;
+            profileSlot.className = "profileSlot";
+            document.getElementById("sidebar").appendChild(profileSlot);
 
-                        if (sidebarCache != null && sidebarCache.has(sidebarProfiles[i])) {
-                              console.log("cache hit :)");
-                              let currentProfile = sidebarCache.get(sidebarProfiles[i]);
-                              let platID = currentProfile[0], emblemUrl = currentProfile[1];
-                              let profileIdConverted = sidebarProfiles[i].replace(/'/g, "&#39;").replace(/"/g, "&quot;");
-                              profileSlot.innerHTML = "<a href='/" + platforms[platID[0]] + "/" + platID[1] + "' class='profileSlot' data-hover = '" + profileIdConverted + "'></a>"
-                              profileSlot.className = "profileSlot";
-                              profileSlot.id = "profileSlot" + i;
-                              profileSlot.style.backgroundImage = "url('https://www.bungie.net" + emblemUrl + "')";
-                              document.getElementById("sidebar").appendChild(profileSlot);
-                              toUpdate.push(sidebarProfiles[i]);
-                        } else {
-                              console.log("cache miss :(");
-                              let cache = [];
-                              let platID = await getPlatformAndId(sidebarProfiles[i]);
-                              let profileIdConverted = sidebarProfiles[i].replace(/'/g, "&#39;").replace(/"/g, "&quot;");
-                              profileSlot.innerHTML = "<a href='/" + platforms[platID[0]] + "/" + platID[1] + "' class='profileSlot' data-hover = '" + profileIdConverted + "'></a>"
-                              profileSlot.className = "profileSlot";
-                              profileSlot.id = "profileSlot" + i;
-
-                              cache.push(platID);
-
-                              let emblemUrl = await getEmblemUrl(platID[0], platID[1])
-                              profileSlot.style.backgroundImage = "url('https://www.bungie.net" + emblemUrl + "')"
-
-                              cache.push(emblemUrl);
-                              document.getElementById("sidebar").appendChild(profileSlot);
-                              sidebarCache.set(sidebarProfiles[i], cache)
-                        }
-                  }
-                  for (let i = 0; i < toUpdate.length; ++i) {
-                        let currentProfile = sidebarCache.get(toUpdate[i]);
-                        let platID = currentProfile[0];
-                        sidebarCache.get(toUpdate[i])[1] = await getEmblemUrl(platID[0], platID[1]);
-                  }
-            })
-            .then(() => {
-                  chrome.storage.local.set({ sidebarCache: Object.fromEntries(sidebarCache) }).then(() => {
-                        console.log("saved sidebar cache!");
+            getPlatformAndId(sidebarProfiles[i]).then((platID) => {
+                  let profileIdConverted = sidebarProfiles[i].replace(/'/g, "&#39;").replace(/"/g, "&quot;");
+                  profileSlot.innerHTML = "<a href='/" + platforms[platID[0]] + "/" + platID[1] + "' class='profileSlot' data-hover = '" + profileIdConverted + "'></a>";
+                  getEmblemUrl(platID[0], platID[1]).then((emblemUrl) => {
+                        profileSlot.style.backgroundImage = "url('https://www.bungie.net" + emblemUrl + "')";
                   });
-            })
+            });
+      }
 }
 
 /**
