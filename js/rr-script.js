@@ -5,7 +5,7 @@ document.head.appendChild(scriptEl);
 
 /* get saved settings */
 chrome.storage.local.get(["sidebarEnabled", "sidebarProfiles", "removeKDA", "dynamicLayout", "minimalLayout", "compactLayout", "modernLayout"]).then((settings) => {
-    /* add scripts and css files of enbaled features */
+    /* add scripts and css files of enabled features */
     if (settings.modernLayout) {
         let styleEl = document.createElement("link");
         styleEl.rel = "stylesheet";
@@ -20,11 +20,11 @@ chrome.storage.local.get(["sidebarEnabled", "sidebarProfiles", "removeKDA", "dyn
         styleEl.href = chrome.runtime.getURL("./css/rr-layout-dynamic-single-row.css");
         document.head.appendChild(styleEl);
     }
-    if(settings.sidebarEnabled) {
+    if (settings.sidebarEnabled) {
         let scriptEl = document.createElement("script");
         scriptEl.src = chrome.runtime.getURL("./js/rr-sidebar.js");
         document.head.appendChild(scriptEl);
-        
+
         let styleEl = document.createElement("link");
         styleEl.rel = "stylesheet";
         styleEl.type = "text/css";
