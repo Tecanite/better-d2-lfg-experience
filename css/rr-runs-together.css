@@ -1,5 +1,5 @@
 .no-margin.card-row, .card-length {
-    max-width: 45rem;
+    max-width: 45rem!important;
 }
 
 .row .col.s6 {
@@ -24,4 +24,13 @@
     height: 40%;
     font-size: 0.75rem;
     color: #03b6fc;
+}
+
+@keyframes skeleton-loading {
+    0% {
+        opacity: .75;
+    }
+    100% {
+        opacity: 1;
+    }
 }
