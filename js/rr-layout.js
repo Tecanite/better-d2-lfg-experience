@@ -67,7 +67,7 @@ function updateLayout(removeUselessStats, enableSingleRow) {
         adjustRowBreaks(raidsPerRow)
 
         window.addEventListener("resize", (event) => {
-            event.stopImmediatePropagation(); //! doesnt work apparently
+            event.stopImmediatePropagation(); //! doesn't work apparently
             
             let lastRaidsPerRow = raidsPerRow;
             raidsPerRow = getElementsPerRow();
@@ -145,7 +145,7 @@ function adjustRowBreaks(raidsPerRow) {
  * @returns {void}
  */
 function padNonMasterOrPrestigeRaids() {
-    tables = document.querySelectorAll("div.card-content > table.centered ");
+    tables = document.querySelectorAll("div.card-content > table.centered:not(.pgcr-table)");
     if (tables != null) {
         for (let i = 0; i < tables.length; i++) {
             if (tables[i].childNodes[1].childNodes.length < 3) {
