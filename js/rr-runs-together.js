@@ -1,9 +1,20 @@
 /**
- * TODO fix non-reload link breaking the thing
  * TODO fix hover on new badge
- */
+*/
 
 var debug = false;
+
+var cachedActivities;
+var ownerID;
+var enableRunsTogether;
+
+var allActivities = [];
+var userID, lastUserID;
+var animTimeoutID, saveTimeoutID;
+
+var runsTogetherDone = false;
+var ce, ron, kf, votd, vog, dsc, gos, lw, cos, sotp, sos, eow, lev;
+var activitiesMap;
 
 var scriptEl = document.createElement("script");
 scriptEl.src = chrome.runtime.getURL("./js/rr-runs-together-inject.js");
@@ -12,9 +23,6 @@ scriptEl.onload = function () {
 };
 (document.head || document.documentElement).appendChild(scriptEl);
 
-var cachedActivities;
-var ownerID;
-var enableRunsTogether;
 
 // get saved settings
 chrome.storage.local.get(["ownProfileID", "cachedActivities", "enableRunsTogether"])
@@ -35,15 +43,17 @@ chrome.storage.local.get(["ownProfileID", "cachedActivities", "enableRunsTogethe
         }
     });
 
-var allActivities = [];
-var userID;
-var timeoutID;
-
 // receive message from injected script
 window.addEventListener("message", function (e) {
     if (e.data.data.Response != null && e.data.data.Response.bungieNetUser != null) {
         userID = e.data.data.Response.bungieNetUser.uniqueName;
         allActivities = [];
+
+        if (userID != lastUserID || lastUserID == null) {
+            ce = [], ron = [], kf = [], votd = [], vog = [], dsc = [], gos = [], lw = [], cos = [], sotp = [], sos = [], eow = [], lev = [];
+            activitiesMap = new Map();
+            runsTogetherDone = false;
+        }
     }
 
     if (e.data.data.Response != null && e.data.data.Response.activities != null) {
@@ -57,9 +67,6 @@ window.addEventListener("message", function (e) {
     }
 });
 
-var ce = [], ron = [], kf = [], votd = [], vog = [], dsc = [], gos = [], lw = [], cos = [], sotp = [], sos = [], eow = [], lev = [];
-var activitiesMap = new Map();
-
 /**
  * This function sorts all fetched activities by raids.
  * @author Tecanite
@@ -67,9 +74,10 @@ var activitiesMap = new Map();
  * @returns {void}
  */
 function sortFetchedActivities() {
-    if (!enableRunsTogether) {
+    if (!enableRunsTogether || allActivities == []) {
         return;
     }
+
     allActivities.forEach(function (item, index, object) {
         // filter only completed activities
         if (item.values.completed.basic.value != 1) {
@@ -161,7 +169,6 @@ function sortFetchedActivities() {
     activitiesMap.set("eow", eow);
     activitiesMap.set("lev", lev);
 
-
     if (debug) {
         console.log("ce:", ce);
         console.log("ron:", ron);
@@ -192,9 +199,8 @@ function sortFetchedActivities() {
         console.log("not filtered:", filteredAllActivities);
     }
 
-    updateRunsTogether(activitiesMap);
+    updateRunsTogether();
 }
-
 
 /**
  * This function computes how many runs were done together by comparing instance ids.
@@ -203,12 +209,15 @@ function sortFetchedActivities() {
  * @param {Map<string, int>} activitiesMap
  * @returns {void}
  */
-function updateRunsTogether(activitiesMap) {
+function updateRunsTogether() {
     // cache activityMap if own profile
     if (ownerID == userID) {
-        chrome.storage.local.set({ cachedActivities: Object.fromEntries(activitiesMap) }).then(() => {
-            console.log("saved activities!");
-        });
+        clearTimeout(saveTimeoutID);
+        saveTimeoutID = setTimeout(() => {
+            chrome.storage.local.set({ cachedActivities: Object.fromEntries(activitiesMap) }).then(() => {
+                console.log("saved activities!");
+            });
+        }, 3000)
     } else {
         var runsTogetherCard = document.getElementById("runs-together-card");
 
@@ -235,9 +244,11 @@ function updateRunsTogether(activitiesMap) {
 
             runsTogetherCard.appendChild(innerDiv);
 
-            let cards = document.getElementsByClassName("card-length");
-            if (cards[0] != null) {
-                cards[0].appendChild(runsTogetherCard);
+            let cards = document.querySelector(".card-length");
+
+            if (cards != null) {
+                cards.appendChild(runsTogetherCard);
+
             }
         }
 
@@ -310,25 +321,41 @@ function updateRunsTogether(activitiesMap) {
             color = "grey";
         }
 
-        let rankValue = document.querySelectorAll("#runs-together-card div.rank-value");
-        let rankTitle = document.querySelectorAll("#runs-together-card div.rank-title");
-        let innerCard = document.querySelectorAll("#runs-together-card>div.rank-card");
+        let rankValue = document.querySelector("#runs-together-card div.rank-value");
+        let rankTitle = document.querySelector("#runs-together-card div.rank-title:nth-child(3)");
+        let innerCard = document.querySelector("#runs-together-card>div.rank-card");
 
-        rankValue[0].innerText = tier;
+        if (rankValue != null) {
+            rankValue.innerText = tier;
+        }
+        if (rankTitle != null) {
+            rankTitle.innerText = countRunsTogether;
+        }
+        if (innerCard != null) {
+            innerCard.title = title;
+            innerCard.style.backgroundColor = color;
+        }
+        if (document.location.href == lastProfileUrl) {
+            finishRunsTogether(runsTogether);
+        } else {
+            clearTimeout(animTimeoutID);
+            animTimeoutID = setTimeout(function () {
+                finishRunsTogether(runsTogether);
+            }, 3000);
+        }
+    }
+}
 
-        rankTitle[1].innerText = countRunsTogether;
-        innerCard[0].title = title;
-        innerCard[0].style.backgroundColor = color;
+function finishRunsTogether(runsTogether) {
+    runsTogetherDone = true;
+    lastProfileUrl = document.location.href;
+    addRunsTogetherNumbers(runsTogether);
+    recolorActivityDots(runsTogether);
 
-        clearTimeout(timeoutID);
-        timeoutID = setTimeout(function() {
-            addRunsTogetherNumbers(runsTogether);
-            recolorActivityDots(runsTogether);
-
-            //remove loading animation
-            let animEl = document.querySelectorAll("#runs-together-card>div.rank-card");
-            animEl[0].style.animation = "";
-        }, 3000);
+    //remove loading animation
+    let animEl = document.querySelector("#runs-together-card>div.rank-card");
+    if (animEl != null) {
+        animEl.style.animation = "";
     }
 }
 

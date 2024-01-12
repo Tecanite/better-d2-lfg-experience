@@ -3,6 +3,8 @@ var scriptEl = document.createElement("script");
 scriptEl.src = chrome.runtime.getURL("./js/rr-layout.js");
 document.head.appendChild(scriptEl);
 
+var lastProfileUrl;
+
 /* get saved settings */
 chrome.storage.local.get(["sidebarEnabled", "sidebarProfiles", "removeKDA", "dynamicLayout", "minimalLayout", "compactLayout", "modernLayout"]).then((settings) => {
     /* add scripts and css files of enabled features */
@@ -41,6 +43,16 @@ chrome.storage.local.get(["sidebarEnabled", "sidebarProfiles", "removeKDA", "dyn
 
         removeAds();
         updateLayout(settings.removeKDA, settings.dynamicLayout);
+
+        let runsTogetherBadge = document.getElementById("runs-together-card");
+        if (runsTogetherDone && runsTogetherBadge == null) {
+            if (!document.location.href.includes("pgcr")) {
+                if (lastProfileUrl == document.location.href) {
+                    console.log("here");
+                    updateRunsTogether();
+                }
+            }
+        }
     }
 
     const rrLayoutObserver = new MutationObserver(rrLayoutCallback);
