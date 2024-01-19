@@ -2,8 +2,7 @@
     src: https://developer.chrome.com/docs/extensions/develop/ui/options-page?hl=d
 */
 
-// TODO remove cached activities
-// TODO make player list order changable
+// TODO make player list order changeable
 
 // Saves options to chrome.storage
 const saveOptions = () => {
@@ -57,7 +56,7 @@ const saveOptions = () => {
 const restoreOptions = () => {
     chrome.storage.local.get({
         sidebarEnabled: false, sidebarProfiles: [],
-        enableRunsTogether: false, ownProfileID: "Bungie#ID", cachedActivities: null,
+        enableRunsTogether: false, ownProfileID: "Bungie#ID", storedActivities: null,
         removeKDA: false, dynamicLayout: false, minimalLayout: false, compactLayout: false, modernLayout: false,
         fireteamSearchGrid: false, fireteamProfileReports: false
     }).then((result) => {
@@ -78,7 +77,7 @@ const restoreOptions = () => {
         // runs together options
         document.getElementById("runs-together-enable").checked = result.enableRunsTogether;
         document.getElementById("own-bungie-id").value = result.ownProfileID;
-        if (result.cachedActivities != null) {
+        if (result.storedActivities != null) {
             let warnDiv = document.getElementById("runs-together-warn");
             warnDiv.parentElement.removeChild(warnDiv);
         }
@@ -110,28 +109,15 @@ const removeLastProfile = () => {
     sidebarList.removeChild(sidebarList.lastChild);
 };
 
-const clearSidebarCache = () => {
-    console.log("clearing sidebar cache...")
-    chrome.storage.local.get(["sidebarCache"])
-        .then((result) => {
-            if (result.sidebarCache != null) {
-                sidebarCache = new Map(Object.entries(result.sidebarCache));
-            } else {
-                sidebarCache = new Map();
-            }
-        })
-        .then(() => {
-            sidebarCache.clear()
-        })
-        .then(() => {
-            chrome.storage.local.set({ sidebarCache: Object.fromEntries(sidebarCache) }).then(() => {
-                console.log("cleared sidebar cache!");
-            });
-        })
+const clearOwnActivityCache = () => {
+    console.log("clearing stored activities...")
+    chrome.storage.local.set({ storedActivities: null }).then(() => {
+        console.log("cleared stored activities!");
+    });
 }
 
 document.addEventListener("DOMContentLoaded", restoreOptions);
 document.getElementById("save").addEventListener("click", saveOptions);
 document.getElementById("addProfile").addEventListener("click", addProfile);
 document.getElementById("removeProfile").addEventListener("click", removeLastProfile);
-document.getElementById("clearSidebarCache").addEventListener("click", clearSidebarCache);
+document.getElementById("clearOwnActivityCache").addEventListener("click", clearOwnActivityCache);
