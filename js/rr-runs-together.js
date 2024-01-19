@@ -1,10 +1,9 @@
-/**
- * TODO fix hover on new badge
-*/
+//TODO fix hover on new badge
 
 var debug = false;
 
-var cachedActivities;
+var storedActivities;
+var runsTogetherAlertRan = false;
 var ownerID;
 var enableRunsTogether;
 
@@ -25,14 +24,14 @@ scriptEl.onload = function () {
 
 
 // get saved settings
-chrome.storage.local.get(["ownProfileID", "cachedActivities", "enableRunsTogether"])
+chrome.storage.local.get(["ownProfileID", "storedActivities", "enableRunsTogether"])
     .then((settings) => {
         ownerID = settings.ownProfileID;
         enableRunsTogether = settings.enableRunsTogether;
-        if (settings.cachedActivities != null) {
-            cachedActivities = new Map(Object.entries(settings.cachedActivities));
+        if (settings.storedActivities != null) {
+            storedActivities = new Map(Object.entries(settings.storedActivities));
         } else {
-            cachedActivities = null;
+            storedActivities = null;
         }
         if (enableRunsTogether) {
             var styleEl = document.createElement("link");
@@ -40,6 +39,8 @@ chrome.storage.local.get(["ownProfileID", "cachedActivities", "enableRunsTogethe
             styleEl.type = "text/css";
             styleEl.href = chrome.runtime.getURL("./css/rr-runs-together.css");
             document.head.appendChild(styleEl);
+
+            runsTogetherAlertRan = false;
         }
     });
 
@@ -214,7 +215,7 @@ function updateRunsTogether() {
     if (ownerID == userID) {
         clearTimeout(saveTimeoutID);
         saveTimeoutID = setTimeout(() => {
-            chrome.storage.local.set({ cachedActivities: Object.fromEntries(activitiesMap) }).then(() => {
+            chrome.storage.local.set({ storedActivities: Object.fromEntries(activitiesMap) }).then(() => {
                 console.log("saved activities!");
             });
         }, 3000)
@@ -269,14 +270,16 @@ function updateRunsTogether() {
         runsTogether.set("eow", []);
         runsTogether.set("lev", []);
 
-        if (cachedActivities == null) {
-            alert("Please visit own raid.report once and let it fully load to cache activities")
+        if (storedActivities == null) {
+            if (!runsTogetherAlertRan) {
+                alert("Please visit own raid.report once and let it fully load to cache activities");
+                runsTogetherAlertRan = true;
+            }
             return;
         }
-
         activitiesMap.forEach(function (value, key) {
             value.forEach(item => {
-                if (cachedActivities.get(key).includes(item)) {
+                if (storedActivities.get(key).includes(item)) {
                     countRunsTogether++;
                     runsTogether.get(key).push(item);
                 }
@@ -341,7 +344,7 @@ function updateRunsTogether() {
             clearTimeout(animTimeoutID);
             animTimeoutID = setTimeout(function () {
                 finishRunsTogether(runsTogether);
-            }, 3000);
+            }, 5000);
         }
     }
 }
