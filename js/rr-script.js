@@ -48,7 +48,6 @@ chrome.storage.local.get(["sidebarEnabled", "sidebarProfiles", "removeKDA", "dyn
         if (runsTogetherDone && runsTogetherBadge == null) {
             if (!document.location.href.includes("pgcr")) {
                 if (lastProfileUrl == document.location.href) {
-                    console.log("here");
                     updateRunsTogether();
                 }
             }
