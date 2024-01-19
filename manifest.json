@@ -1,47 +1,87 @@
 {
     "manifest_version": 3,
-    "name": "Better raid.report",
-    "description": "Adds useful features to Destiny 2 raid.report",
-    "version": "0.1",
+    "name": "better d2 lfg experience",
+    "description": "adds useful features to destiny 2 raid.report and bungie fireteam search",
+    "version": "0.2",
     "permissions": [
         "contextMenus",
         "scripting",
         "activeTab",
         "tabs",
-        "webRequest"
+        "webRequest",
+        "storage"
     ],
     "host_permissions": [
-        "https://www.bungie.net/Platform/*"
+        "https://www.bungie.net/Platform/*",
+        "https://raid.report/*"
     ],
     "icons": {
-        "16": "/images/rr16.png",
-        "48": "/images/rr48.png",
-        "128": "/images/rr128.png"
+        "16": "images/rr16.png",
+        "48": "images/rr48.png",
+        "128": "images/rr128.png"
     },
+    "options_ui": {
+        "page": "html/options.html",
+        "open_in_tab": false
+      },
     "content_scripts": [
         {
             "matches": [
                 "*://raid.report/*/*"
             ],
             "css": [
-                "css/styles.css"
+                "css/rr-layout.css"
             ],
             "js": [
-                "js/jquery-3.7.0.min.js",
-                "js/sidebar.js",
-                "js/container.js",
-                "js/content_script.js"
+                "js/rr-layout.js",
+                "js/rr-sidebar.js",
+                "js/rr-script.js"
+            ]
+        },
+        {
+            "matches": [
+                "*://raid.report/*/*"
+            ],
+            "js": [
+                "js/rr-runs-together.js"
+            ],
+            "run_at": "document_start",
+            "all_frames": true
+        },
+        {
+            "matches": [
+                "*://www.bungie.net/7/*/Fireteams/Search?*"
+            ],
+            "js": [
+                "js/fireteam-quickactions.js",
+                "js/fireteam-script.js"
             ]
         }
     ],
     "web_accessible_resources": [
         {
             "resources": [
-                "js/sidebar.js",
-                "js/container.js"
+                "js/rr-sidebar.js",
+                "js/rr-layout.js",
+                "js/rr-runs-together-inject.js",
+                "css/rr-layout-dynamic-single-row.css",
+                "css/rr-layout-modern.css",
+                "css/rr-runs-together.css",
+                "css/rr-sidebar.css"
             ],
             "matches": [
                 "*://raid.report/*"
+            ]
+        },
+        {
+            "resources": [
+                "js/fireteam-quickactions.js",
+                "css/fireteamSearch.css",
+                "css/fireteam-player-reports.css",
+                "css/fireteam-search-grid.css"
+            ],
+            "matches": [
+                "*://www.bungie.net/*"
             ]
         }
     ]

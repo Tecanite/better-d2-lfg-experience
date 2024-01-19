@@ -1,0 +1,63 @@
+/* sidebar */
+div.nav-wrapper, footer.page-footer{
+    z-index: 1;
+}
+
+#sidebar {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 4rem;
+    height: 100%;
+    padding-top: 64px;
+}
+
+#sidebar>div.profileSlot {
+    float: top;
+    width: 3rem;
+    height: 3rem;
+    margin-left: 0.5rem;
+    border-radius: 0.75rem;
+    background-color: #3b8f89;
+    background-size: cover;
+}
+
+div.profileSlot+div.profileSlot {
+    margin-top: 5px;
+}
+
+a.profileSlot {
+    position: fixed;
+    display: inline-block;
+    width: 3rem;
+    height: 3rem;
+    left: 0.5rem;
+    border-radius: 0.75rem;
+    background-color: transparent;
+}
+
+a.profileSlot:before {
+    content: attr(data-hover);
+    visibility: hidden;
+    opacity: 0;
+    width: fit-content;
+    max-width: 300px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px 5px;
+    transition: opacity 0.5s ease-in-out;
+
+    white-space: nowrap;
+
+    position: absolute;
+    z-index: 1;
+    left: 110%;
+    top: 5px;
+}
+
+a.profileSlot:hover:before {
+    opacity: 1;
+    visibility: visible;
+}

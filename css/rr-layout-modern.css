@@ -1,0 +1,93 @@
+/* raid report cards*/
+/* TODO remove options that make more compact, fix text size when window gets smaller*/
+.card {
+    border-radius: 0.75rem !important;
+}
+
+.card .card-content {
+    padding-top: 2vh !important;
+    padding-right: 0.8vw !important;
+    padding-bottom: 0.5rem !important;
+    padding-left: 0.8vw !important;
+}
+
+.card .card-image img {
+    border-radius: 0.75rem 0.75rem 0 0 !important;
+}
+
+.card .card-title {
+    font-size: 1vw !important;
+    font-weight: 400 !important;
+}
+
+.card .raid-card-image {
+    padding-top: 33%;
+}
+
+.card table {
+    font-size: 0.6vw !important;
+}
+
+.card .key-stats {
+    font-size: 0.6vw !important;
+    padding: 0 0.1vw !important;
+}
+
+.card .small-bottom-margin {
+    margin-bottom: 0.1rem !important;
+}
+
+.card .row {
+    margin-bottom: 5px !important;
+}
+
+.card td,
+.card th {
+    padding: 0.2rem 0.2rem 0 0 !important;
+}
+
+.card .drr-badges {
+    z-index: 1;
+    position: relative;
+    top: -2vh;
+}
+
+.card span.badge {
+    line-height: 2vh !important;
+    height: 2vh !important;
+    border: 0.1rem;
+}
+
+.card hr.row-bottom-margin {
+    margin-bottom: 0.2rem !important;
+}
+
+/* weekly characters */
+
+/* x's */
+.card div.top-spacing {
+    margin-top: 0.2rem !important;
+}
+
+.card div.top-spacing i.material-icons {
+    font-size: 16px;
+}
+
+.card div.top-spacing label.label-heading {
+    font-size: 0.7rem !important;
+}
+
+.card div.top-spacing div.col label {
+    font-size: 0.6rem !important;
+}
+
+/* already cleared */
+.card div.s4 a svg {
+    height: 16px !important;
+    width: 16px !important;
+    font-size: 0.7rem;
+}
+
+.card div.s4 a svg g text {
+    transform: translate(0px, -1px);
+}
