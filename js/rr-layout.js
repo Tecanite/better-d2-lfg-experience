@@ -1,8 +1,4 @@
 /**
- * TODO maybe change order
- */
-
-/**
  * This functions removes ad banner elements from the raid.report page.
  * @name removeAds
  * @returns {void}
@@ -67,7 +63,8 @@ function updateLayout(removeUselessStats, enableSingleRow) {
         adjustRowBreaks(raidsPerRow)
 
         window.addEventListener("resize", (event) => {
-            event.stopImmediatePropagation(); //! doesn't work apparently
+            event.stopImmediatePropagation(); 
+            //! doesn't work apparently => breaks raid.report if window to resized to small
             
             let lastRaidsPerRow = raidsPerRow;
             raidsPerRow = getElementsPerRow();
