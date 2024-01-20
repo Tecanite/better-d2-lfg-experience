@@ -21,7 +21,7 @@ chrome extension that adds some useful features to bungie.net fireteam search, r
 - WIP
 
 ## configuration
-this extension comes with an options page where all features can be individually configured
+this extension comes with an options page where all features can be individually configured.
 the options page can be accessed by right-clicking the exentions icon in the chrome menu bar and choosing "options"
 
 ## installation
