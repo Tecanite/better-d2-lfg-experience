@@ -20,11 +20,11 @@ chrome extension that adds some useful features to bungie.net fireteam search, r
 ### dungeon.report features
 - WIP
 
-## configuration
+## Configuration
 this extension comes with an options page where all features can be individually configured.
 the options page can be accessed by right-clicking the exentions icon in the chrome menu bar and choosing "options"
 
-## installation
+## Installation
 - download the [latest release](https://github.com/Tecanite/better-d2-lfg-experience/releases/latest) from the releases tab
 - enable developer mode on chrome extension page (<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>E</kbd>)
 - import the zip  as an unpacked extension
