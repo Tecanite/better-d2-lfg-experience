@@ -15,7 +15,7 @@ jobs:
         with:
           type: 'zip'
           filename: 'better-d2-lfg-experience.zip'
-          exclusions: '*.git*'
+          exclusions: '*.git* README.md'
       - name: Upload better-d2-lfg-experience Release
         uses: ncipollo/release-action@v1
         with:
