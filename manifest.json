@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "better d2 lfg experience",
+    "name": "better-d2-lfg-experience",
     "description": "adds useful features to destiny 2 raid.report and bungie fireteam search",
     "version": "0.2",
     "permissions": [
@@ -16,9 +16,9 @@
         "https://raid.report/*"
     ],
     "icons": {
-        "16": "images/rr16.png",
-        "48": "images/rr48.png",
-        "128": "images/rr128.png"
+        "16": "images/16.png",
+        "48": "images/48.png",
+        "128": "images/128.png"
     },
     "options_ui": {
         "page": "html/options.html",
