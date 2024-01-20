@@ -21,7 +21,6 @@ chrome extension that adds some useful features to bungie.net fireteam search, r
 - WIP
 
 ## installation
-download the [latest release](https://github.com/Tecanite/better-d2-lfg-experience/releases/latest) from the releases tab and import the zip in the chrome extensions page (<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>E</kbd>) as an unpacked extension.
-for the option to become visible developer mode has to be enabled.
-
-
+- download the [latest release](https://github.com/Tecanite/better-d2-lfg-experience/releases/latest) from the releases tab
+- enable developer mode on chrome extension page (<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>E</kbd>)
+- import the zip  as an unpacked extension
