@@ -27,4 +27,4 @@ the options page can be accessed by right-clicking the exentions icon in the chr
 ## installation
 - download the [latest release](https://github.com/Tecanite/better-d2-lfg-experience/releases/latest) from the releases tab
 - enable developer mode on chrome extension page (<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>E</kbd>)
-- import the zip  as an unpacked extension
+- import the zip  as an unpacked extension.
