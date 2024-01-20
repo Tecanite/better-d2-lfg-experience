@@ -8,13 +8,13 @@
 chrome extension that adds some useful features to bungie.net fireteam search, raid.report, dungeon.report.
 
 <details open>
-    <summary>## Features</summary>
+<summary>Features</summary>
   
-    ### bungie.net fireteam search features
+### bungie.net fireteam search features
 
-    ### raid.report features
+### raid.report features
 
-    ### dungeon.report features
+### dungeon.report features
 </details>
 
 ## installation
