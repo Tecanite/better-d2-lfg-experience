@@ -14,7 +14,7 @@ chrome extension that adds some useful features to bungie.net fireteam search, r
 
 ### raid.report features
 - options for a more modern, compact, minimal (WIP) styling
-- optional sidebar with quick access to other players reports
+- optional sidebar with quick access to other player reports
 - "runs together" functionality that shows how many runs were done together with the viewed profile
 
 ### dungeon.report features
