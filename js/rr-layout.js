@@ -5,13 +5,11 @@
  */
 function removeAds() {
     /* remove ad banner */
-    let adBanner1 = document.querySelector("div.jss6");
-    if (adBanner1 != null) {
-        adBanner1.remove();
-    }
-    let adBanner2 = document.querySelector("div.jss12");
-    if (adBanner2 != null) {
-        adBanner2.remove();
+    let adBanners = document.querySelectorAll("div[class^='jss']");
+    for (let adBanner of adBanners) {
+        if (adBanner.innerHTML.includes("Premium")) {
+            adBanner.parentNode.removeChild(adBanner);
+        }
     }
     let ads = document.getElementsByClassName("div.ad-tag");
     for (let i = ads.length-1; i >= 0; i--) {
