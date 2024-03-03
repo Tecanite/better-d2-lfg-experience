@@ -14,13 +14,24 @@ var platforms = {
  * @returns {void}
  */
 function addSidebar(profiles) {
-      var main = document.getElementsByTagName("main");
-      var container = document.getElementsByClassName("side-container")
-      if (container[0] != null) {
-            container[0].style.paddingLeft = "4rem";
-            container[0].id = "side-container";
-      }
+      let main = document.getElementsByTagName("main");
+      if (document.location.href == "https://raid.report/") {
+            if (main != null && main[0] != null && main[0].childNodes.length > 0) {
+                  if (main[0].childNodes[0].id == "sidebar" && main[0].childNodes[1] != null) {
+                        main[0].childNodes[1].style.paddingLeft = "4rem";
+                  } else if (main[0].childNodes[0].id != "sidebar") {
+                        main[0].childNodes[0].style.paddingLeft = "4rem";
+                  }
+            }
+      } else {
+            let container = document.getElementsByClassName("side-container");
 
+            if (container != null && container[0] != null) {
+                  container[0].style.paddingLeft = "4rem";
+                  container[0].id = "side-container";
+            }
+      }
+      
       let sidebar = document.getElementById("sidebar");
       if (sidebar == null) {
             sidebar = document.createElement("div")
