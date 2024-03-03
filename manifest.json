@@ -23,7 +23,7 @@
     "options_ui": {
         "page": "html/options.html",
         "open_in_tab": false
-      },
+    },
     "content_scripts": [
         {
             "matches": [
@@ -50,7 +50,7 @@
         },
         {
             "matches": [
-                "*://www.bungie.net/7/*/Fireteams/Search?*"
+                "*://www.bungie.net/7/*/Fireteams/Search*"
             ],
             "js": [
                 "js/fireteam-quickactions.js",
