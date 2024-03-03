@@ -3,7 +3,7 @@ var scriptEl = document.createElement("script");
 scriptEl.src = chrome.runtime.getURL("./js/rr-layout.js");
 document.head.appendChild(scriptEl);
 
-var lastProfileUrl;
+var lastProfileUrl, lastUrl;
 
 /* get saved settings */
 chrome.storage.local.get(["sidebarEnabled", "sidebarProfiles", "removeKDA", "dynamicLayout", "minimalLayout", "compactLayout", "modernLayout"]).then((settings) => {
@@ -37,6 +37,14 @@ chrome.storage.local.get(["sidebarEnabled", "sidebarProfiles", "removeKDA", "dyn
     const rrLayoutTargetNode = document.getElementById("root");
     const rrLayoutConfig = { attributes: false, childList: true, subtree: true };
     const rrLayoutCallback = (mutationList, observer) => {
+        if (document.location.href == lastUrl) {
+            return;
+        }
+        lastUrl = document.location.href;
+
+        if (document.location.href == "https://raid.report/") {
+            return
+        }
         if (settings.sidebarEnabled) {
             addSidebar(settings.sidebarProfiles)
         }
