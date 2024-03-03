@@ -27,7 +27,7 @@
     "content_scripts": [
         {
             "matches": [
-                "*://raid.report/*/*"
+                "*://raid.report/*"
             ],
             "css": [
                 "css/rr-layout.css"
