@@ -1,3 +1,4 @@
+// TODO at some point add text field in options where user can put his own api key
 var api_key = "41bf571cea84481eb853af82101e7230"
 var api_url = "https://www.bungie.net/Platform"
 var platforms = {
@@ -31,7 +32,6 @@ function addSidebar(profiles) {
                   container[0].id = "side-container";
             }
       }
-      
       let sidebar = document.getElementById("sidebar");
       if (sidebar == null) {
             sidebar = document.createElement("div")
