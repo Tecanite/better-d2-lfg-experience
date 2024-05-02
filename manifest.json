@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "better-d2-lfg-experience",
     "description": "adds useful features to destiny 2 raid.report and bungie fireteam search",
-    "version": "0.2",
+    "version": "0.3",
     "permissions": [
         "contextMenus",
         "scripting",
