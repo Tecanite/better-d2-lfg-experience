@@ -6,7 +6,7 @@
  */
 function addReportLinkButtons() {
     let fireteam = document.getElementsByClassName("modalContainer");
-    if (fireteam.length != 0) {
+    if (fireteam.length > 0) {
         let fireteamMembers = document.getElementsByClassName("Fireteam_user__c4SNE");
         for (let i = 0; i < fireteamMembers.length; i++) {
             if (fireteamMembers[i].nodeName == "DIV") {

@@ -62,7 +62,7 @@ function updateLayout(removeUselessStats, enableSingleRow) {
 
         window.addEventListener("resize", (event) => {
             event.stopImmediatePropagation(); 
-            //! doesn't work apparently => breaks raid.report if window to resized to small
+            //! doesn't work => breaks raid.report if window to resized to small
             
             let lastRaidsPerRow = raidsPerRow;
             raidsPerRow = getElementsPerRow();
