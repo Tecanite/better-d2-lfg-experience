@@ -3,7 +3,7 @@ var scriptEl = document.createElement("script");
 scriptEl.src = chrome.runtime.getURL("./js/rr-layout.js");
 document.head.appendChild(scriptEl);
 
-var lastProfileUrl;
+var lastProfileUrl, lastUrl;
 
 /* get saved settings */
 chrome.storage.local.get(["sidebarEnabled", "sidebarProfiles", "removeKDA", "dynamicLayout", "minimalLayout", "compactLayout", "modernLayout"]).then((settings) => {
@@ -33,15 +33,28 @@ chrome.storage.local.get(["sidebarEnabled", "sidebarProfiles", "removeKDA", "dyn
         styleEl.href = chrome.runtime.getURL("./css/rr-sidebar.css");
         document.head.appendChild(styleEl);
     }
+    if (settings.sidebarEnabled) {
+        addSidebar(settings.sidebarProfiles)
+    }
+    removeAds();
+
     /* update layout of page with observer */
     const rrLayoutTargetNode = document.getElementById("root");
     const rrLayoutConfig = { attributes: false, childList: true, subtree: true };
     const rrLayoutCallback = (mutationList, observer) => {
         if (settings.sidebarEnabled) {
-            addSidebar(settings.sidebarProfiles)
+            addSidebar(settings.sidebarProfiles);
         }
-
         removeAds();
+        
+        if (document.location.href.endsWith("raid.report/")) {
+            return;
+        }
+        if (document.location.href == lastUrl) {
+            return;
+        }
+        lastUrl = document.location.href;
+
         updateLayout(settings.removeKDA, settings.dynamicLayout);
 
         let runsTogetherBadge = document.getElementById("runs-together-card");

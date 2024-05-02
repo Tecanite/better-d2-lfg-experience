@@ -1,5 +1,3 @@
-//TODO fix hover on new badge
-
 var debug = false;
 
 var storedActivities;
@@ -46,15 +44,16 @@ chrome.storage.local.get(["ownProfileID", "storedActivities", "enableRunsTogethe
 
 // receive message from injected script
 window.addEventListener("message", function (e) {
-    if (e.data.data.Response != null && e.data.data.Response.bungieNetUser != null) {
-        userID = e.data.data.Response.bungieNetUser.uniqueName;
+    // console.log(e.data.data.Response)
+    if (e.data.data != null && e.data.data.Response != null && e.data.data.Response.destinyMemberships != null) {
+        firstMembership = e.data.data.Response.destinyMemberships[0];
+        userID = firstMembership.bungieGlobalDisplayName + "#" + firstMembership.bungieGlobalDisplayNameCode;
+
         allActivities = [];
 
-        if (userID != lastUserID || lastUserID == null) {
-            ce = [], ron = [], kf = [], votd = [], vog = [], dsc = [], gos = [], lw = [], cos = [], sotp = [], sos = [], eow = [], lev = [];
-            activitiesMap = new Map();
-            runsTogetherDone = false;
-        }
+        ce = [], ron = [], kf = [], votd = [], vog = [], dsc = [], gos = [], lw = [], cos = [], sotp = [], sos = [], eow = [], lev = [];
+        activitiesMap = new Map();
+        runsTogetherDone = false;
     }
 
     if (e.data.data.Response != null && e.data.data.Response.activities != null) {
@@ -78,10 +77,10 @@ function sortFetchedActivities() {
     if (!enableRunsTogether || allActivities == []) {
         return;
     }
-
+    
     allActivities.forEach(function (item, index, object) {
         // filter only completed activities
-        if (item.values.completed.basic.value != 1) {
+        if (item.values.completed.basic.value != 1 || item.values.completionReason.basic.value == 2) {
             return;
         }
 
@@ -220,7 +219,24 @@ function updateRunsTogether() {
             });
         }, 3000)
     } else {
-        var runsTogetherCard = document.getElementById("runs-together-card");
+        var countRunsTogether = 0;
+        var runsTogether = new Map();
+
+        runsTogether.set("ce", []);
+        runsTogether.set("ron", []);
+        runsTogether.set("kf", []);
+        runsTogether.set("votd", []);
+        runsTogether.set("vog", []);
+        runsTogether.set("dsc", []);
+        runsTogether.set("gos", []);
+        runsTogether.set("lw", []);
+        runsTogether.set("cos", []);
+        runsTogether.set("sotp", []);
+        runsTogether.set("sos", []);
+        runsTogether.set("eow", []);
+        runsTogether.set("lev", []);
+
+        let runsTogetherCard = document.getElementById("runs-together-card");
 
         if (runsTogetherCard == null) {
             runsTogetherCard = document.createElement("div");
@@ -229,7 +245,6 @@ function updateRunsTogether() {
 
             let innerDiv = document.createElement("div");
             innerDiv.className = "card rank-card";
-            innerDiv.title = "???";
             innerDiv.style.backgroundColor = "grey";
 
             let img = document.createElement("img");
@@ -249,30 +264,17 @@ function updateRunsTogether() {
 
             if (cards != null) {
                 cards.appendChild(runsTogetherCard);
-
             }
         }
 
-        var countRunsTogether = 0;
-        var runsTogether = new Map();
-
-        runsTogether.set("ce", []);
-        runsTogether.set("ron", []);
-        runsTogether.set("kf", []);
-        runsTogether.set("votd", []);
-        runsTogether.set("vog", []);
-        runsTogether.set("dsc", []);
-        runsTogether.set("gos", []);
-        runsTogether.set("lw", []);
-        runsTogether.set("cos", []);
-        runsTogether.set("sotp", []);
-        runsTogether.set("sos", []);
-        runsTogether.set("eow", []);
-        runsTogether.set("lev", []);
 
         if (storedActivities == null) {
             if (!runsTogetherAlertRan) {
-                alert("Please visit own raid.report once and let it fully load to cache activities");
+                if (ownerID == "Bungie#ID") {
+                    alert("Please set own Bungie ID in options and visit own raid.report to enable runs together.");
+                } else {
+                    alert("Please visit own raid.report once and let it fully load to cache activities");
+                }
                 runsTogetherAlertRan = true;
             }
             return;
@@ -287,40 +289,31 @@ function updateRunsTogether() {
         })
 
         let tier;
-        let title;
         let color;
 
         if (countRunsTogether >= 500) {
             tier = "Challenger";
-            title = "God Tier Gamer";
             color = "rgb(250, 87, 111)";
         } else if (countRunsTogether >= 250) {
             tier = "Master";
-            title = "Gamer Gamer";
             color = "rgb(250, 87, 111)";
         } else if (countRunsTogether >= 100) {
             tier = "Diamond";
-            title = "Gamer";
             color = "rgb(4, 138, 180)";
         } else if (countRunsTogether >= 50) {
             tier = "Platinum";
-            title = "Friend";
             color = "rgb(4, 177, 161)";
         } else if (countRunsTogether >= 25) {
             tier = "Gold";
-            title = "Friend";
             color = "rgb(250, 188, 68)";
         } else if (countRunsTogether >= 10) {
             tier = "Silver";
-            title = "I think I know this guy";
             color = "rgb(158, 163, 176)";
         } else if (countRunsTogether >= 1) {
             tier = "Bronze";
-            title = "That name sounds familiar";
             color = "rgb(106, 91, 63)";
         } else {
             tier = "Unranked";
-            title = "???";
             color = "grey";
         }
 
@@ -335,16 +328,23 @@ function updateRunsTogether() {
             rankTitle.innerText = countRunsTogether;
         }
         if (innerCard != null) {
-            innerCard.title = title;
             innerCard.style.backgroundColor = color;
         }
-        if (document.location.href == lastProfileUrl) {
+        //// if (document.location.href == lastProfileUrl && runsTogetherDone) {
+        ////     finishRunsTogether(runsTogether);
+        //// } else {
+        ////     clearTimeout(animTimeoutID);
+        ////     animTimeoutID = setTimeout(function () {
+        ////         finishRunsTogether(runsTogether);
+        ////     }, 5000);
+        //// }
+        // TODO does not work if player has 0 crota clears ???
+        let totalCompletion = document.querySelector("div.total-completions");
+        console.log(totalCompletion)
+        console.log(totalCompletion.children)
+        if (totalCompletion && totalCompletion.children.length != 0 && !totalCompletion.children[0].classList.contains("MuiSkeleton-pulse")) {
+            console.log("here")
             finishRunsTogether(runsTogether);
-        } else {
-            clearTimeout(animTimeoutID);
-            animTimeoutID = setTimeout(function () {
-                finishRunsTogether(runsTogether);
-            }, 5000);
         }
     }
 }
@@ -353,7 +353,7 @@ function finishRunsTogether(runsTogether) {
     runsTogetherDone = true;
     lastProfileUrl = document.location.href;
     addRunsTogetherNumbers(runsTogether);
-    recolorActivityDots(runsTogether);
+    setTimeout(() => { recolorActivityDots(runsTogether) }, 50);
 
     //remove loading animation
     let animEl = document.querySelector("#runs-together-card>div.rank-card");
@@ -371,24 +371,19 @@ function finishRunsTogether(runsTogether) {
  */
 function addRunsTogetherNumbers(runsTogether) {
     let clearDivs = document.querySelectorAll(".total-completions");
-
     for (let node of clearDivs) {
-        node.classList.remove("total-completions", "center", "centered-content");
+        // node.classList.remove("total-completions");
+        if (node.childNodes[0].classList != null) {
+            node.childNodes[0].classList.add("total-completions");
+        }
+        node.style.flexDirection = "column";
+
         let key = node.closest(".col.l3.m6.s12").id;
-
-        let totalClearDiv = document.createElement("div");
-        totalClearDiv.className = "total-completions center";
-        totalClearDiv.innerHTML = node.innerHTML;
-
-        node.firstChild.remove();
-        node.append(totalClearDiv);
-
-        let runsTogetherDiv = document.createElement("div");
-        runsTogetherDiv.className = "together-completions center";
-        runsTogetherDiv.innerHTML = "<span>(" + runsTogether.get(key).length + ")</span>";
-        node.append(runsTogetherDiv);
+        let runsTogetherSpan = document.createElement("span");
+        runsTogetherSpan.innerHTML = "(" + runsTogether.get(key).length + ")";
+        runsTogetherSpan.className = "together-completions";
+        node.appendChild(runsTogetherSpan);
     }
-
 }
 
 /**
@@ -400,17 +395,13 @@ function addRunsTogetherNumbers(runsTogether) {
  */
 function recolorActivityDots(runsTogether) {
     // get all dots and color
-    let activityDots = document.getElementsByTagName("svg");
-    for (let raidDots of activityDots) {
-        for (let node of raidDots.childNodes) {
-            if (node.nodeName == "a") {
-                let key = node.closest(".col.l3.m6.s12").id;
-                let dotInstanceID = (node.href.baseVal.split("/")).at(2);
+    let dots = document.querySelectorAll("a.clickable.activity-dot");
 
-                if (runsTogether.get(key).includes(dotInstanceID)) {
-                    node.firstChild.attributes.fill.value = "#03b6fc";
-                }
-            }
+    for (let dot of dots) {
+        let key = dot.closest(".col.l3.m6.s12").id;
+        let dotInstanceID = (dot.href.baseVal.split("/")).at(2);
+        if (runsTogether.get(key).includes(dotInstanceID)) {
+            dot.firstChild.attributes.fill.value = "#03b6fc";
         }
     }
 
