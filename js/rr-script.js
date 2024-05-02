@@ -6,7 +6,7 @@ document.head.appendChild(scriptEl);
 var lastProfileUrl, lastUrl;
 
 /* get saved settings */
-chrome.storage.local.get(["sidebarEnabled", "sidebarProfiles", "removeKDA", "dynamicLayout", "minimalLayout", "compactLayout", "modernLayout"]).then((settings) => {
+chrome.storage.local.get(["sidebarEnabled", "sidebarProfiles", "removeKDA", "dynamicLayout", "minimalLayout", "compactLayout", "modernLayout", "apiKey"]).then((settings) => {
     /* add scripts and css files of enabled features */
     if (settings.modernLayout) {
         let styleEl = document.createElement("link");
@@ -32,10 +32,10 @@ chrome.storage.local.get(["sidebarEnabled", "sidebarProfiles", "removeKDA", "dyn
         styleEl.type = "text/css";
         styleEl.href = chrome.runtime.getURL("./css/rr-sidebar.css");
         document.head.appendChild(styleEl);
+
+        addSidebar(settings.sidebarProfiles, settings.apiKey)
     }
-    if (settings.sidebarEnabled) {
-        addSidebar(settings.sidebarProfiles)
-    }
+
     removeAds();
 
     /* update layout of page with observer */
@@ -46,8 +46,7 @@ chrome.storage.local.get(["sidebarEnabled", "sidebarProfiles", "removeKDA", "dyn
             addSidebar(settings.sidebarProfiles);
         }
         removeAds();
-        
-        if (document.location.href.endsWith("raid.report/")) {
+        if (document.location.href.endsWith("raid.report/") || document.location.href.endsWith("raid.report")) {
             return;
         }
         if (document.location.href == lastUrl) {

@@ -9,6 +9,8 @@ const saveOptions = () => {
     // sidebar options
     var sidebarEnabled = document.getElementById("sidebar-toggle").checked;
 
+    var apiKey = document.getElementById("bungie-api-key").value;
+
     let profileList = document.getElementById("rr-sidebar-profiles");
     let profileElements = profileList.getElementsByTagName("li");
     var profiles = [];
@@ -36,7 +38,7 @@ const saveOptions = () => {
 
     // saving
     chrome.storage.local.set({
-        sidebarEnabled: sidebarEnabled, sidebarProfiles: profiles,
+        sidebarEnabled: sidebarEnabled, apiKey: apiKey, sidebarProfiles: profiles,
         enableRunsTogether: enableRunsTogether, ownProfileID: ownProfile,
         removeKDA: removeKDA, dynamicLayout: dynamic, minimalLayout: minimal, compactLayout: compact, modernLayout: modern,
         fireteamSearchGrid: fireteamGrid, fireteamProfileReports: fireteamReports
@@ -55,7 +57,7 @@ const saveOptions = () => {
 // stored in chrome.storage.
 const restoreOptions = () => {
     chrome.storage.local.get({
-        sidebarEnabled: false, sidebarProfiles: [],
+        sidebarEnabled: false, apiKey: "", sidebarProfiles: [],
         enableRunsTogether: false, ownProfileID: "Bungie#ID", storedActivities: null,
         removeKDA: false, dynamicLayout: false, minimalLayout: false, compactLayout: false, modernLayout: false,
         fireteamSearchGrid: false, fireteamProfileReports: false
@@ -64,6 +66,14 @@ const restoreOptions = () => {
 
         // sidebar options
         document.getElementById("sidebar-toggle").checked = result.sidebarEnabled;
+        document.getElementById("bungie-api-key").value = result.apiKey;
+
+        if (result.sidebarEnabled && result.apiKey == "") {
+            let infoDiv = document.createElement("div");
+            infoDiv.innerHTML = "Get an API key by registering an application <a href='https://www.bungie.net/en/Application'> here </a>.";
+            document.getElementById("bungie-api-key").insertAdjacentElement("afterend", infoDiv);
+        }
+
 
         let sidebarProfiles = result.sidebarProfiles;
         let profileList = document.getElementById("rr-sidebar-profiles");
