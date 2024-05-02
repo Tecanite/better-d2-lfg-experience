@@ -10,7 +10,7 @@ var userID, lastUserID;
 var animTimeoutID, saveTimeoutID;
 
 var runsTogetherDone = false;
-var ce, ron, kf, votd, vog, dsc, gos, lw, cos, sotp, sos, eow, lev;
+var pantheon, ce, ron, kf, votd, vog, dsc, gos, lw, cos, sotp, sos, eow, lev;
 var activitiesMap;
 
 var scriptEl = document.createElement("script");
@@ -51,7 +51,7 @@ window.addEventListener("message", function (e) {
 
         allActivities = [];
 
-        ce = [], ron = [], kf = [], votd = [], vog = [], dsc = [], gos = [], lw = [], cos = [], sotp = [], sos = [], eow = [], lev = [];
+        pantheon = [], ce = [], ron = [], kf = [], votd = [], vog = [], dsc = [], gos = [], lw = [], cos = [], sotp = [], sos = [], eow = [], lev = [];
         activitiesMap = new Map();
         runsTogetherDone = false;
     }
@@ -77,7 +77,7 @@ function sortFetchedActivities() {
     if (!enableRunsTogether || allActivities == []) {
         return;
     }
-    
+
     allActivities.forEach(function (item, index, object) {
         // filter only completed activities
         if (item.values.completed.basic.value != 1 || item.values.completionReason.basic.value == 2) {
@@ -85,7 +85,12 @@ function sortFetchedActivities() {
         }
 
         switch (item.activityDetails.directorActivityHash) {
-            case 4179289725: case 1507509200: case 4103176774: case 156253568:// ce normal / master / guided / contest
+            case 4169648179: case 4169648176: case 4169648177: case 4169648182: // Atraks Sovereign / Oryx Exalted / Rhulk Indomitable / Nezarec Sublime
+                if (!pantheon.includes(item.activityDetails.instanceId)) {
+                    pantheon.push(item.activityDetails.instanceId);
+                }
+                break;
+            case 4179289725: case 1507509200: case 4103176774: case 156253568: // ce normal / master / guided / contest
                 if (!ce.includes(item.activityDetails.instanceId)) {
                     ce.push(item.activityDetails.instanceId);
                 }
@@ -155,6 +160,7 @@ function sortFetchedActivities() {
         }
     })
     // create map for easy access
+    activitiesMap.set("pantheon", pantheon);
     activitiesMap.set("ce", ce);
     activitiesMap.set("ron", ron);
     activitiesMap.set("kf", kf);
@@ -188,12 +194,12 @@ function sortFetchedActivities() {
 
         filteredAllActivities = allActivities.filter(item => {
             var hash = item.activityDetails.directorActivityHash;
-            var existing = [4179289725, 1507509200, 4103176774, 156253568, 2381413764, 2918919505, 1191701339, 1374392663, 2964135793, 3257594522, 2897223272,
-                1063970578, 1441982566, 4217492330, 3889634515, 4156879541, 3881495763, 1681562271, 3022541210, 3711931140, 1485585878, 910380154,
-                3976949817, 3458480158, 1042180643, 2659723068, 2497200493, 2122313384, 1661734046, 3333172150, 548750096, 2812525063, 119944200,
-                3213556450, 3089205900, 809170886, 2693136600, 2693136601, 2693136602, 2693136603, 2693136604, 2693136605, 757116822, 3879860661,
-                2449714930, 417231112, 3446541099, 1685065161, 960175301, 3845997235, 2164432138, 1699948563, 3916343513, 4039317196, 89727599,
-                1875726950, 3004605630, 287649202];
+            var existing = [4169648179, 4169648176, 4169648177, 4169648182, 4179289725, 1507509200, 4103176774, 156253568, 2381413764, 2918919505,
+                1191701339, 1374392663, 2964135793, 3257594522, 2897223272, 1063970578, 1441982566, 4217492330, 3889634515, 4156879541, 3881495763,
+                1681562271, 3022541210, 3711931140, 1485585878, 910380154, 3976949817, 3458480158, 1042180643, 2659723068, 2497200493, 2122313384,
+                1661734046, 3333172150, 548750096, 2812525063, 119944200, 3213556450, 3089205900, 809170886, 2693136600, 2693136601, 2693136602,
+                2693136603, 2693136604, 2693136605, 757116822, 3879860661, 2449714930, 417231112, 3446541099, 1685065161, 960175301, 3845997235,
+                2164432138, 1699948563, 3916343513, 4039317196, 89727599, 1875726950, 3004605630, 287649202];
             return !existing.includes(hash);
         })
         console.log("not filtered:", filteredAllActivities);
@@ -222,6 +228,7 @@ function updateRunsTogether() {
         var countRunsTogether = 0;
         var runsTogether = new Map();
 
+        runsTogether.set("pantheon", []);
         runsTogether.set("ce", []);
         runsTogether.set("ron", []);
         runsTogether.set("kf", []);

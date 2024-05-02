@@ -11,8 +11,8 @@ function removeAds() {
             adBanner.parentNode.removeChild(adBanner);
         }
     }
-    let ads = document.getElementsByClassName("div.ad-tag");
-    for (let i = ads.length-1; i >= 0; i--) {
+    let ads = document.querySelectorAll("div.ad-tag");
+    for (let i = ads.length - 1; i >= 0; i--) {
         ads[i].remove();
     }
 }
@@ -31,56 +31,60 @@ var raidsPerRow = 4;
 function updateLayout(removeUselessStats, enableSingleRow) {
     if (enableSingleRow) {
         var singleRow = document.getElementById("single-raid-row");
-    
+
         if (singleRow != null) {
+            console.log("here");
             return;
         }
-        
-        var rows = document.getElementsByClassName("row raid-row");
-    
+        var cards = document.querySelectorAll(".col.l3.m6.s12")
+
+
         let singleRaidRow = document.createElement("div");
         singleRaidRow.className = "row raid-row";
         singleRaidRow.id = "single-raid-row";
-        let container = document.getElementById("side-container");
-        if (container != null) {
-            container.appendChild(singleRaidRow);
+        let container = document.getElementsByClassName("side-container");
+
+        if (container != null && container[0] != null) {
+            container[0].id = "side-container";
+            container[0].appendChild(singleRaidRow);
         }
-    
-        combinedInnerHTML = "";
-        for(let i = 0; i < rows.length;) {
-            if (!(rows[i].classList.contains("small-bottom-margin") || rows[i].id == "single-raid-row")) {
-                for(let j = 0; j < rows[i].childNodes.length;) {
-                    singleRaidRow.appendChild(rows[i].childNodes[j]);
-                }
-                rows[i].parentNode.removeChild(rows[i]);
+
+        for (let card of cards) {
+            singleRaidRow.appendChild(card);
+        }
+        let rows = document.getElementsByClassName("row raid-row");
+        for (let i = 0; i < rows.length;) {
+            if (rows[i].childNodes.length == 0) {
+                rows[i].parentElement.removeChild(rows[i]);
             } else {
                 i++;
             }
         }
+
         raidsPerRow = getElementsPerRow();
-        adjustRowBreaks(raidsPerRow)
+        adjustRowBreaks(raidsPerRow);
 
         window.addEventListener("resize", (event) => {
-            event.stopImmediatePropagation(); 
+            event.stopImmediatePropagation();
             //! doesn't work => breaks raid.report if window to resized to small
-            
+
             let lastRaidsPerRow = raidsPerRow;
             raidsPerRow = getElementsPerRow();
-            if(!(lastRaidsPerRow == raidsPerRow)) {
+            if (!(lastRaidsPerRow == raidsPerRow)) {
                 adjustRowBreaks(raidsPerRow);
             }
-            
+
         });
     }
 
-    var raids = ["ce", "ron", "kf", "votd", "vog", "dsc", "gos", "lw", "cos", "sotp", "sos", "eow", "lev"];
+    var raids = ["pantheon", "ce", "ron", "kf", "votd", "vog", "dsc", "gos", "lw", "cos", "sotp", "sos", "eow", "lev"];
     var cards = document.getElementsByClassName("col l3 m6 s12");
-    var order = ["ce", "ron", "kf", "votd", "vog", "dsc", "gos", "lw", "cos", "sotp", "sos", "eow", "lev"];
+    var order = ["pantheon", "ce", "ron", "kf", "votd", "vog", "dsc", "gos", "lw", "cos", "sotp", "sos", "eow", "lev"];
 
-    for(let i = 0; i < cards.length; i++) {   
+    for (let i = 0; i < cards.length; i++) {
         if (raids[i] != null) {
             cards[i].id = raids[i];
-            if(enableSingleRow) {
+            if (enableSingleRow) {
                 cards[i].classList.add("item");
             }
         } else if (!runAlertOnce) {
@@ -90,7 +94,7 @@ function updateLayout(removeUselessStats, enableSingleRow) {
     }
 
     padNonMasterOrPrestigeRaids();
-    if(removeUselessStats) {
+    if (removeUselessStats) {
         removeStats();
     }
 }
@@ -127,7 +131,7 @@ function adjustRowBreaks(raidsPerRow) {
     let singleRaidRow = document.getElementById("single-raid-row");
     let cards = document.getElementsByClassName("col l3 m6 s12");
 
-    for(let i = raidsPerRow; i < cards.length; i += raidsPerRow) {
+    for (let i = raidsPerRow; i < cards.length; i += raidsPerRow) {
         let breakDiv = document.createElement("div");
         breakDiv.className = "break";
         singleRaidRow.insertBefore(breakDiv, cards[i]);
@@ -160,7 +164,7 @@ function padNonMasterOrPrestigeRaids() {
 function removeStats() {
     tables = document.querySelectorAll("table.col.s8.centered");
     if (tables != null) {
-        for(let i = tables.length - 1; i >= 0; i--) {
+        for (let i = tables.length - 1; i >= 0; i--) {
             tables[i].remove();
         }
     }
