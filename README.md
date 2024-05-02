@@ -29,10 +29,12 @@ chrome extension that adds some useful features to bungie.net fireteam search, r
 this extension comes with an options page where all features can be individually configured.
 the options page can be accessed by right-clicking the extentions icon in the chrome menu bar and choosing "options"
 
-for the sidebar functionality you have to input your own bungie api key in the settings page
-you can get one by registering a dummy application [here](https://www.bungie.net/en/Application)
-disable app authentication but be sure to put "https://raid.report" under origin header for browser based apps.
-after creating the dummy app you can copy the automatically generated api key into the text field on the settings page
+for the sidebar functionality you have to input your own bungie api key in the settings page. follow the steps below to get one:
+- register a dummy application [here](https://www.bungie.net/en/Application)
+- you can disable app authentication since its not needed
+- put "https://raid.report" under origin header for browser based apps
+- accept terms and create app
+- copy the automatically generated api key into the text field on the settings page
 
 
 ## Installation
