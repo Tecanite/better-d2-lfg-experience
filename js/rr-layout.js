@@ -73,9 +73,9 @@ function updateLayout(removeUselessStats, enableSingleRow) {
         });
     }
 
-    var raids = ["ce", "ron", "kf", "votd", "vog", "dsc", "gos", "lw", "cos", "sotp", "sos", "eow", "lev"];
+    var raids = ["pantheon", "ce", "ron", "kf", "votd", "vog", "dsc", "gos", "lw", "cos", "sotp", "sos", "eow", "lev"];
     var cards = document.getElementsByClassName("col l3 m6 s12");
-    var order = ["ce", "ron", "kf", "votd", "vog", "dsc", "gos", "lw", "cos", "sotp", "sos", "eow", "lev"];
+    var order = ["pantheon", "ce", "ron", "kf", "votd", "vog", "dsc", "gos", "lw", "cos", "sotp", "sos", "eow", "lev"];
 
     for(let i = 0; i < cards.length; i++) {   
         if (raids[i] != null) {
