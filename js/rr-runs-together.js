@@ -337,20 +337,16 @@ function updateRunsTogether() {
         if (innerCard != null) {
             innerCard.style.backgroundColor = color;
         }
-        //// if (document.location.href == lastProfileUrl && runsTogetherDone) {
-        ////     finishRunsTogether(runsTogether);
-        //// } else {
-        ////     clearTimeout(animTimeoutID);
-        ////     animTimeoutID = setTimeout(function () {
-        ////         finishRunsTogether(runsTogether);
-        ////     }, 5000);
-        //// }
         // TODO does not work if player has 0 crota clears ???
         let totalCompletion = document.querySelector("div.total-completions");
-        console.log(totalCompletion)
-        console.log(totalCompletion.children)
+        if (debug) {
+            console.log(totalCompletion)
+            console.log(totalCompletion.children)
+        }
         if (totalCompletion && totalCompletion.children.length != 0 && !totalCompletion.children[0].classList.contains("MuiSkeleton-pulse")) {
-            console.log("here")
+            if (debug) {
+                console.log("finishing runs together")
+            }
             finishRunsTogether(runsTogether);
         }
     }
