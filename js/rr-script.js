@@ -43,7 +43,7 @@ chrome.storage.local.get(["sidebarEnabled", "sidebarProfiles", "removeKDA", "dyn
     const rrLayoutConfig = { attributes: false, childList: true, subtree: true };
     const rrLayoutCallback = (mutationList, observer) => {
         if (settings.sidebarEnabled) {
-            addSidebar(settings.sidebarProfiles);
+            addSidebar(settings.sidebarProfiles, settings.apiKey);
         }
         removeAds();
         if (document.location.href.endsWith("raid.report/") || document.location.href.endsWith("raid.report")) {
