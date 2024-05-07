@@ -14,17 +14,17 @@ jobs:
         uses: thedoctor0/zip-release@master
         with:
           type: 'zip'
-          filename: 'build/better-d2-lfg-experience.zip'
+          filename: 'better-d2-lfg-experience.zip'
           exclusions: '*.git*'
       - name: Pack better-d2-lfg-experience to signed crx
         uses: cardinalby/webext-buildtools-chrome-crx-action@v2
         with:
-          zipFilePath: 'build/better-d2-lfg-experience.zip'
-          crxFilePath: 'build/better-d2-lfg-experience.crx'
+          zipFilePath: 'better-d2-lfg-experience.zip'
+          crxFilePath: 'better-d2-lfg-experience.crx'
           privateKey: ${{ secrets.CHROME_CRX_PRIVATE_KEY }}
       - name: Upload better-d2-lfg-experience Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: 'build/better-d2-lfg-experience.zip,build/better-d2-lfg-experience.crx'
+          artifacts: 'better-d2-lfg-experience.zip,better-d2-lfg-experience.crx'
           generateReleaseNotes: true
           token: ${{ secrets.GITHUB_TOKEN }}
