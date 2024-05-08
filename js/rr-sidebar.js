@@ -66,7 +66,7 @@ function sidebarProfilesAdd(sidebarProfiles, apiKey) {
             getPlatformAndId(sidebarProfiles[i], apiKey).then((platID) => {
                   let profileIdConverted = sidebarProfiles[i].replace(/'/g, "&#39;").replace(/"/g, "&quot;");
                   profileSlot.innerHTML = "<a href='/" + platforms[platID[0]] + "/" + platID[1] + "' class='profileSlot' data-hover = '" + profileIdConverted + "'></a>";
-                  getEmblemUrl(platID[0], platID[1]).then((emblemUrl) => {
+                  getEmblemUrl(platID[0], platID[1], apiKey).then((emblemUrl) => {
                         profileSlot.style.backgroundImage = "url('https://www.bungie.net" + emblemUrl + "')";
                   });
             });
