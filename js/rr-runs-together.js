@@ -195,11 +195,9 @@ function updateRunsTogether() {
     if (ownerID == userID) {
         clearTimeout(saveTimeoutID);
         saveTimeoutID = setTimeout(() => {
-            console.log(activitiesMap);
             activitiesMap.forEach((activitySet, key) => {
                 activitiesMap.set(key, Array.from(activitySet))
             });
-            console.log(activitiesMap);
             chrome.storage.local.set({ storedActivities: Object.fromEntries(activitiesMap) }).then(() => {
                 console.log("saved activities!");
             });
