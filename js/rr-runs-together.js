@@ -28,6 +28,9 @@ chrome.storage.local.get(["ownProfileID", "storedActivities", "enableRunsTogethe
         enableRunsTogether = settings.enableRunsTogether;
         if (settings.storedActivities != null) {
             storedActivities = new Map(Object.entries(settings.storedActivities));
+            storedActivities.forEach((activityArray, key) => {
+                storedActivities.set(key, new Set(activityArray));
+            });
         } else {
             storedActivities = null;
         }
@@ -51,8 +54,8 @@ window.addEventListener("message", function (e) {
 
         allActivities = [];
 
-        pantheon = [], ce = [], ron = [], kf = [], votd = [], vog = [], dsc = [], gos = [], lw = [], cos = [], sotp = [], sos = [], eow = [], lev = [];
-        activitiesMap = new Map();
+        pantheon = new Set(), ce = new Set(), ron = new Set(), kf = new Set(), votd = new Set(), vog = new Set(), dsc = new Set(), gos = new Set(), lw = new Set(), cos = new Set(), sotp = new Set(), sos = new Set(), eow = new Set(), lev = new Set(),
+            activitiesMap = new Map();
         runsTogetherDone = false;
     }
 
@@ -86,76 +89,48 @@ function sortFetchedActivities() {
 
         switch (item.activityDetails.directorActivityHash) {
             case 4169648179: case 4169648176: case 4169648177: case 4169648182: // Atraks Sovereign / Oryx Exalted / Rhulk Indomitable / Nezarec Sublime
-                if (!pantheon.includes(item.activityDetails.instanceId)) {
-                    pantheon.push(item.activityDetails.instanceId);
-                }
+                pantheon.add(item.activityDetails.instanceId);
                 break;
             case 4179289725: case 1507509200: case 4103176774: case 156253568: // ce normal / master / guided / contest
-                if (!ce.includes(item.activityDetails.instanceId)) {
-                    ce.push(item.activityDetails.instanceId);
-                }
+                ce.add(item.activityDetails.instanceId);
                 break;
             case 2381413764: case 2918919505: case 1191701339: // ron normal / master / guided
-                if (!ron.includes(item.activityDetails.instanceId)) {
-                    ron.push(item.activityDetails.instanceId);
-                }
+                ron.add(item.activityDetails.instanceId);
                 break;
             case 1374392663: case 2964135793: case 3257594522: case 2897223272: case 1063970578: // kf normal / master / master / guided / challenge
-                if (!kf.includes(item.activityDetails.instanceId)) {
-                    kf.push(item.activityDetails.instanceId);
-                }
+                kf.add(item.activityDetails.instanceId);
                 break;
             case 1441982566: case 4217492330: case 3889634515: case 4156879541: // vow normal / master / master / guided
-                if (!votd.includes(item.activityDetails.instanceId)) {
-                    votd.push(item.activityDetails.instanceId);
-                }
+                votd.add(item.activityDetails.instanceId);
                 break;
             case 3881495763: case 1681562271: case 3022541210: case 3711931140: case 1485585878: // vog normal / master / master / guided / challenge
-                if (!vog.includes(item.activityDetails.instanceId)) {
-                    vog.push(item.activityDetails.instanceId);
-                }
+                vog.add(item.activityDetails.instanceId);
                 break;
             case 910380154: case 3976949817: // deep stone crypt normal / guided
-                if (!dsc.includes(item.activityDetails.instanceId)) {
-                    dsc.push(item.activityDetails.instanceId);
-                }
+                dsc.add(item.activityDetails.instanceId);
                 break;
             case 3458480158: case 1042180643: case 2659723068: case 2497200493: case 3845997235: // gos normal / new div / old div / guided / guided
-                if (!gos.includes(item.activityDetails.instanceId)) {
-                    gos.push(item.activityDetails.instanceId);
-                }
+                gos.add(item.activityDetails.instanceId);
                 break;
             case 2122313384: case 1661734046:  //lw normal / guided
-                if (!lw.includes(item.activityDetails.instanceId)) {
-                    lw.push(item.activityDetails.instanceId);
-                }
+                lw.add(item.activityDetails.instanceId);
                 break;
             case 3333172150: case 960175301: // cos normal / guided
-                if (!cos.includes(item.activityDetails.instanceId)) {
-                    cos.push(item.activityDetails.instanceId);
-                }
+                cos.add(item.activityDetails.instanceId);
                 break;
             case 548750096: case 2812525063: // sotp normal / guided
-                if (!sotp.includes(item.activityDetails.instanceId)) {
-                    sotp.push(item.activityDetails.instanceId);
-                }
+                sotp.add(item.activityDetails.instanceId);
                 break;
             case 119944200: case 3213556450: case 3004605630: // sos normal / prestige / guided
-                if (!sos.includes(item.activityDetails.instanceId)) {
-                    sos.push(item.activityDetails.instanceId);
-                }
+                sos.add(item.activityDetails.instanceId);
                 break;
             case 3089205900: case 809170886: case 2164432138: // eow normal / prestige / guided
-                if (!eow.includes(item.activityDetails.instanceId)) {
-                    eow.push(item.activityDetails.instanceId);
-                }
+                eow.add(item.activityDetails.instanceId);
                 break;
             case 2693136600: case 2693136601: case 2693136602: case 2693136603: case 2693136604: case 2693136605: // lev normal
-            case 757116822: case 3879860661: case 2449714930: case 417231112: case 3446541099: case 1685065161: // lev prestige     //! WTF Bungie
+            case 757116822: case 3879860661: case 2449714930: case 417231112: case 3446541099: case 1685065161: // lev prestige
             case 1699948563: case 3916343513: case 4039317196: case 89727599: case 1875726950: case 287649202: // lev guided
-                if (!lev.includes(item.activityDetails.instanceId)) {
-                    lev.push(item.activityDetails.instanceId);
-                }
+                lev.add(item.activityDetails.instanceId);
                 break;
         }
     })
@@ -220,6 +195,11 @@ function updateRunsTogether() {
     if (ownerID == userID) {
         clearTimeout(saveTimeoutID);
         saveTimeoutID = setTimeout(() => {
+            console.log(activitiesMap);
+            activitiesMap.forEach((activitySet, key) => {
+                activitiesMap.set(key, Array.from(activitySet))
+            });
+            console.log(activitiesMap);
             chrome.storage.local.set({ storedActivities: Object.fromEntries(activitiesMap) }).then(() => {
                 console.log("saved activities!");
             });
@@ -228,20 +208,20 @@ function updateRunsTogether() {
         var countRunsTogether = 0;
         var runsTogether = new Map();
 
-        runsTogether.set("pantheon", []);
-        runsTogether.set("ce", []);
-        runsTogether.set("ron", []);
-        runsTogether.set("kf", []);
-        runsTogether.set("votd", []);
-        runsTogether.set("vog", []);
-        runsTogether.set("dsc", []);
-        runsTogether.set("gos", []);
-        runsTogether.set("lw", []);
-        runsTogether.set("cos", []);
-        runsTogether.set("sotp", []);
-        runsTogether.set("sos", []);
-        runsTogether.set("eow", []);
-        runsTogether.set("lev", []);
+        runsTogether.set("pantheon", new Set());
+        runsTogether.set("ce", new Set());
+        runsTogether.set("ron", new Set());
+        runsTogether.set("kf", new Set());
+        runsTogether.set("votd", new Set());
+        runsTogether.set("vog", new Set());
+        runsTogether.set("dsc", new Set());
+        runsTogether.set("gos", new Set());
+        runsTogether.set("lw", new Set());
+        runsTogether.set("cos", new Set());
+        runsTogether.set("sotp", new Set());
+        runsTogether.set("sos", new Set());
+        runsTogether.set("eow", new Set());
+        runsTogether.set("lev", new Set());
 
         let runsTogetherCard = document.getElementById("runs-together-card");
 
@@ -288,9 +268,9 @@ function updateRunsTogether() {
         }
         activitiesMap.forEach(function (value, key) {
             value.forEach(item => {
-                if (storedActivities.get(key).includes(item)) {
+                if (storedActivities.get(key).has(item)) {
                     countRunsTogether++;
-                    runsTogether.get(key).push(item);
+                    runsTogether.get(key).add(item);
                 }
             })
         })
@@ -375,7 +355,6 @@ function finishRunsTogether(runsTogether) {
 function addRunsTogetherNumbers(runsTogether) {
     let clearDivs = document.querySelectorAll(".total-completions");
     for (let node of clearDivs) {
-        // node.classList.remove("total-completions");
         if (node.childNodes[0].classList != null) {
             node.childNodes[0].classList.add("total-completions");
         }
@@ -383,7 +362,7 @@ function addRunsTogetherNumbers(runsTogether) {
 
         let key = node.closest(".col.l3.m6.s12").id;
         let runsTogetherSpan = document.createElement("span");
-        runsTogetherSpan.innerHTML = "(" + runsTogether.get(key).length + ")";
+        runsTogetherSpan.innerHTML = "(" + runsTogether.get(key).size + ")";
         runsTogetherSpan.className = "together-completions";
         node.appendChild(runsTogetherSpan);
     }
@@ -403,7 +382,7 @@ function recolorActivityDots(runsTogether) {
     for (let dot of dots) {
         let key = dot.closest(".col.l3.m6.s12").id;
         let dotInstanceID = (dot.href.baseVal.split("/")).at(2);
-        if (runsTogether.get(key).includes(dotInstanceID)) {
+        if (runsTogether.get(key).has(dotInstanceID)) {
             dot.firstChild.attributes.fill.value = "#03b6fc";
         }
     }
@@ -420,7 +399,7 @@ function recolorActivityDots(runsTogether) {
                 let node = mutation.addedNodes[0]
                 let key = node.closest(".col.l3.m6.s12").id;
                 let dotInstanceID = (node.href.baseVal.split("/")).at(2);
-                if (runsTogether.get(key).includes(dotInstanceID)) {
+                if (runsTogether.get(key).has(dotInstanceID)) {
                     node.firstChild.attributes.fill.value = "#03b6fc";
                 }
             }
