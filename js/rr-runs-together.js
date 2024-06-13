@@ -10,7 +10,7 @@ var userID, lastUserID;
 var animTimeoutID, saveTimeoutID;
 
 var runsTogetherDone = false;
-var pantheon, ce, ron, kf, votd, vog, dsc, gos, lw, cos, sotp, sos, eow, lev;
+var se, pantheon, ce, ron, kf, votd, vog, dsc, gos, lw, cos, sotp, sos, eow, lev;
 var activitiesMap;
 
 var scriptEl = document.createElement("script");
@@ -54,7 +54,7 @@ window.addEventListener("message", function (e) {
 
         allActivities = [];
 
-        pantheon = new Set(), ce = new Set(), ron = new Set(), kf = new Set(), votd = new Set(), vog = new Set(), dsc = new Set(), gos = new Set(), lw = new Set(), cos = new Set(), sotp = new Set(), sos = new Set(), eow = new Set(), lev = new Set(),
+        se = new Set(), pantheon = new Set(), ce = new Set(), ron = new Set(), kf = new Set(), votd = new Set(), vog = new Set(), dsc = new Set(), gos = new Set(), lw = new Set(), cos = new Set(), sotp = new Set(), sos = new Set(), eow = new Set(), lev = new Set(),
             activitiesMap = new Map();
         runsTogetherDone = false;
     }
@@ -88,6 +88,9 @@ function sortFetchedActivities() {
         }
 
         switch (item.activityDetails.directorActivityHash) {
+            case 1541433876: case 2192826039: case 4129614942: // se contest / normal / master
+                se.add(item.activityDetails.instanceId);
+                break;
             case 4169648179: case 4169648176: case 4169648177: case 4169648182: // Atraks Sovereign / Oryx Exalted / Rhulk Indomitable / Nezarec Sublime
                 pantheon.add(item.activityDetails.instanceId);
                 break;
@@ -135,6 +138,7 @@ function sortFetchedActivities() {
         }
     })
     // create map for easy access
+    activitiesMap.set("se", se);
     activitiesMap.set("pantheon", pantheon);
     activitiesMap.set("ce", ce);
     activitiesMap.set("ron", ron);
@@ -151,6 +155,8 @@ function sortFetchedActivities() {
     activitiesMap.set("lev", lev);
 
     if (debug) {
+        console.log("se:", se);
+        console.log("pantheon:", pantheon);
         console.log("ce:", ce);
         console.log("ron:", ron);
         console.log("kf:", kf);
@@ -174,7 +180,7 @@ function sortFetchedActivities() {
                 1681562271, 3022541210, 3711931140, 1485585878, 910380154, 3976949817, 3458480158, 1042180643, 2659723068, 2497200493, 2122313384,
                 1661734046, 3333172150, 548750096, 2812525063, 119944200, 3213556450, 3089205900, 809170886, 2693136600, 2693136601, 2693136602,
                 2693136603, 2693136604, 2693136605, 757116822, 3879860661, 2449714930, 417231112, 3446541099, 1685065161, 960175301, 3845997235,
-                2164432138, 1699948563, 3916343513, 4039317196, 89727599, 1875726950, 3004605630, 287649202];
+                2164432138, 1699948563, 3916343513, 4039317196, 89727599, 1875726950, 3004605630, 287649202, 1541433876, 2192826039, 4129614942];
             return !existing.includes(hash);
         })
         console.log("not filtered:", filteredAllActivities);
@@ -205,7 +211,7 @@ function updateRunsTogether() {
     } else {
         var countRunsTogether = 0;
         var runsTogether = new Map();
-
+        runsTogether.set("se", new Set());
         runsTogether.set("pantheon", new Set());
         runsTogether.set("ce", new Set());
         runsTogether.set("ron", new Set());
