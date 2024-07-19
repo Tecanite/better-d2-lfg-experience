@@ -4,9 +4,10 @@ scriptEl.src = chrome.runtime.getURL("./js/rr-layout.js");
 document.head.appendChild(scriptEl);
 
 var lastProfileUrl, lastUrl;
+var runsTogetherEnabled;
 
 /* get saved settings */
-chrome.storage.local.get(["sidebarEnabled", "sidebarProfiles", "removeKDA", "dynamicLayout", "minimalLayout", "compactLayout", "modernLayout", "apiKey"]).then((settings) => {
+chrome.storage.local.get(["sidebarEnabled", "sidebarProfiles", "removeKDA", "dynamicLayout", "minimalLayout", "compactLayout", "modernLayout", "apiKey", "enableRunsTogether"]).then((settings) => {
     /* add scripts and css files of enabled features */
     if (settings.modernLayout) {
         let styleEl = document.createElement("link");
@@ -36,6 +37,8 @@ chrome.storage.local.get(["sidebarEnabled", "sidebarProfiles", "removeKDA", "dyn
         addSidebar(settings.sidebarProfiles, settings.apiKey)
     }
 
+    runsTogetherEnabled = settings.enableRunsTogether;
+
     removeAds();
 
     /* update layout of page with observer */
@@ -55,12 +58,13 @@ chrome.storage.local.get(["sidebarEnabled", "sidebarProfiles", "removeKDA", "dyn
         lastUrl = document.location.href;
 
         updateLayout(settings.removeKDA, settings.dynamicLayout);
-
-        let runsTogetherBadge = document.getElementById("runs-together-card");
-        if (runsTogetherDone && runsTogetherBadge == null) {
-            if (!document.location.href.includes("pgcr")) {
-                if (lastProfileUrl == document.location.href) {
-                    updateRunsTogether();
+        if (runsTogetherEnabled) {
+            let runsTogetherBadge = document.getElementById("runs-together-card");
+            if (runsTogetherDone && runsTogetherBadge == null) {
+                if (!document.location.href.includes("pgcr")) {
+                    if (lastProfileUrl == document.location.href) {
+                        finishRunsTogether();
+                    }
                 }
             }
         }
