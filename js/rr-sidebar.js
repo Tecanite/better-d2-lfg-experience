@@ -110,7 +110,7 @@ async function getPlatformAndId(bungieID, apiKey) {
                   id = result.Response[0].membershipId;
                   return [platform, id];
             })
-            .catch(error => console.log("error", error))
+            .catch(error => console.debug("error getting platform and if for bungieID", error))
 }
 
 /**
@@ -134,20 +134,19 @@ async function getEmblemUrl(platform, id, apiKey) {
       return await fetch(api_url + "/Destiny2/" + platform + "/Profile/" + id + "/?components=200", requestOptions)
             .then(response => response.json())
             .then(result => {
-                  // console.log(result);
                   let timestamps = [];
                   let charactersData = Object.entries(result.Response.characters.data);
-                  // console.log(charactersData);
+                  //get time last played for each character
                   charactersData.forEach(character => {
                         let timestamp = character[1].dateLastPlayed;
                         timestamp = timestamp.replace(/\D/g, "");
                         timestamps.push(parseInt(timestamp));
                   })
-                  // console.log(timestamps);
+                  // get last played character and its emblem
                   let lastPlayedCharacter = timestamps.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
                   return charactersData[lastPlayedCharacter][1].emblemPath;
             })
-            .catch(error => console.log("error", error));
+            .catch(error => console.debug("error when fetching emblem for sidebar", error));
 }
 
 

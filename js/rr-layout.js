@@ -33,7 +33,6 @@ function updateLayout(removeUselessStats, enableSingleRow) {
         var singleRow = document.getElementById("single-raid-row");
 
         if (singleRow != null) {
-            console.log("here");
             return;
         }
         var cards = document.querySelectorAll(".col.l3.m6.s12")
