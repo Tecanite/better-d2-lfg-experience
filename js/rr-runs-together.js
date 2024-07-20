@@ -5,13 +5,14 @@ var runsTogetherAlertRan = false;
 var ownerID;
 var enableRunsTogether;
 
-var allActivities = [];
 var userID, lastUserID;
 var animTimeoutID, saveTimeoutID;
 
 var runsTogetherDone = false;
-var se, pantheon, ce, ron, kf, votd, vog, dsc, gos, lw, cos, sotp, sos, eow, lev;
 var activitiesMap;
+var runsTogether;
+
+var alreadyObservedOnce = false;
 
 var scriptEl = document.createElement("script");
 scriptEl.src = chrome.runtime.getURL("./js/rr-runs-together-inject.js");
@@ -19,7 +20,6 @@ scriptEl.onload = function () {
     this.remove();
 };
 (document.head || document.documentElement).appendChild(scriptEl);
-
 
 // get saved settings
 chrome.storage.local.get(["ownProfileID", "storedActivities", "enableRunsTogether"])
@@ -47,41 +47,85 @@ chrome.storage.local.get(["ownProfileID", "storedActivities", "enableRunsTogethe
 
 // receive message from injected script
 window.addEventListener("message", function (e) {
-    // console.log(e.data.data.Response)
+    // console.debug("received message from injected script:", e.data.data.Response)
     if (e.data.data != null && e.data.data.Response != null && e.data.data.Response.destinyMemberships != null) {
         firstMembership = e.data.data.Response.destinyMemberships[0];
         userID = firstMembership.bungieGlobalDisplayName + "#" + firstMembership.bungieGlobalDisplayNameCode;
 
-        allActivities = [];
+        // reset maps for activities since new profile is loaded
+        activitiesMap = new Map(), runsTogether = new Map();
+        activitiesMap.set("se", new Set()), runsTogether.set("se", new Set());
+        activitiesMap.set("ce", new Set()), runsTogether.set("ce", new Set());
+        activitiesMap.set("ron", new Set()), runsTogether.set("ron", new Set());
+        activitiesMap.set("kf", new Set()), runsTogether.set("kf", new Set());
+        activitiesMap.set("votd", new Set()), runsTogether.set("votd", new Set());
+        activitiesMap.set("vog", new Set()), runsTogether.set("vog", new Set());
+        activitiesMap.set("dsc", new Set()), runsTogether.set("dsc", new Set());
+        activitiesMap.set("gos", new Set()), runsTogether.set("gos", new Set());
+        activitiesMap.set("lw", new Set()), runsTogether.set("lw", new Set());
+        activitiesMap.set("pantheon", new Set()), runsTogether.set("pantheon", new Set());
+        activitiesMap.set("cos", new Set()), runsTogether.set("cos", new Set());
+        activitiesMap.set("sotp", new Set()), runsTogether.set("sotp", new Set());
+        activitiesMap.set("sos", new Set()), runsTogether.set("sos", new Set());
+        activitiesMap.set("eow", new Set()), runsTogether.set("eow", new Set());
+        activitiesMap.set("lev", new Set()), runsTogether.set("lev", new Set());
 
-        se = new Set(), pantheon = new Set(), ce = new Set(), ron = new Set(), kf = new Set(), votd = new Set(), vog = new Set(), dsc = new Set(), gos = new Set(), lw = new Set(), cos = new Set(), sotp = new Set(), sos = new Set(), eow = new Set(), lev = new Set(),
-            activitiesMap = new Map();
+        // reset checks if runsTogether has been done and ran
         runsTogetherDone = false;
+        alreadyObservedOnce = false;
     }
 
     if (e.data.data.Response != null && e.data.data.Response.activities != null) {
         let activities = e.data.data.Response.activities;
+
         if (activities[0].period != null) {
-            activities.forEach(element => {
-                allActivities.push(element);
-            });
-            sortFetchedActivities();
+            sortFetchedActivities(activities);
         }
     }
 });
+
+// observer checking if page is still loading 
+// finishes runsTogether once page fully loaded
+const loadingObserverCallback = (_, observer) => {
+    let loadingElements = document.querySelector("span.MuiSkeleton-root.MuiSkeleton-text.MuiSkeleton-pulse");
+
+    if (!loadingElements) {
+        //loading has finished
+        observer.disconnect();
+        
+        // gotta wait till last request is also handled by our functions
+        setTimeout(() => {
+            if (ownerID == userID) {
+                console.debug("storing activities:", activitiesMap);
+                // make map serializable
+                activitiesMap.forEach((activitySet, key) => {
+                    activitiesMap.set(key, Array.from(activitySet))
+                });
+                chrome.storage.local.set({ storedActivities: Object.fromEntries(activitiesMap) }).then(() => {
+                    console.debug("saved activities!");
+                });
+            } else {
+                console.debug("finishing runs together")
+                finishRunsTogether();
+            }
+        }, 200)
+    }
+}
+const loadingObserver = new MutationObserver(loadingObserverCallback);
 
 /**
  * This function sorts all fetched activities by raids.
  * @author Tecanite
  * @name sortFetchedActivities
+ * @param {Array<Activity>} activities 
  * @returns {void}
  */
-function sortFetchedActivities() {
-    if (!enableRunsTogether || allActivities == []) {
+function sortFetchedActivities(activities) {
+    if (!enableRunsTogether || activities == []) {
         return;
     }
 
-    allActivities.forEach(function (item, index, object) {
+    activities.forEach(function (item, index, object) {
         // filter only completed activities
         if (item.values.completed.basic.value != 1 || item.values.completionReason.basic.value == 2) {
             return;
@@ -89,144 +133,79 @@ function sortFetchedActivities() {
 
         switch (item.activityDetails.directorActivityHash) {
             case 1541433876: case 2192826039: case 4129614942: // se contest / normal / master
-                se.add(item.activityDetails.instanceId);
+                activitiesMap.get("se").add(item.activityDetails.instanceId);
                 break;
-            case 4169648179: case 4169648176: case 4169648177: case 4169648182: // Atraks Sovereign / Oryx Exalted / Rhulk Indomitable / Nezarec Sublime
-                pantheon.add(item.activityDetails.instanceId);
-                break;
-            case 4179289725: case 1507509200: case 4103176774: case 156253568: // ce normal / master / guided / contest
-                ce.add(item.activityDetails.instanceId);
+            case 4179289725: case 1507509200: case 4103176774: case 156253568: case 107319834: // ce normal / master / guided / contest / apparently ce is now a dungeon ¯\_(ツ)_/¯
+                activitiesMap.get("ce").add(item.activityDetails.instanceId);
                 break;
             case 2381413764: case 2918919505: case 1191701339: // ron normal / master / guided
-                ron.add(item.activityDetails.instanceId);
+                activitiesMap.get("ron").add(item.activityDetails.instanceId);
                 break;
             case 1374392663: case 2964135793: case 3257594522: case 2897223272: case 1063970578: // kf normal / master / master / guided / challenge
-                kf.add(item.activityDetails.instanceId);
+                activitiesMap.get("kf").add(item.activityDetails.instanceId);
                 break;
             case 1441982566: case 4217492330: case 3889634515: case 4156879541: // vow normal / master / master / guided
-                votd.add(item.activityDetails.instanceId);
+                activitiesMap.get("votd").add(item.activityDetails.instanceId);
                 break;
             case 3881495763: case 1681562271: case 3022541210: case 3711931140: case 1485585878: // vog normal / master / master / guided / challenge
-                vog.add(item.activityDetails.instanceId);
+                activitiesMap.get("vog").add(item.activityDetails.instanceId);
                 break;
             case 910380154: case 3976949817: // deep stone crypt normal / guided
-                dsc.add(item.activityDetails.instanceId);
+                activitiesMap.get("dsc").add(item.activityDetails.instanceId);
                 break;
             case 3458480158: case 1042180643: case 2659723068: case 2497200493: case 3845997235: // gos normal / new div / old div / guided / guided
-                gos.add(item.activityDetails.instanceId);
+                activitiesMap.get("gos").add(item.activityDetails.instanceId);
                 break;
             case 2122313384: case 1661734046:  //lw normal / guided
-                lw.add(item.activityDetails.instanceId);
+                activitiesMap.get("lw").add(item.activityDetails.instanceId);
+                break;
+            case 4169648179: case 4169648176: case 4169648177: case 4169648182: // Atraks Sovereign / Oryx Exalted / Rhulk Indomitable / Nezarec Sublime
+                activitiesMap.get("pantheon").add(item.activityDetails.instanceId);
                 break;
             case 3333172150: case 960175301: // cos normal / guided
-                cos.add(item.activityDetails.instanceId);
+                activitiesMap.get("cos").add(item.activityDetails.instanceId);
                 break;
             case 548750096: case 2812525063: // sotp normal / guided
-                sotp.add(item.activityDetails.instanceId);
+                activitiesMap.get("sotp").add(item.activityDetails.instanceId);
                 break;
             case 119944200: case 3213556450: case 3004605630: // sos normal / prestige / guided
-                sos.add(item.activityDetails.instanceId);
+                activitiesMap.get("sos").add(item.activityDetails.instanceId);
                 break;
             case 3089205900: case 809170886: case 2164432138: // eow normal / prestige / guided
-                eow.add(item.activityDetails.instanceId);
+                activitiesMap.get("eow").add(item.activityDetails.instanceId);
                 break;
             case 2693136600: case 2693136601: case 2693136602: case 2693136603: case 2693136604: case 2693136605: // lev normal
             case 757116822: case 3879860661: case 2449714930: case 417231112: case 3446541099: case 1685065161: // lev prestige
             case 1699948563: case 3916343513: case 4039317196: case 89727599: case 1875726950: case 287649202: // lev guided
-                lev.add(item.activityDetails.instanceId);
+                activitiesMap.get("lev").add(item.activityDetails.instanceId);
                 break;
+            default:
+                console.debug("unknown / new activity which is currently not sorted:", item);
         }
     })
-    // create map for easy access
-    activitiesMap.set("se", se);
-    activitiesMap.set("pantheon", pantheon);
-    activitiesMap.set("ce", ce);
-    activitiesMap.set("ron", ron);
-    activitiesMap.set("kf", kf);
-    activitiesMap.set("votd", votd);
-    activitiesMap.set("vog", vog);
-    activitiesMap.set("dsc", dsc);
-    activitiesMap.set("gos", gos);
-    activitiesMap.set("lw", lw);
-    activitiesMap.set("cos", cos);
-    activitiesMap.set("sotp", sotp);
-    activitiesMap.set("sos", sos);
-    activitiesMap.set("eow", eow);
-    activitiesMap.set("lev", lev);
-
-    if (debug) {
-        console.log("se:", se);
-        console.log("pantheon:", pantheon);
-        console.log("ce:", ce);
-        console.log("ron:", ron);
-        console.log("kf:", kf);
-        console.log("votd:", votd);
-        console.log("vog:", vog);
-        console.log("dsc:", dsc);
-        console.log("gos:", gos);
-        console.log("lw:", lw);
-        console.log("cos:", cos);
-        console.log("sotp:", sotp);
-        console.log("sos:", sos);
-        console.log("eow:", eow);
-        console.log("lev:", lev);
-
-        console.log(activitiesMap);
-
-        filteredAllActivities = allActivities.filter(item => {
-            var hash = item.activityDetails.directorActivityHash;
-            var existing = [4169648179, 4169648176, 4169648177, 4169648182, 4179289725, 1507509200, 4103176774, 156253568, 2381413764, 2918919505,
-                1191701339, 1374392663, 2964135793, 3257594522, 2897223272, 1063970578, 1441982566, 4217492330, 3889634515, 4156879541, 3881495763,
-                1681562271, 3022541210, 3711931140, 1485585878, 910380154, 3976949817, 3458480158, 1042180643, 2659723068, 2497200493, 2122313384,
-                1661734046, 3333172150, 548750096, 2812525063, 119944200, 3213556450, 3089205900, 809170886, 2693136600, 2693136601, 2693136602,
-                2693136603, 2693136604, 2693136605, 757116822, 3879860661, 2449714930, 417231112, 3446541099, 1685065161, 960175301, 3845997235,
-                2164432138, 1699948563, 3916343513, 4039317196, 89727599, 1875726950, 3004605630, 287649202, 1541433876, 2192826039, 4129614942];
-            return !existing.includes(hash);
-        })
-        console.log("not filtered:", filteredAllActivities);
-    }
-
     updateRunsTogether();
 }
 
 /**
- * This function computes how many runs were done together by comparing instance ids.
+ * This function computes how many runs were done together by comparing instance ids and stores them in runsTogether Map<string, Set()>.
  * @author Tecanite
- * @name sidebarProfilesAdd
- * @param {Map<string, int>} activitiesMap
+ * @name updateRunsTogether
  * @returns {void}
  */
 function updateRunsTogether() {
-    // cache activityMap if own profile
-    if (ownerID == userID) {
-        clearTimeout(saveTimeoutID);
-        saveTimeoutID = setTimeout(() => {
-            activitiesMap.forEach((activitySet, key) => {
-                activitiesMap.set(key, Array.from(activitySet))
-            });
-            chrome.storage.local.set({ storedActivities: Object.fromEntries(activitiesMap) }).then(() => {
-                console.log("saved activities!");
-            });
-        }, 3000)
-    } else {
-        var countRunsTogether = 0;
-        var runsTogether = new Map();
-        runsTogether.set("se", new Set());
-        runsTogether.set("pantheon", new Set());
-        runsTogether.set("ce", new Set());
-        runsTogether.set("ron", new Set());
-        runsTogether.set("kf", new Set());
-        runsTogether.set("votd", new Set());
-        runsTogether.set("vog", new Set());
-        runsTogether.set("dsc", new Set());
-        runsTogether.set("gos", new Set());
-        runsTogether.set("lw", new Set());
-        runsTogether.set("cos", new Set());
-        runsTogether.set("sotp", new Set());
-        runsTogether.set("sos", new Set());
-        runsTogether.set("eow", new Set());
-        runsTogether.set("lev", new Set());
+    // add observer to finish runs together once site has finished loading
+    
+    if (!alreadyObservedOnce) {
+        alreadyObservedOnce = true;
 
+        const loadingObserverTargetNode = document.getElementById("root");
+        const loadingObserverConfig = { attributes: true, childList: true, subtree: true };
+        loadingObserver.observe(loadingObserverTargetNode, loadingObserverConfig);
+    }
+
+    if (ownerID == userID) {
+        return;
+    } else {
         let runsTogetherCard = document.getElementById("runs-together-card");
 
         if (runsTogetherCard == null) {
@@ -273,7 +252,6 @@ function updateRunsTogether() {
         activitiesMap.forEach(function (value, key) {
             value.forEach(item => {
                 if (storedActivities.get(key).has(item)) {
-                    countRunsTogether++;
                     runsTogether.get(key).add(item);
                 }
             })
@@ -281,6 +259,11 @@ function updateRunsTogether() {
 
         let tier;
         let color;
+
+        let countRunsTogether = 0;
+        runsTogether.forEach(function (value, key) {
+            countRunsTogether += value.size;
+        })
 
         if (countRunsTogether >= 500) {
             tier = "Challenger";
@@ -321,26 +304,20 @@ function updateRunsTogether() {
         if (innerCard != null) {
             innerCard.style.backgroundColor = color;
         }
-        // TODO does not work if player has 0 crota clears ???
-        let totalCompletion = document.querySelector("div.total-completions");
-        if (debug) {
-            console.log(totalCompletion)
-            console.log(totalCompletion.children)
-        }
-        if (totalCompletion && totalCompletion.children.length != 0 && !totalCompletion.children[0].classList.contains("MuiSkeleton-pulse")) {
-            if (debug) {
-                console.log("finishing runs together")
-            }
-            finishRunsTogether(runsTogether);
-        }
     }
 }
 
-function finishRunsTogether(runsTogether) {
+/**
+ * This functions finishes adding all runsTogether elements to site.
+ * @author Tecanite
+ * @name finishRunsTogether
+ * @returns {void}
+ */
+function finishRunsTogether() {
     runsTogetherDone = true;
     lastProfileUrl = document.location.href;
-    addRunsTogetherNumbers(runsTogether);
-    setTimeout(() => { recolorActivityDots(runsTogether) }, 50);
+    addRunsTogetherNumbers();
+    setTimeout(() => { recolorActivityDots() }, 50);
 
     //remove loading animation
     let animEl = document.querySelector("#runs-together-card>div.rank-card");
@@ -353,10 +330,9 @@ function finishRunsTogether(runsTogether) {
  * This functions adds runs together number to every raid card.
  * @author Tecanite
  * @name addRunsTogetherNumbers
- * @param {Map<string, int[]>} runsTogether
  * @returns {void}
  */
-function addRunsTogetherNumbers(runsTogether) {
+function addRunsTogetherNumbers() {
     let clearDivs = document.querySelectorAll(".total-completions");
     for (let node of clearDivs) {
         if (node.childNodes[0].classList != null) {
@@ -376,10 +352,9 @@ function addRunsTogetherNumbers(runsTogether) {
  * This functions changes color of activity dots that were completed together.
  * @author Tecanite
  * @name recolorActivityDots
- * @param {Map<string, int[]>} runsTogether
  * @returns {void}
  */
-function recolorActivityDots(runsTogether) {
+function recolorActivityDots() {
     // get all dots and color
     let dots = document.querySelectorAll("a.clickable.activity-dot");
 

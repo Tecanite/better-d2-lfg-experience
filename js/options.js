@@ -43,7 +43,7 @@ const saveOptions = () => {
         removeKDA: removeKDA, dynamicLayout: dynamic, minimalLayout: minimal, compactLayout: compact, modernLayout: modern,
         fireteamSearchGrid: fireteamGrid, fireteamProfileReports: fireteamReports
     }).then(() => {
-        console.log("Saved Options!");
+        console.debug("Saved Options!");
         const status = document.getElementById("status");
         status.textContent = "Options saved.";
         setTimeout(() => {
@@ -62,8 +62,6 @@ const restoreOptions = () => {
         removeKDA: false, dynamicLayout: false, minimalLayout: false, compactLayout: false, modernLayout: false,
         fireteamSearchGrid: false, fireteamProfileReports: false
     }).then((result) => {
-        console.log(result);
-
         // sidebar options
         document.getElementById("sidebar-toggle").checked = result.sidebarEnabled;
         document.getElementById("bungie-api-key").value = result.apiKey;
@@ -120,9 +118,9 @@ const removeLastProfile = () => {
 };
 
 const clearOwnActivityCache = () => {
-    console.log("clearing stored activities...")
+    console.debug("clearing stored activities...")
     chrome.storage.local.set({ storedActivities: null }).then(() => {
-        console.log("cleared stored activities!");
+        console.debug("cleared stored activities!");
     });
 }
 

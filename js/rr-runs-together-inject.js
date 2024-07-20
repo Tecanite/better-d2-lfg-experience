@@ -18,7 +18,7 @@
     };
 
     XHR.send = function (postData) {
-        // console.log('injected script xhr request:', this._method, this._url, this.getAllResponseHeaders(), postData);
+        // console.debug('injected script xhr request:', this._method, this._url, this.getAllResponseHeaders(), postData);
         this.addEventListener('load', function () {
             window.postMessage({ type: 'xhr', data: this.response }, '*');  // send to content script
         });
