@@ -92,7 +92,7 @@ const loadingObserverCallback = (_, observer) => {
     if (!loadingElements) {
         //loading has finished
         observer.disconnect();
-        
+
         // gotta wait till last request is also handled by our functions
         setTimeout(() => {
             if (ownerID == userID) {
@@ -108,7 +108,7 @@ const loadingObserverCallback = (_, observer) => {
                 console.debug("finishing runs together")
                 finishRunsTogether();
             }
-        }, 200)
+        }, 200);
     }
 }
 const loadingObserver = new MutationObserver(loadingObserverCallback);
@@ -194,7 +194,7 @@ function sortFetchedActivities(activities) {
  */
 function updateRunsTogether() {
     // add observer to finish runs together once site has finished loading
-    
+
     if (!alreadyObservedOnce) {
         alreadyObservedOnce = true;
 
@@ -206,38 +206,6 @@ function updateRunsTogether() {
     if (ownerID == userID) {
         return;
     } else {
-        let runsTogetherCard = document.getElementById("runs-together-card");
-
-        if (runsTogetherCard == null) {
-            runsTogetherCard = document.createElement("div");
-            runsTogetherCard.className = "col s6 runs-together-padding";
-            runsTogetherCard.id = "runs-together-card"
-
-            let innerDiv = document.createElement("div");
-            innerDiv.className = "card rank-card";
-            innerDiv.style.backgroundColor = "grey";
-
-            let img = document.createElement("img");
-            img.className = "rank-emblem";
-            img.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAANkAAADZCAYAAACtvpV2AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAACTpJREFUeNrs3S13HMkVgOHanIAwCy6zYJhnWdgqLMxaFrZjFmbrF1j+BSuxMI9Z2Eps4YiJRWKGE2ZoMzFl+pzuPVJNyZLWmlv98bznDNCQ0nTX23Xr1q3q766vrxOA7fEnlwAgGUAyACQDSAaQDADJAJIBJANAMoBkAEgGkAwgGQCSASQDSAaAZADJAJIBIBlAMgAkA0gGkAwAyQCSASQDQDKAZABIBpAMIBkAkgEkA0gGgGQAyQCSASAZQDIAJANIBpAMAMkAkgEkA0AygGQASAaQDCAZAJIBJANIBoBkAMkAkgEgGUAyACQDSAaQDADJAJIBJANAMoBkAEgGkAwgGQCSASQDSAaAZADJAJIBIBkwWP4c3N7O+jMLbvNi/fnsVvfy/iyzv2ft/1Cr/a3w3fX1dfSNbH7Yj4HtfVh/5vx58APpRaX7Mmv7xrOx9Ysaku20N/N5YJsH689R4f/YmahMV+vPp+y75vq8Dmr/cv3ZuxFhRPeJvP3RSVbjqdXwQ3sjO75vn2R/maBkJ9m1aK7D+6C2v6w/u1kHjxxBS+1vlVqJj+aivqnQsW6OXJ/a76bGeSbYrDDKb7OD5yPIIlCwFDmC1Zasu7jHge09b9u8yce2002F1frzWxYynwRGFG8ywZu/fw78/a+y9kcvWXeRTwPbe7n+HGbf/dZ2vrHTPL3/U3jQRc2D3mUPuWZE+SXw9x8XHrIh1JqT5QmIZXDI8Pd0O33bzMv+NfJEyL+zZEfzsHkb1HbtTOJZK3WaqmQ1Lnpp8vt9K9oUEh3768+vQW2XMomRD9XQTGIfw8WbiZB5YHvPCkmPsSZCLjLBdgPDplKi4yTFZhLnqXIxQp/Kqk7auD2KZkH86J4OOXTyB0dkoqMk2FGKLUSY9+F+9q128TA4EfK6DZ1y2T+NQLCrQqLjKHAUyTOJ8xS32N1w0JfIpC9zspqJkC/tnHCVJULepGEvVC+y39T8nqhs3nG6vQ7aXN//Bv72XpXS9VGybt5wEZgIuUybhbG7abg1j82yxHmlTn6aRQc17mXVREffw8WOVSGM2yYvCsmAVbq9cDukRMd5ITKI6uDzSnPAu+aBJPsKyzaujuLnwsh1PrBEyKfCg2EZmOjYLyQ6Rl0yNXTJupv0Ibi9WSH0GkIi5KodNa4qdfK9bA54mCZQMjUGyboJ+2VQW8/asHHnns7bR/KsaDMqv67UwZu23wb+9molU0NOfKRCEiJy8nxamBP+df35Z49D62WW6IgKE0uZxGWaSMnUWEayLgkReSFfps2tOB8DEwiPvTbLSsmG0+w6RSc6LlNsgmzUkqV2JHsV2N4vhfnZspWtL9SsrM8zid31iarq70XJ1Ngk6zpQZCIk3+jZfdeHG9tVdFxlyYaXQR08zyQ29yYykzhPA8n8DvFIuHmKS4Q8T5ulOaXOXYM867kfmGzYT5vVJJGZxN6UTI1VstTOz74EtfVj2tzoWVqPig6da1XWv8rmgHspdvNlE8kcDamzDlWyz8GivU2biZe8siKKmpX1HzKZZ8EjymWKPxtmspJ1nTzygpfmZ9EL1VeFEStqwfksbZZMLdLES6bGLlk32Y46jOdZKqfwF4Hzs7ytqLlQKVUeufkyDVWwMUjWdbSzoLZeFOYDV0HzoXzUnAXNhUqp8ujNl70tmXoIQ6n4uI/oE2h/KsxF/rb+/GOLoXE+D1sFhWr5oUONcO8D7+3xEOdhYxvJUvuU3U9xiZBm5NrNvttWxX7Nyvo8kzgLFux06IKNSbLuaR91Q7qDeLadCCmtyUUlOvJM4m6KLSsrVZSQrAc0nSLqMJ675mdPuVCdV5c0ne51hQ5eY/PlPI3klVdjfAngYYo7jKe00bNUT/hHaEaNj1moFrEI+7+0uSYYvflyP43o1LCxvmlznuJKr0obPVffGFrlFf9RI0mpJvEwxZdMLcfUGccq2edWtIhESGmjZ2kkekyi46QQBkdkTuep7ubLwZVMTVmylGJPJS4dxNPNqR6TCCntwm5GkojK+rzodhbc4UeT6JiSZF0njzqMp7TR87FHF9SqrM9HkFqnTI2SsSxG38cicF7xQ2HSPkv37+A9T7fXw3ZTzJELpTMno998uZfGdTz6pEayjsjDeErrZ/dV7K9SnZfzlTKJixSbSXwzZsGmJFlkRUhpo2cXCq7umIfVOLO+lEmM3nzZ61OmSPZ4Vinu0JXSRs/UyvS5MHLUqKyfZyNIM6JFbr4cRckUyTZZprhESGmjZz5q5dnHqMr6d2kzkxi9+XI+lU43lcRHKoweEaNF6Y0xXafeTXUq6/M3ntR4i86oEx0ku52MiOhYpexdrf+n9MaTZYrdG5ZvnREujpi9FJMIKRUS50QlOnLBFsGCHUxNsKmPZF3YFvXerp/umPc0odv7IMEugtv9WphKsgkR1dlKHT3q3PhXafOUqcg3Xz40ZBYujpRFijmVOC8kjlpwfpfqbr4cdckUyR43mkVUhNycnzUdf9uV9c3D4/DG3958KVysSuRhPGcBCYdSJrER7GXgNc3DVCPZxIksvdq2YHdtvowU7JhgRrKvhY7vB/4b8p0A0b+p9BJFIxl+Z5HiTiXeVoiWZzBtvjSS9ZJlil2ofaoQLX/z5SrFJzoudB+SPYTomr5thGgXwf//5EqmhIvfRuRhPNsI0RbBgh0QjGR/hMjDeL4lRKu9+XKUp0wJF2M5TLFHoz2GPJPYCPdr8Cg600VI9hREL+Q+hFJNYhOyRSY6dtPEKzqEi0/HPMUdxvMQ8sVeb740ko2C6JHiLs7SZtFt839Fv5hvoUsYyZ6ai1S/kqH0atlFsGBKpki2VZoR46BS26VXCjV/R2YSJ3PKlHCxPovgzt2QL/bW2HxpHmYkCyPyVOJuDnRTsN0Uv/lyTjAjWTQ7KW6NKBdqN22+t3qbrFL5BGSQDBAuAiQDQDKAZADJAJAMIBkAkgEkA0gGgGQAyQCSASAZQDIAJANIBpAMAMkAkgEkA0AygGQAyQCQDCAZAJIBJANIBoBkAMkAkgEgGUAyACQDSAaQDADJAJIBJANAMoBkAMkAkAwgGQCSASQDSAaAZADJAJIBIBlAMgAkA0gGkAwAyQCSASQDQDKAZADJAJAMIBkAkgEkA0gGgGQAyQCSASAZMAD+L8AA/wpgSrPsYqIAAAAASUVORK5CYII="
-            innerDiv.appendChild(img);
-
-            let innerInnerDiv = document.createElement("div");
-            innerInnerDiv.className = "rank-content white-text";
-            innerInnerDiv.innerHTML = "<div class='rank-title'>Runs Together</div><div class='rank-value'>Unranked</div><div class='rank-title'>0</div>";
-            innerDiv.style.animation = "skeleton-loading 1s linear infinite alternate";
-            innerDiv.appendChild(innerInnerDiv);
-
-            runsTogetherCard.appendChild(innerDiv);
-
-            let cards = document.querySelector(".card-length");
-
-            if (cards != null) {
-                cards.appendChild(runsTogetherCard);
-            }
-        }
-
-
         if (storedActivities == null) {
             if (!runsTogetherAlertRan) {
                 if (ownerID == "Bungie#ID") {
@@ -256,57 +224,9 @@ function updateRunsTogether() {
                 }
             })
         })
-
-        let tier;
-        let color;
-
-        let countRunsTogether = 0;
-        runsTogether.forEach(function (value, key) {
-            countRunsTogether += value.size;
-        })
-
-        if (countRunsTogether >= 500) {
-            tier = "Challenger";
-            color = "rgb(250, 87, 111)";
-        } else if (countRunsTogether >= 250) {
-            tier = "Master";
-            color = "rgb(250, 87, 111)";
-        } else if (countRunsTogether >= 100) {
-            tier = "Diamond";
-            color = "rgb(4, 138, 180)";
-        } else if (countRunsTogether >= 50) {
-            tier = "Platinum";
-            color = "rgb(4, 177, 161)";
-        } else if (countRunsTogether >= 25) {
-            tier = "Gold";
-            color = "rgb(250, 188, 68)";
-        } else if (countRunsTogether >= 10) {
-            tier = "Silver";
-            color = "rgb(158, 163, 176)";
-        } else if (countRunsTogether >= 1) {
-            tier = "Bronze";
-            color = "rgb(106, 91, 63)";
-        } else {
-            tier = "Unranked";
-            color = "grey";
-        }
-
-        let rankValue = document.querySelector("#runs-together-card div.rank-value");
-        let rankTitle = document.querySelector("#runs-together-card div.rank-title:nth-child(3)");
-        let innerCard = document.querySelector("#runs-together-card>div.rank-card");
-
-        if (rankValue != null) {
-            rankValue.innerText = tier;
-        }
-        if (rankTitle != null) {
-            rankTitle.innerText = countRunsTogether;
-        }
-        if (innerCard != null) {
-            innerCard.style.backgroundColor = color;
-        }
+        addRunsTogetherCard();
     }
 }
-
 /**
  * This functions finishes adding all runsTogether elements to site.
  * @author Tecanite
@@ -316,6 +236,7 @@ function updateRunsTogether() {
 function finishRunsTogether() {
     runsTogetherDone = true;
     lastProfileUrl = document.location.href;
+    addRunsTogetherCard();
     addRunsTogetherNumbers();
     setTimeout(() => { recolorActivityDots() }, 50);
 
@@ -323,6 +244,95 @@ function finishRunsTogether() {
     let animEl = document.querySelector("#runs-together-card>div.rank-card");
     if (animEl != null) {
         animEl.style.animation = "";
+    }
+}
+
+/**
+ * This functions adds a card next to total full clears and speed rank displaying the number and "rank" of runs done together
+ * @author Tecanite
+ * @name addRunsTogetherCard
+ * @returns {void}
+ */
+function addRunsTogetherCard() {
+    let runsTogetherCard = document.getElementById("runs-together-card");
+
+    if (runsTogetherCard == null) {
+        runsTogetherCard = document.createElement("div");
+        runsTogetherCard.className = "col s6 runs-together-padding";
+        runsTogetherCard.id = "runs-together-card"
+
+        let innerDiv = document.createElement("div");
+        innerDiv.className = "card rank-card";
+        innerDiv.style.backgroundColor = "grey";
+
+        let img = document.createElement("img");
+        img.className = "rank-emblem";
+        img.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAANkAAADZCAYAAACtvpV2AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAACTpJREFUeNrs3S13HMkVgOHanIAwCy6zYJhnWdgqLMxaFrZjFmbrF1j+BSuxMI9Z2Eps4YiJRWKGE2ZoMzFl+pzuPVJNyZLWmlv98bznDNCQ0nTX23Xr1q3q766vrxOA7fEnlwAgGUAyACQDSAaQDADJAJIBJANAMoBkAEgGkAwgGQCSASQDSAaAZADJAJIBIBlAMgAkA0gGkAwAyQCSASQDQDKAZABIBpAMIBkAkgEkA0gGgGQAyQCSASAZQDIAJANIBpAMAMkAkgEkA0AygGQASAaQDCAZAJIBJANIBoBkAMkAkgEgGUAyACQDSAaQDADJAJIBJANAMoBkAEgGkAwgGQCSASQDSAaAZADJAJIBIBkwWP4c3N7O+jMLbvNi/fnsVvfy/iyzv2ft/1Cr/a3w3fX1dfSNbH7Yj4HtfVh/5vx58APpRaX7Mmv7xrOx9Ysaku20N/N5YJsH689R4f/YmahMV+vPp+y75vq8Dmr/cv3ZuxFhRPeJvP3RSVbjqdXwQ3sjO75vn2R/maBkJ9m1aK7D+6C2v6w/u1kHjxxBS+1vlVqJj+aivqnQsW6OXJ/a76bGeSbYrDDKb7OD5yPIIlCwFDmC1Zasu7jHge09b9u8yce2002F1frzWxYynwRGFG8ywZu/fw78/a+y9kcvWXeRTwPbe7n+HGbf/dZ2vrHTPL3/U3jQRc2D3mUPuWZE+SXw9x8XHrIh1JqT5QmIZXDI8Pd0O33bzMv+NfJEyL+zZEfzsHkb1HbtTOJZK3WaqmQ1Lnpp8vt9K9oUEh3768+vQW2XMomRD9XQTGIfw8WbiZB5YHvPCkmPsSZCLjLBdgPDplKi4yTFZhLnqXIxQp/Kqk7auD2KZkH86J4OOXTyB0dkoqMk2FGKLUSY9+F+9q128TA4EfK6DZ1y2T+NQLCrQqLjKHAUyTOJ8xS32N1w0JfIpC9zspqJkC/tnHCVJULepGEvVC+y39T8nqhs3nG6vQ7aXN//Bv72XpXS9VGybt5wEZgIuUybhbG7abg1j82yxHmlTn6aRQc17mXVREffw8WOVSGM2yYvCsmAVbq9cDukRMd5ITKI6uDzSnPAu+aBJPsKyzaujuLnwsh1PrBEyKfCg2EZmOjYLyQ6Rl0yNXTJupv0Ibi9WSH0GkIi5KodNa4qdfK9bA54mCZQMjUGyboJ+2VQW8/asHHnns7bR/KsaDMqv67UwZu23wb+9molU0NOfKRCEiJy8nxamBP+df35Z49D62WW6IgKE0uZxGWaSMnUWEayLgkReSFfps2tOB8DEwiPvTbLSsmG0+w6RSc6LlNsgmzUkqV2JHsV2N4vhfnZspWtL9SsrM8zid31iarq70XJ1Ngk6zpQZCIk3+jZfdeHG9tVdFxlyYaXQR08zyQ29yYykzhPA8n8DvFIuHmKS4Q8T5ulOaXOXYM867kfmGzYT5vVJJGZxN6UTI1VstTOz74EtfVj2tzoWVqPig6da1XWv8rmgHspdvNlE8kcDamzDlWyz8GivU2biZe8siKKmpX1HzKZZ8EjymWKPxtmspJ1nTzygpfmZ9EL1VeFEStqwfksbZZMLdLES6bGLlk32Y46jOdZKqfwF4Hzs7ytqLlQKVUeufkyDVWwMUjWdbSzoLZeFOYDV0HzoXzUnAXNhUqp8ujNl70tmXoIQ6n4uI/oE2h/KsxF/rb+/GOLoXE+D1sFhWr5oUONcO8D7+3xEOdhYxvJUvuU3U9xiZBm5NrNvttWxX7Nyvo8kzgLFux06IKNSbLuaR91Q7qDeLadCCmtyUUlOvJM4m6KLSsrVZSQrAc0nSLqMJ675mdPuVCdV5c0ne51hQ5eY/PlPI3klVdjfAngYYo7jKe00bNUT/hHaEaNj1moFrEI+7+0uSYYvflyP43o1LCxvmlznuJKr0obPVffGFrlFf9RI0mpJvEwxZdMLcfUGccq2edWtIhESGmjZ2kkekyi46QQBkdkTuep7ubLwZVMTVmylGJPJS4dxNPNqR6TCCntwm5GkojK+rzodhbc4UeT6JiSZF0njzqMp7TR87FHF9SqrM9HkFqnTI2SsSxG38cicF7xQ2HSPkv37+A9T7fXw3ZTzJELpTMno998uZfGdTz6pEayjsjDeErrZ/dV7K9SnZfzlTKJixSbSXwzZsGmJFlkRUhpo2cXCq7umIfVOLO+lEmM3nzZ61OmSPZ4Vinu0JXSRs/UyvS5MHLUqKyfZyNIM6JFbr4cRckUyTZZprhESGmjZz5q5dnHqMr6d2kzkxi9+XI+lU43lcRHKoweEaNF6Y0xXafeTXUq6/M3ntR4i86oEx0ku52MiOhYpexdrf+n9MaTZYrdG5ZvnREujpi9FJMIKRUS50QlOnLBFsGCHUxNsKmPZF3YFvXerp/umPc0odv7IMEugtv9WphKsgkR1dlKHT3q3PhXafOUqcg3Xz40ZBYujpRFijmVOC8kjlpwfpfqbr4cdckUyR43mkVUhNycnzUdf9uV9c3D4/DG3958KVysSuRhPGcBCYdSJrER7GXgNc3DVCPZxIksvdq2YHdtvowU7JhgRrKvhY7vB/4b8p0A0b+p9BJFIxl+Z5HiTiXeVoiWZzBtvjSS9ZJlil2ofaoQLX/z5SrFJzoudB+SPYTomr5thGgXwf//5EqmhIvfRuRhPNsI0RbBgh0QjGR/hMjDeL4lRKu9+XKUp0wJF2M5TLFHoz2GPJPYCPdr8Cg600VI9hREL+Q+hFJNYhOyRSY6dtPEKzqEi0/HPMUdxvMQ8sVeb740ko2C6JHiLs7SZtFt839Fv5hvoUsYyZ6ai1S/kqH0atlFsGBKpki2VZoR46BS26VXCjV/R2YSJ3PKlHCxPovgzt2QL/bW2HxpHmYkCyPyVOJuDnRTsN0Uv/lyTjAjWTQ7KW6NKBdqN22+t3qbrFL5BGSQDBAuAiQDQDKAZADJAJAMIBkAkgEkA0gGgGQAyQCSASAZQDIAJANIBpAMAMkAkgEkA0AygGQAyQCQDCAZAJIBJANIBoBkAMkAkgEgGUAyACQDSAaQDADJAJIBJANAMoBkAMkAkAwgGQCSASQDSAaAZADJAJIBIBlAMgAkA0gGkAwAyQCSASQDQDKAZADJAJAMIBkAkgEkA0gGgGQAyQCSASAZMAD+L8AA/wpgSrPsYqIAAAAASUVORK5CYII="
+        innerDiv.appendChild(img);
+
+        let innerInnerDiv = document.createElement("div");
+        innerInnerDiv.className = "rank-content white-text";
+        innerInnerDiv.innerHTML = "<div class='rank-title'>Runs Together</div><div class='rank-value'>Unranked</div><div class='rank-title'>0</div>";
+        innerDiv.style.animation = "skeleton-loading 1s linear infinite alternate";
+        innerDiv.appendChild(innerInnerDiv);
+
+        runsTogetherCard.appendChild(innerDiv);
+
+        let cards = document.querySelector(".card-length");
+
+        if (cards != null) {
+            cards.appendChild(runsTogetherCard);
+        } else {
+            console.debug("Could not find card container to add runsTogether card")
+        }
+    }
+
+    let tier;
+    let color;
+
+    let countRunsTogether = 0;
+    runsTogether.forEach(function (value, _) {
+        countRunsTogether += value.size;
+    })
+
+    if (countRunsTogether >= 500) {
+        tier = "Challenger";
+        color = "rgb(250, 87, 111)";
+    } else if (countRunsTogether >= 250) {
+        tier = "Master";
+        color = "rgb(250, 87, 111)";
+    } else if (countRunsTogether >= 100) {
+        tier = "Diamond";
+        color = "rgb(4, 138, 180)";
+    } else if (countRunsTogether >= 50) {
+        tier = "Platinum";
+        color = "rgb(4, 177, 161)";
+    } else if (countRunsTogether >= 25) {
+        tier = "Gold";
+        color = "rgb(250, 188, 68)";
+    } else if (countRunsTogether >= 10) {
+        tier = "Silver";
+        color = "rgb(158, 163, 176)";
+    } else if (countRunsTogether >= 1) {
+        tier = "Bronze";
+        color = "rgb(106, 91, 63)";
+    } else {
+        tier = "Unranked";
+        color = "grey";
+    }
+
+    let rankValue = document.querySelector("#runs-together-card div.rank-value");
+    let rankTitle = document.querySelector("#runs-together-card div.rank-title:nth-child(3)");
+    let innerCard = document.querySelector("#runs-together-card>div.rank-card");
+
+    if (rankValue != null) {
+        rankValue.innerText = tier;
+    }
+    if (rankTitle != null) {
+        rankTitle.innerText = countRunsTogether;
+    }
+    if (innerCard != null) {
+        innerCard.style.backgroundColor = color;
     }
 }
 
