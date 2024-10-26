@@ -1,22 +1,3 @@
-/**
- * This functions removes ad banner elements from the raid.report page.
- * @name removeAds
- * @returns {void}
- */
-function removeAds() {
-    /* remove ad banner */
-    let adBanners = document.querySelectorAll("div[class^='jss']");
-    for (let adBanner of adBanners) {
-        if (adBanner.innerHTML.includes("Premium")) {
-            adBanner.parentNode.removeChild(adBanner);
-        }
-    }
-    let ads = document.querySelectorAll("div.ad-tag");
-    for (let i = ads.length - 1; i >= 0; i--) {
-        ads[i].remove();
-    }
-}
-
 var runAlertOnce = false;
 var runOnce = false;
 var raidsPerRow = 4;
