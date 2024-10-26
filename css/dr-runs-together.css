@@ -1,0 +1,36 @@
+.no-margin.card-row, .card-length {
+    max-width: 45rem!important;
+}
+
+.row .col.s6 {
+    width: 33%;
+}
+
+.col.s6.speed-rank-padding {
+    padding-right: 0.5rem!important;
+    padding-left: 0.5rem!important;
+}
+
+.col.s6.runs-together-padding {
+    padding-right: 0!important;
+    padding-left: 0.5rem!important;
+}
+
+span.total-completions {
+    height: 60%;
+}
+
+span.together-completions {
+    height: 40%;
+    font-size: 0.75rem;
+    color: #03b6fc;
+}
+
+@keyframes skeleton-loading {
+    0% {
+        opacity: .75;
+    }
+    100% {
+        opacity: 1;
+    }
+}
