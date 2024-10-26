@@ -103,9 +103,9 @@ const restoreOptions = () => {
         document.getElementById("runs-together-enable").checked = result.enableRunsTogether;
         document.getElementById("own-bungie-id").value = result.ownProfileID;
         chrome.storage.local.get({
-            storedActivities: null,
+            rrStoredActivities: null, drStoredActivities: null
         }).then((result) => {
-            if (result.storedActivities != null) {
+            if (result.rrStoredActivities != null && result.drStoredActivities != null) {
                 let warnDiv = document.getElementById("runs-together-warn");
                 warnDiv.parentElement.removeChild(warnDiv);
             }
@@ -140,7 +140,7 @@ const removeLastProfile = () => {
 
 const clearOwnActivityCache = () => {
     console.debug("clearing stored activities...")
-    chrome.storage.local.set({ storedActivities: null }).then(() => {
+    chrome.storage.local.set({ rrStoredActivities: null, drStoredActivities: null }).then(() => {
         console.debug("cleared stored activities!");
     });
 }

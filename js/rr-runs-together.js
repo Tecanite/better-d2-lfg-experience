@@ -44,14 +44,14 @@ chrome.storage.sync.get(["migrated", "ownProfileID", "enableRunsTogether"])
             runsTogetherAlertRan = false;
         }
 
-        chrome.storage.local.get(["storedActivities"]).then((settings) => {
-            if (settings.storedActivities != null) {
-                storedActivities = new Map(Object.entries(settings.storedActivities));
-                storedActivities.forEach((activityArray, key) => {
-                    storedActivities.set(key, new Set(activityArray));
+        chrome.storage.local.get(["rrStoredActivities"]).then((settings) => {
+            if (settings.rrStoredActivities != null) {
+                rrStoredActivities = new Map(Object.entries(settings.rrStoredActivities));
+                rrStoredActivities.forEach((activityArray, key) => {
+                    rrStoredActivities.set(key, new Set(activityArray));
                 });
             } else {
-                storedActivities = null;
+                rrStoredActivities = null;
             }
         })
     });
@@ -99,7 +99,7 @@ const loadingObserverCallback = (_, observer) => {
                 activitiesMap.forEach((activitySet, key) => {
                     activitiesMap.set(key, Array.from(activitySet))
                 });
-                chrome.storage.local.set({ storedActivities: Object.fromEntries(activitiesMap) }).then(() => {
+                chrome.storage.local.set({ rrStoredActivities: Object.fromEntries(activitiesMap) }).then(() => {
                     console.debug("saved activities!");
                 });
             } else {
@@ -223,7 +223,7 @@ function updateRunsTogether() {
     if (ownerID == userID) {
         return;
     } else {
-        if (storedActivities == null) {
+        if (rrStoredActivities == null) {
             if (!runsTogetherAlertRan) {
                 if (ownerID == "Bungie#ID") {
                     alert("Please set own Bungie ID in options and visit own raid.report to enable runs together.");
@@ -236,7 +236,7 @@ function updateRunsTogether() {
         }
         activitiesMap.forEach(function (value, key) {
             value.forEach(item => {
-                if (storedActivities.get(key).has(item)) {
+                if (rrStoredActivities.get(key).has(item)) {
                     runsTogether.get(key).add(item);
                 }
             })
