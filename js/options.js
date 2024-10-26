@@ -9,8 +9,6 @@ const saveOptions = () => {
     // sidebar options
     var sidebarEnabled = document.getElementById("sidebar-toggle").checked;
 
-    var apiKey = document.getElementById("bungie-api-key").value;
-
     let profileList = document.getElementById("rr-sidebar-profiles");
     let profileElements = profileList.getElementsByTagName("li");
     var profiles = [];
@@ -38,7 +36,7 @@ const saveOptions = () => {
 
     // saving
     chrome.storage.sync.set({
-        migrated: true, sidebarEnabled: sidebarEnabled, apiKey: apiKey, sidebarProfiles: profiles,
+        migrated: true, sidebarEnabled: sidebarEnabled, sidebarProfiles: profiles,
         enableRunsTogether: enableRunsTogether, ownProfileID: ownProfile,
         removeKDA: removeKDA, dynamicLayout: dynamic, minimalLayout: minimal, compactLayout: compact, modernLayout: modern,
         fireteamSearchGrid: fireteamGrid, fireteamProfileReports: fireteamReports
@@ -57,7 +55,7 @@ const saveOptions = () => {
 // stored in chrome.storage.sync, if not yet migrated from chrome.storage.local, load local settings
 const restoreOptions = () => {
     chrome.storage.sync.get({
-        migrated: false, sidebarEnabled: false, apiKey: "", sidebarProfiles: [],
+        migrated: false, sidebarEnabled: false, sidebarProfiles: [],
         enableRunsTogether: false, ownProfileID: "Bungie#ID",
         removeKDA: false, dynamicLayout: false, minimalLayout: false, compactLayout: false, modernLayout: false,
         fireteamSearchGrid: false, fireteamProfileReports: false
@@ -70,7 +68,7 @@ const restoreOptions = () => {
             document.body.insertBefore(sync_storage_warning, document.body.firstChild);
 
             return chrome.storage.local.get({
-                sidebarEnabled: false, apiKey: "", sidebarProfiles: [],
+                sidebarEnabled: false, sidebarProfiles: [],
                 enableRunsTogether: false, ownProfileID: "Bungie#ID",
                 removeKDA: false, dynamicLayout: false, minimalLayout: false, compactLayout: false, modernLayout: false,
                 fireteamSearchGrid: false, fireteamProfileReports: false
@@ -81,14 +79,6 @@ const restoreOptions = () => {
     }).then((result) => {
         // sidebar options
         document.getElementById("sidebar-toggle").checked = result.sidebarEnabled;
-        document.getElementById("bungie-api-key").value = result.apiKey;
-
-        if (result.sidebarEnabled && result.apiKey == "") {
-            let infoDiv = document.createElement("div");
-            infoDiv.innerHTML = "Get an API key by registering an application <a href='https://www.bungie.net/en/Application'> here </a>.";
-            document.getElementById("bungie-api-key").insertAdjacentElement("afterend", infoDiv);
-        }
-
 
         let sidebarProfiles = result.sidebarProfiles;
         let profileList = document.getElementById("rr-sidebar-profiles");
