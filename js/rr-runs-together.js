@@ -1,6 +1,6 @@
 var debug = false;
 
-var storedActivities;
+var rrStoredActivities;
 var runsTogetherAlertRan = false;
 var ownerID;
 var enableRunsTogether;
@@ -15,7 +15,7 @@ var runsTogether;
 var alreadyObservedOnce = false;
 
 var scriptEl = document.createElement("script");
-scriptEl.src = chrome.runtime.getURL("./js/rr-runs-together-inject.js");
+scriptEl.src = chrome.runtime.getURL("./js/runs-together-inject.js");
 scriptEl.onload = function () {
     this.remove();
 };
@@ -62,24 +62,12 @@ window.addEventListener("message", function (e) {
     if (e.data != null && e.data.data != null && e.data.data.Response != null && e.data.data.Response.destinyMemberships != null) {
         firstMembership = e.data.data.Response.destinyMemberships[0];
         userID = firstMembership.bungieGlobalDisplayName + "#" + firstMembership.bungieGlobalDisplayNameCode;
-
         // reset maps for activities since new profile is loaded
         activitiesMap = new Map(), runsTogether = new Map();
-        activitiesMap.set("se", new Set()), runsTogether.set("se", new Set());
-        activitiesMap.set("ce", new Set()), runsTogether.set("ce", new Set());
-        activitiesMap.set("ron", new Set()), runsTogether.set("ron", new Set());
-        activitiesMap.set("kf", new Set()), runsTogether.set("kf", new Set());
-        activitiesMap.set("votd", new Set()), runsTogether.set("votd", new Set());
-        activitiesMap.set("vog", new Set()), runsTogether.set("vog", new Set());
-        activitiesMap.set("dsc", new Set()), runsTogether.set("dsc", new Set());
-        activitiesMap.set("gos", new Set()), runsTogether.set("gos", new Set());
-        activitiesMap.set("lw", new Set()), runsTogether.set("lw", new Set());
-        activitiesMap.set("pantheon", new Set()), runsTogether.set("pantheon", new Set());
-        activitiesMap.set("cos", new Set()), runsTogether.set("cos", new Set());
-        activitiesMap.set("sotp", new Set()), runsTogether.set("sotp", new Set());
-        activitiesMap.set("sos", new Set()), runsTogether.set("sos", new Set());
-        activitiesMap.set("eow", new Set()), runsTogether.set("eow", new Set());
-        activitiesMap.set("lev", new Set()), runsTogether.set("lev", new Set());
+
+        for (raid_key of raids) {
+            activitiesMap.set(raid_key, new Set()), runsTogether.set(raid_key, new Set());
+        }
 
         // reset checks if runsTogether has been done and ran
         runsTogetherDone = false;
@@ -142,51 +130,70 @@ function sortFetchedActivities(activities) {
         }
 
         switch (item.activityDetails.directorActivityHash) {
-            case 1541433876: case 2192826039: case 4129614942: // se contest / normal / master
+            // se contest / guided / standard / master
+            case 940375169: case 1541433876: case 2192826039: case 4129614942: 
                 activitiesMap.get("se").add(item.activityDetails.instanceId);
                 break;
-            case 4179289725: case 1507509200: case 4103176774: case 156253568: case 107319834: // ce normal / master / guided / contest / apparently ce is now a dungeon ¯\_(ツ)_/¯
+            // apparently ce is now a dungeon ¯\_(ツ)_/¯ 
+            // ce guided / challenge / master / standard / ??? / contest 
+            case 107319834: case 156253568: case 1507509200: case 1566480315: case 4103176774: case 4179289725: 
                 activitiesMap.get("ce").add(item.activityDetails.instanceId);
                 break;
-            case 2381413764: case 2918919505: case 1191701339: // ron normal / master / guided
+            // ron guided / standard (also contest) / master
+            case 1191701339: case 2381413764: case 2918919505: 
                 activitiesMap.get("ron").add(item.activityDetails.instanceId);
                 break;
-            case 1374392663: case 2964135793: case 3257594522: case 2897223272: case 1063970578: // kf normal / master / master / guided / challenge
+            // kf challenge / standard / contest / master / master
+            case 1063970578: case 1374392663: case 2897223272: case 2964135793: case 3257594522:  
                 activitiesMap.get("kf").add(item.activityDetails.instanceId);
                 break;
-            case 1441982566: case 4217492330: case 3889634515: case 4156879541: // vow normal / master / master / guided
+            // votd standard / ??? / master / contest / master
+            case 1441982566: case 2906950631: case 3889634515: case 4156879541: case 4217492330:
                 activitiesMap.get("votd").add(item.activityDetails.instanceId);
                 break;
-            case 3881495763: case 1681562271: case 3022541210: case 3711931140: case 1485585878: // vog normal / master / master / guided / challenge
+            // vog challenge / master / master / guided / standard
+            case 1485585878: case 1681562271: case 3022541210: case 3711931140: case 3881495763:
                 activitiesMap.get("vog").add(item.activityDetails.instanceId);
                 break;
-            case 910380154: case 3976949817: // deep stone crypt normal / guided
+            // dsc standard / guided
+            case 910380154: case 3976949817:
                 activitiesMap.get("dsc").add(item.activityDetails.instanceId);
                 break;
-            case 3458480158: case 1042180643: case 2659723068: case 2497200493: case 3845997235: // gos normal / new div / old div / guided / guided
+            // gos standard / guided / ??? / standard / guided
+            case 1042180643: case 2497200493: case 2659723068: case 3458480158: case 3845997235: 
                 activitiesMap.get("gos").add(item.activityDetails.instanceId);
                 break;
-            case 2122313384: case 1661734046:  //lw normal / guided
+            //lw normal / standard / level 58 / level 55
+            case 1661734046: case 2122313384: case 221460815: case 2214608157:
                 activitiesMap.get("lw").add(item.activityDetails.instanceId);
                 break;
-            case 4169648179: case 4169648176: case 4169648177: case 4169648182: // Atraks Sovereign / Oryx Exalted / Rhulk Indomitable / Nezarec Sublime
+            // pantheon oryx / rhulk / atraks / nezarec
+            case 4169648176: case 4169648177: case 4169648179:  case 4169648182: 
                 activitiesMap.get("pantheon").add(item.activityDetails.instanceId);
                 break;
-            case 3333172150: case 960175301: // cos normal / guided
+            // cos guided / normal
+            case 960175301: case 3333172150: 
                 activitiesMap.get("cos").add(item.activityDetails.instanceId);
                 break;
-            case 548750096: case 2812525063: // sotp normal / guided
+            // sotp standard / guided
+            case 548750096: case 2812525063:
                 activitiesMap.get("sotp").add(item.activityDetails.instanceId);
                 break;
-            case 119944200: case 3213556450: case 3004605630: // sos normal / prestige / guided
+            // sos normal / guided / prestige
+            case 119944200: case 3004605630: case 3213556450: 
                 activitiesMap.get("sos").add(item.activityDetails.instanceId);
                 break;
-            case 3089205900: case 809170886: case 2164432138: // eow normal / prestige / guided
+            // eow prestige / guided / normal
+            case 809170886: case 2164432138: case 3089205900:
                 activitiesMap.get("eow").add(item.activityDetails.instanceId);
                 break;
-            case 2693136600: case 2693136601: case 2693136602: case 2693136603: case 2693136604: case 2693136605: // lev normal
-            case 757116822: case 3879860661: case 2449714930: case 417231112: case 3446541099: case 1685065161: // lev prestige
-            case 1699948563: case 3916343513: case 4039317196: case 89727599: case 1875726950: case 287649202: // lev guided
+            // lev normal
+            case 2693136600: case 2693136601: case 2693136602: case 2693136603: case 2693136604: case 2693136605:
+            // lev prestige
+            case 417231112: case 508802457: case 757116822: case 771164842: case 1685065161: case 1800508819:
+            case 2449714930: case 3446541099: case 3857338478: case 3879860661: case 3912437239: case 4206123728:
+            // lev guided
+            case 89727599: case 287649202: case 1875726950: case 1699948563:   case 3916343513: case 4039317196:
                 activitiesMap.get("lev").add(item.activityDetails.instanceId);
                 break;
             default:
