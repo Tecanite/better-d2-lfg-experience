@@ -11,3 +11,10 @@ a.dr-button {
     background-image: url("https://dungeon.report/favicon.ico");
     background-size: 100%;
 }
+
+a.rh-button {
+    width: 25.16px;
+    height: 100%;
+    background-image: url("https://raidhub.io/favicon.ico");
+    background-size: 100%;
+}

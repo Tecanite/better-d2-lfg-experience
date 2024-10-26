@@ -21,7 +21,7 @@ chrome.storage.local.get(["fireteamSearchGrid", "fireteamProfileReports"]).then(
 
         const targetNode = document.getElementById("root");
         const config = { attributes: true, childList: true, subtree: true };
-        const addReportLinkButtonsCallback = (mutationList, observer) => {
+        const addReportLinkButtonsCallback = (_, __) => {
             addReportLinkButtons();
         }
 
