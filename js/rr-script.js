@@ -7,10 +7,10 @@ var lastProfileUrl, lastUrl;
 var runsTogetherEnabled;
 
 /* get saved settings */
-chrome.storage.sync.get(["migrated", "sidebarEnabled", "sidebarProfiles", "removeKDA", "dynamicLayout", "minimalLayout", "compactLayout", "modernLayout", "apiKey", "enableRunsTogether"])
+chrome.storage.sync.get(["migrated", "sidebarEnabled", "sidebarProfiles", "removeKDA", "dynamicLayout", "minimalLayout", "compactLayout", "modernLayout", "enableRunsTogether"])
     .then((settings) => {
         if (settings.migrated == null || settings.migrated == false) {
-            return chrome.storage.local.get(["sidebarEnabled", "sidebarProfiles", "removeKDA", "dynamicLayout", "minimalLayout", "compactLayout", "modernLayout", "apiKey", "enableRunsTogether"])
+            return chrome.storage.local.get(["sidebarEnabled", "sidebarProfiles", "removeKDA", "dynamicLayout", "minimalLayout", "compactLayout", "modernLayout", "enableRunsTogether"])
         } else {
             return settings
         }
@@ -41,21 +41,17 @@ chrome.storage.sync.get(["migrated", "sidebarEnabled", "sidebarProfiles", "remov
             styleEl.href = chrome.runtime.getURL("./css/rr-sidebar.css");
             document.head.appendChild(styleEl);
 
-            addSidebar(settings.sidebarProfiles, settings.apiKey)
+            addSidebar(settings.sidebarProfiles)
         }
-
         runsTogetherEnabled = settings.enableRunsTogether;
-
-        removeAds();
 
         /* update layout of page with observer */
         const rrLayoutTargetNode = document.getElementById("root");
         const rrLayoutConfig = { attributes: false, childList: true, subtree: true };
         const rrLayoutCallback = (_, __) => {
             if (settings.sidebarEnabled) {
-                addSidebar(settings.sidebarProfiles, settings.apiKey);
+                addSidebar(settings.sidebarProfiles);
             }
-            removeAds();
             if (document.location.href.endsWith("raid.report/") || document.location.href.endsWith("raid.report")) {
                 return;
             }
