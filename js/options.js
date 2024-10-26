@@ -4,7 +4,7 @@
 
 // TODO make player list order changeable
 
-// Saves options to chrome.storage
+// Saves options to chrome.storage.sync
 const saveOptions = () => {
     // sidebar options
     var sidebarEnabled = document.getElementById("sidebar-toggle").checked;
@@ -37,8 +37,8 @@ const saveOptions = () => {
 
 
     // saving
-    chrome.storage.local.set({
-        sidebarEnabled: sidebarEnabled, apiKey: apiKey, sidebarProfiles: profiles,
+    chrome.storage.sync.set({
+        migrated: true, sidebarEnabled: sidebarEnabled, apiKey: apiKey, sidebarProfiles: profiles,
         enableRunsTogether: enableRunsTogether, ownProfileID: ownProfile,
         removeKDA: removeKDA, dynamicLayout: dynamic, minimalLayout: minimal, compactLayout: compact, modernLayout: modern,
         fireteamSearchGrid: fireteamGrid, fireteamProfileReports: fireteamReports
@@ -54,13 +54,30 @@ const saveOptions = () => {
 };
 
 // Restores select box and checkbox state using the preferences
-// stored in chrome.storage.
+// stored in chrome.storage.sync, if not yet migrated from chrome.storage.local, load local settings
 const restoreOptions = () => {
-    chrome.storage.local.get({
-        sidebarEnabled: false, apiKey: "", sidebarProfiles: [],
-        enableRunsTogether: false, ownProfileID: "Bungie#ID", storedActivities: null,
+    chrome.storage.sync.get({
+        migrated: false, sidebarEnabled: false, apiKey: "", sidebarProfiles: [],
+        enableRunsTogether: false, ownProfileID: "Bungie#ID",
         removeKDA: false, dynamicLayout: false, minimalLayout: false, compactLayout: false, modernLayout: false,
         fireteamSearchGrid: false, fireteamProfileReports: false
+    }).then((result) => {
+        if (result.migrated == false) {
+            let sync_storage_warning = document.createElement("div");
+            sync_storage_warning.textContent = "Your saved settings have not been migrated to sync storage. Please save your options once to enable syncing across multiple devices.";
+            sync_storage_warning.style.color = "red";
+            sync_storage_warning.style.fontWeight = "bold";
+            document.body.insertBefore(sync_storage_warning, document.body.firstChild);
+
+            return chrome.storage.local.get({
+                sidebarEnabled: false, apiKey: "", sidebarProfiles: [],
+                enableRunsTogether: false, ownProfileID: "Bungie#ID",
+                removeKDA: false, dynamicLayout: false, minimalLayout: false, compactLayout: false, modernLayout: false,
+                fireteamSearchGrid: false, fireteamProfileReports: false
+            })
+        } else {
+            return result
+        }
     }).then((result) => {
         // sidebar options
         document.getElementById("sidebar-toggle").checked = result.sidebarEnabled;
@@ -85,10 +102,14 @@ const restoreOptions = () => {
         // runs together options
         document.getElementById("runs-together-enable").checked = result.enableRunsTogether;
         document.getElementById("own-bungie-id").value = result.ownProfileID;
-        if (result.storedActivities != null) {
-            let warnDiv = document.getElementById("runs-together-warn");
-            warnDiv.parentElement.removeChild(warnDiv);
-        }
+        chrome.storage.local.get({
+            rrStoredActivities: null, drStoredActivities: null
+        }).then((result) => {
+            if (result.rrStoredActivities != null && result.drStoredActivities != null) {
+                let warnDiv = document.getElementById("runs-together-warn");
+                warnDiv.parentElement.removeChild(warnDiv);
+            }
+        });
 
         // raid.report layout options
         document.getElementById("remove-kda").checked = result.removeKDA;
@@ -119,9 +140,12 @@ const removeLastProfile = () => {
 
 const clearOwnActivityCache = () => {
     console.debug("clearing stored activities...")
-    chrome.storage.local.set({ storedActivities: null }).then(() => {
+    chrome.storage.local.set({ rrStoredActivities: null, drStoredActivities: null }).then(() => {
         console.debug("cleared stored activities!");
     });
+}
+const clearSync = () => {
+    chrome.storage.sync.clear()
 }
 
 document.addEventListener("DOMContentLoaded", restoreOptions);
@@ -129,3 +153,4 @@ document.getElementById("save").addEventListener("click", saveOptions);
 document.getElementById("addProfile").addEventListener("click", addProfile);
 document.getElementById("removeProfile").addEventListener("click", removeLastProfile);
 document.getElementById("clearOwnActivityCache").addEventListener("click", clearOwnActivityCache);
+document.getElementById("clearSync").addEventListener("click", clearSync);

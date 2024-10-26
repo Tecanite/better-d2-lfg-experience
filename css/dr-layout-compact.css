@@ -1,5 +1,6 @@
-/* raid report cards*/
-/* TODO remove options that make more compact, fix text size when window gets smaller*/
+/* dungeon report cards*/
+/* TODO isolate options that make cards more compact, decrease spacings*/
+
 .card {
     border-radius: 0.75rem !important;
 }
@@ -46,10 +47,13 @@
     padding: 0.2rem 0.2rem 0 0 !important;
 }
 
-.card:not(.destiny-card) span.badge {
+.card span.badge {
     line-height: 2vh !important;
     height: 2vh !important;
     border: 0.1rem;
+    z-index: 1;
+    position: relative;
+    top: -2vh;
     z-index: 1;
     position: relative;
     top: -2vh;

@@ -5,6 +5,8 @@ var platforms = {
       3: "pc"
 }
 
+const raid_report_api_key = "2f4b6880fd6e47c89085cd8c9cd6c127"
+
 /**
  * This function adds the sidebar div container to the raid.report page.
  * @author Tecanite
@@ -12,7 +14,7 @@ var platforms = {
  * @param {String[]} profiles
  * @returns {void}
  */
-function addSidebar(profiles, apiKey) {
+function addSidebar(profiles) {
       let main = document.getElementsByTagName("main");
       if (document.location.href == "https://raid.report/") {
             if (main != null && main[0] != null && main[0].childNodes.length > 0) {
@@ -37,15 +39,7 @@ function addSidebar(profiles, apiKey) {
             sidebar.className = "drr-color"
             main[0].appendChild(sidebar);
 
-            if (apiKey == "") {
-                  alert("Please input your personal API key in the settings page to enable the sidebar feature of fetching current player emblems and correct player platform!");
-                  return;
-            }
-            if (profiles == null) {
-                  sidebarProfilesAdd([], apiKey);
-            } else {
-                  sidebarProfilesAdd(profiles, apiKey);
-            }
+            sidebarProfilesAdd(profiles);
       }
 }
 
@@ -56,17 +50,17 @@ function addSidebar(profiles, apiKey) {
  * @param {String[]} sidebarProfiles
  * @returns {void}
  */
-function sidebarProfilesAdd(sidebarProfiles, apiKey) {
+function sidebarProfilesAdd(sidebarProfiles) {
       for (let i = 0; i < sidebarProfiles.length; ++i) {
             let profileSlot = document.createElement("div");
             profileSlot.id = "profileSlot" + i;
             profileSlot.className = "profileSlot";
             document.getElementById("sidebar").appendChild(profileSlot);
 
-            getPlatformAndId(sidebarProfiles[i], apiKey).then((platID) => {
+            getPlatformAndId(sidebarProfiles[i]).then((platID) => {
                   let profileIdConverted = sidebarProfiles[i].replace(/'/g, "&#39;").replace(/"/g, "&quot;");
                   profileSlot.innerHTML = "<a href='/" + platforms[platID[0]] + "/" + platID[1] + "' class='profileSlot' data-hover = '" + profileIdConverted + "'></a>";
-                  getEmblemUrl(platID[0], platID[1], apiKey).then((emblemUrl) => {
+                  getEmblemUrl(platID[0], platID[1]).then((emblemUrl) => {
                         profileSlot.style.backgroundImage = "url('https://www.bungie.net" + emblemUrl + "')";
                   });
             });
@@ -80,11 +74,11 @@ function sidebarProfilesAdd(sidebarProfiles, apiKey) {
  * @param {String} bungieID
  * @returns {[platform:int, id:string]}
  */
-async function getPlatformAndId(bungieID, apiKey) {
+async function getPlatformAndId(bungieID) {
       const splitUsername = bungieID.split("#")
 
       let myHeaders = new Headers();
-      myHeaders.append("x-api-key", apiKey);
+      myHeaders.append("x-api-key", raid_report_api_key);
       myHeaders.append("Content-Type", "application/json");
 
       let raw = JSON.stringify({
@@ -121,9 +115,9 @@ async function getPlatformAndId(bungieID, apiKey) {
  * @param {string} id
  * @returns {string}
  */
-async function getEmblemUrl(platform, id, apiKey) {
+async function getEmblemUrl(platform, id) {
       let myInnerHeaders = new Headers();
-      myInnerHeaders.append("x-api-key", apiKey);
+      myInnerHeaders.append("x-api-key", raid_report_api_key);
 
       let requestOptions = {
             method: "GET",

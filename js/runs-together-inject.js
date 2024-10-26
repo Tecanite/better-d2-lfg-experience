@@ -31,7 +31,7 @@
 const { fetch: origFetch } = window;
 window.fetch = async (...args) => {
     const response = await origFetch(...args);
-    console.log('injected script fetch request:', args);
+    // console.log('injected script fetch request:', args);
     response
         .clone()
         .blob() // maybe json(), text(), blob()

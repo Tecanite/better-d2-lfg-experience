@@ -1,10 +1,10 @@
 var runAlertOnce = false;
 var runOnce = false;
-var raidsPerRow = 4;
+var dungeonsPerRow = 4;
 
-const raids = ["se", "ce", "ron", "kf", "votd", "vog", "dsc", "gos", "lw", "pantheon", "cos", "sotp", "sos", "eow", "lev"];
+const dungeons = ["vh", "wr", "gotd", "sow", "dual", "goa", "proph", "poh", "st", "pres", "harb", "zh", "whisper"];
 /**
- * This is the main function to alter the raid.report layout.
+ * This is the main function to alter the dungeon.report layout.
  * @name updateLayout
  * @param {boolean} removeUselessStats
  * @param {boolean} enableSingleRow
@@ -12,7 +12,7 @@ const raids = ["se", "ce", "ron", "kf", "votd", "vog", "dsc", "gos", "lw", "pant
  */
 function updateLayout(removeUselessStats, enableSingleRow) {
     if (enableSingleRow) {
-        var singleRow = document.getElementById("single-raid-row");
+        var singleRow = document.getElementById("single-dungeon-row");
 
         if (singleRow != null) {
             return;
@@ -20,20 +20,20 @@ function updateLayout(removeUselessStats, enableSingleRow) {
         var cards = document.querySelectorAll(".col.l3.m6.s12")
 
 
-        let singleRaidRow = document.createElement("div");
-        singleRaidRow.className = "row raid-row";
-        singleRaidRow.id = "single-raid-row";
+        let singleDungeonRow = document.createElement("div");
+        singleDungeonRow.className = "row dungeon-row";
+        singleDungeonRow.id = "single-dungeon-row";
         let container = document.getElementsByClassName("side-container");
 
         if (container != null && container[0] != null) {
             container[0].id = "side-container";
-            container[0].appendChild(singleRaidRow);
+            container[0].appendChild(singleDungeonRow);
         }
 
         for (let card of cards) {
-            singleRaidRow.appendChild(card);
+            singleDungeonRow.appendChild(card);
         }
-        let rows = document.getElementsByClassName("row raid-row");
+        let rows = document.getElementsByClassName("row dungeon-row");
         for (let i = 0; i < rows.length;) {
             if (rows[i].childNodes.length == 0) {
                 rows[i].parentElement.removeChild(rows[i]);
@@ -42,43 +42,44 @@ function updateLayout(removeUselessStats, enableSingleRow) {
             }
         }
 
-        raidsPerRow = getElementsPerRow();
-        adjustRowBreaks(raidsPerRow);
+        dungeonsPerRow = getElementsPerRow();
+        adjustRowBreaks(dungeonsPerRow);
 
         window.addEventListener("resize", (event) => {
             event.stopImmediatePropagation();
-            //! doesn't work => breaks raid.report if window to resized to small
+            //! doesn't work => breaks dungeon.report if window to resized to small
 
-            let lastRaidsPerRow = raidsPerRow;
-            raidsPerRow = getElementsPerRow();
-            if (!(lastRaidsPerRow == raidsPerRow)) {
-                adjustRowBreaks(raidsPerRow);
+            let lastDungeonsPerRow = dungeonsPerRow;
+            dungeonsPerRow = getElementsPerRow();
+            if (!(lastDungeonsPerRow == dungeonsPerRow)) {
+                adjustRowBreaks(dungeonsPerRow);
             }
 
         });
     }
+
     var cards = document.getElementsByClassName("col l3 m6 s12");
 
     for (let i = 0; i < cards.length; i++) {
-        if (raids[i] != null) {
-            cards[i].id = raids[i];
+        if (dungeons[i] != null) {
+            cards[i].id = dungeons[i];
             if (enableSingleRow) {
                 cards[i].classList.add("item");
             }
         } else if (!runAlertOnce) {
-            alert("New raid has been added.\nPlease update to the new latest version of better-d2-lfg-experience to prevent breakage!");
+            alert("New dungeon has been added.\nPlease update to the new latest version of better-d2-lfg-experience to prevent breakage!");
             runAlertOnce = true;
         }
     }
 
-    padNonMasterOrPrestigeRaids();
+    padNonMasterDungeons();
     if (removeUselessStats) {
         removeStats();
     }
 }
 
 /**
- * This functions returns the number of raids that should be displayed per row according to window width.
+ * This functions returns the number of dungeons that should be displayed per row according to window width.
  * @name getElementsPerRow
  * @returns {int}
  */
@@ -96,36 +97,36 @@ function getElementsPerRow() {
 }
 
 /**
- * This function adjusts position of break elements according to how many raids should be displayed per row.
+ * This function adjusts position of break elements according to how many dungeons should be displayed per row.
  * @name adjustRowBreaks
- * @param {int} raidsPerRow
+ * @param {int} dungeonsPerRow
  * @returns {void}
  */
-function adjustRowBreaks(raidsPerRow) {
+function adjustRowBreaks(dungeonsPerRow) {
     document.querySelectorAll(".break").forEach((breakEl) => {
         breakEl.remove();
     });
 
-    let singleRaidRow = document.getElementById("single-raid-row");
+    let singleDungeonRow = document.getElementById("single-dungeon-row");
     let cards = document.getElementsByClassName("col l3 m6 s12");
 
-    for (let i = raidsPerRow; i < cards.length; i += raidsPerRow) {
+    for (let i = dungeonsPerRow; i < cards.length; i += dungeonsPerRow) {
         let breakDiv = document.createElement("div");
         breakDiv.className = "break";
-        singleRaidRow.insertBefore(breakDiv, cards[i]);
+        singleDungeonRow.insertBefore(breakDiv, cards[i]);
     }
 }
 
 /**
- * This function adds a padding line to the clear table to align raid cards properly.
- * @name padNonMasterOrPrestigeRaids
+ * This function adds a padding line to the clear table to align dungeon cards properly.
+ * @name padNonMasterDungeons
  * @returns {void}
  */
-function padNonMasterOrPrestigeRaids() {
+function padNonMasterDungeons() {
     tables = document.querySelectorAll("div.card-content > table.centered:not(.pgcr-table)");
     if (tables != null) {
         for (let i = 0; i < tables.length; i++) {
-            if (tables[i].childNodes[1].childNodes.length < 3) {
+            if (tables[i].childNodes[1].childNodes.length < 2) {
                 let padding = document.createElement('tr');
                 padding.innerHTML = "<th><p style='visibility: hidden;'>|</p></th><td><span class=''></span></td><td><span class=''></span></td>";
                 tables[i].childNodes[1].append(padding);
@@ -135,12 +136,12 @@ function padNonMasterOrPrestigeRaids() {
 }
 
 /**
- * This function removes the KDA-Stats table from all raid cards.
+ * This function removes the KDA-Stats table from all dungeon cards.
  * @name removeStats
  * @returns {void}
  */
 function removeStats() {
-    statRows = document.querySelectorAll("div.row:not(.small-bottom-margin):not(.center):not(.no-margin):not(#single-raid-row)");
+    statRows = document.querySelectorAll("div.row:not(.small-bottom-margin):not(.center):not(.no-margin):not(#single-dungeon-row)");
     for (row of statRows) {
         if (row && row.previousSibling) {
             row.parentNode.removeChild(row.previousSibling);

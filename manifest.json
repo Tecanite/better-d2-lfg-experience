@@ -2,8 +2,8 @@
     "manifest_version": 3,
     "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwwz/9pV46DnfK6QtSRawszHqBXEJvlPxbCpcqgeMQOOUS+MhmNYYOeU1/gI9M7w1zhSz6BZnaG+iDr9ecIL5FxIAvhZkyeg5rg+2/ddsON+6A5D33ygBXid3E3jKpbJlawmmPzqPSAiz9uNq3HcBnn3ExgoXrJGdg/kaEaFk4lHPO7JNsOentH7LUrnjZVIFGL/Xw2NZe/zQZsWYnutCzx99g8UhS+UiSXmGC+4y/H7beWaKcMHA26pIo2tnbOp4iZhwZfI7K8Z61rfYvxhixSw6Hi/Meh/7VlXUFoEV4KCa6qywC5e/wU8lapTGRyWR7xFpTJXQsRXjDLFQ+pto1QIDAQAB",
     "name": "better-d2-lfg-experience",
-    "description": "adds useful features to destiny 2 raid.report and bungie fireteam search",
-    "version": "0.3.2.3",
+    "description": "adds useful features to destiny 2 raid.report, dungeon.report and bungie fireteam search",
+    "version": "0.3.3",
     "permissions": [
         "contextMenus",
         "scripting",
@@ -14,12 +14,16 @@
     ],
     "host_permissions": [
         "https://www.bungie.net/Platform/*",
-        "https://raid.report/*"
+        "https://raid.report/*",
+        "https://dungeon.report/*"
     ],
     "icons": {
         "16": "images/16.png",
         "48": "images/48.png",
         "128": "images/128.png"
+    },
+    "action": {
+        "default_popup": "html/options.html"
     },
     "options_ui": {
         "page": "html/options.html",
@@ -51,6 +55,29 @@
         },
         {
             "matches": [
+                "*://dungeon.report/*"
+            ],
+            "css": [
+                "css/dr-layout.css"
+            ],
+            "js": [
+                "js/dr-layout.js",
+                "js/dr-sidebar.js",
+                "js/dr-script.js"
+            ]
+        },
+        {
+            "matches": [
+                "*://dungeon.report/*/*"
+            ],
+            "js": [
+                "js/dr-runs-together.js"
+            ],
+            "run_at": "document_start",
+            "all_frames": true
+        },
+        {
+            "matches": [
                 "*://www.bungie.net/7/*/Fireteams/Search*"
             ],
             "js": [
@@ -64,7 +91,7 @@
             "resources": [
                 "js/rr-sidebar.js",
                 "js/rr-layout.js",
-                "js/rr-runs-together-inject.js",
+                "js/runs-together-inject.js",
                 "css/rr-layout-dynamic-single-row.css",
                 "css/rr-layout-modern.css",
                 "css/rr-runs-together.css",
@@ -72,6 +99,20 @@
             ],
             "matches": [
                 "*://raid.report/*"
+            ]
+        },
+        {
+            "resources": [
+                "js/dr-sidebar.js",
+                "js/dr-layout.js",
+                "js/runs-together-inject.js",
+                "css/dr-layout-dynamic-single-row.css",
+                "css/dr-layout-modern.css",
+                "css/dr-runs-together.css",
+                "css/dr-sidebar.css"
+            ],
+            "matches": [
+                "*://dungeon.report/*"
             ]
         },
         {
