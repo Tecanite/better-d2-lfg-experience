@@ -51,7 +51,7 @@ chrome.storage.sync.get(["migrated", "sidebarEnabled", "sidebarProfiles", "remov
         /* update layout of page with observer */
         const rrLayoutTargetNode = document.getElementById("root");
         const rrLayoutConfig = { attributes: false, childList: true, subtree: true };
-        const rrLayoutCallback = (mutationList, observer) => {
+        const rrLayoutCallback = (_, __) => {
             if (settings.sidebarEnabled) {
                 addSidebar(settings.sidebarProfiles, settings.apiKey);
             }

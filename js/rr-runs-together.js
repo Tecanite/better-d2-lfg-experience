@@ -389,7 +389,7 @@ function recolorActivityDots() {
     // observer to recolor changing activity dots
     const recolorActivityDotsTargetNode = document.getElementById("side-container");
     const recolorActivityDotsConfig = { attributes: false, childList: true, subtree: true };
-    const recolorActivityDotsCallback = (mutationList, observer) => {
+    const recolorActivityDotsCallback = (mutationList, _) => {
         for (let mutation of mutationList) {
             if (!document.body.contains(mutation.addedNodes[0])) {
                 continue;

@@ -161,11 +161,12 @@ function padNonMasterOrPrestigeRaids() {
  * @returns {void}
  */
 function removeStats() {
-    tables = document.querySelectorAll("table.col.s8.centered");
-    if (tables != null) {
-        for (let i = tables.length - 1; i >= 0; i--) {
-            tables[i].remove();
+    statRows = document.querySelectorAll("div.row:not(.small-bottom-margin):not(.center):not(.no-margin):not(#single-raid-row)");
+    for (row of statRows) {
+        if (row && row.previousSibling) {
+            row.parentNode.removeChild(row.previousSibling);
         }
+        row.parentNode.removeChild(row);
     }
 }
 
