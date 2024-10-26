@@ -46,16 +46,13 @@
     padding: 0.2rem 0.2rem 0 0 !important;
 }
 
-.card .drr-badges {
-    z-index: 1;
-    position: relative;
-    top: -2vh;
-}
-
-.card span.badge {
+.card:not(.destiny-card) span.badge {
     line-height: 2vh !important;
     height: 2vh !important;
     border: 0.1rem;
+    z-index: 1;
+    position: relative;
+    top: -2vh;
 }
 
 .card hr.row-bottom-margin {
