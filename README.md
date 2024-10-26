@@ -12,33 +12,21 @@ chrome extension that adds some useful features to bungie.net fireteam search, r
 ### bungie.net fireteam search features
 
 - grid layout for fireteam search
-- links to a players raid.report and dungeon.report when viewing a fireteam
+- links to a players raid.report, dungeon.report and raidhub.io profile when viewing a fireteam
 
-### raid.report features
+### raid.report and dungeon.report features
 
 - options for a more modern, compact, minimal (WIP) styling
 - optional sidebar with quick access to other player reports
 - "runs together" functionality that shows how many runs were done together with the viewed profile
 
-### dungeon.report features
-
-- WIP
-
 ## Configuration
 
 this extension comes with an options page where all features can be individually configured.
-the options page can be accessed by right-clicking the extentions icon in the chrome menu bar and choosing "options"
-
-for the sidebar functionality you have to input your own bungie api key in the settings page. follow the steps below to get one:
-- register a dummy application [here](https://www.bungie.net/en/Application)
-- you can disable app authentication since its not needed
-- put "https://raid.report" under origin header for browser based apps
-- accept terms and create app
-- copy the automatically generated api key into the text field on the settings page
-
+the options page can be accessed either as a popup by left-clicking on the extensions icon or as a page by right-clicking the extention icon and choosing "options"
 
 ## Installation
 
-- download the [latest release](https://github.com/Tecanite/better-d2-lfg-experience/releases/latest) from the releases tab
-- enable developer mode on chrome extension page (<kbd>Ctrl </kbd>+ <kbd>Shift </kbd> + <kbd>E </kbd> or [chrome://extensions/](chrome://extensions/) or under &#8942; )
-- import the zip as an unpacked extension
+- download the [latest release](https://github.com/Tecanite/better-d2-lfg-experience/releases/latest) from the releases tab (you might need to download the .crx via "save link as" because of some chrome bullshit
+- enable developer mode on chrome extension page (`<kbd>`Ctrl `</kbd>`+ `<kbd>`Shift `</kbd>` + `<kbd>`E `</kbd>` or [chrome://extensions/](chrome://extensions/) or under &#8942; )
+- either drag the .crx onto the page or import the .zip as an unpacked extension
