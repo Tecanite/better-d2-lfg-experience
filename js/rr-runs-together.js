@@ -22,18 +22,18 @@ scriptEl.onload = function () {
 (document.head || document.documentElement).appendChild(scriptEl);
 
 // get saved settings
-chrome.storage.local.get(["ownProfileID", "storedActivities", "enableRunsTogether"])
+chrome.storage.sync.get(["migrated", "ownProfileID", "enableRunsTogether"])
+    .then((settings) => {
+        if (settings.migrated == null || settings.migrated == false) {
+            alert("better-d2-lfg-experience: Please visit the extension options and migrate settings to use synced storage. Using local values for now.")
+            return chrome.storage.local.get(["ownProfileID", "enableRunsTogether"])
+        } else {
+            return settings
+        }
+    })
     .then((settings) => {
         ownerID = settings.ownProfileID;
         enableRunsTogether = settings.enableRunsTogether;
-        if (settings.storedActivities != null) {
-            storedActivities = new Map(Object.entries(settings.storedActivities));
-            storedActivities.forEach((activityArray, key) => {
-                storedActivities.set(key, new Set(activityArray));
-            });
-        } else {
-            storedActivities = null;
-        }
         if (enableRunsTogether) {
             var styleEl = document.createElement("link");
             styleEl.rel = "stylesheet";
@@ -43,6 +43,17 @@ chrome.storage.local.get(["ownProfileID", "storedActivities", "enableRunsTogethe
 
             runsTogetherAlertRan = false;
         }
+
+        chrome.storage.local.get(["storedActivities"]).then((settings) => {
+            if (settings.storedActivities != null) {
+                storedActivities = new Map(Object.entries(settings.storedActivities));
+                storedActivities.forEach((activityArray, key) => {
+                    storedActivities.set(key, new Set(activityArray));
+                });
+            } else {
+                storedActivities = null;
+            }
+        })
     });
 
 // receive message from injected script
