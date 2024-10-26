@@ -48,7 +48,7 @@ chrome.storage.local.get(["ownProfileID", "storedActivities", "enableRunsTogethe
 // receive message from injected script
 window.addEventListener("message", function (e) {
     // console.debug("received message from injected script:", e.data.data.Response)
-    if (e.data.data != null && e.data.data.Response != null && e.data.data.Response.destinyMemberships != null) {
+    if (e.data != null && e.data.data != null && e.data.data.Response != null && e.data.data.Response.destinyMemberships != null) {
         firstMembership = e.data.data.Response.destinyMemberships[0];
         userID = firstMembership.bungieGlobalDisplayName + "#" + firstMembership.bungieGlobalDisplayNameCode;
 
@@ -75,9 +75,8 @@ window.addEventListener("message", function (e) {
         alreadyObservedOnce = false;
     }
 
-    if (e.data.data.Response != null && e.data.data.Response.activities != null) {
+    if (e.data != null && e.data.data != null && e.data.data.Response != null && e.data.data.Response.activities != null) {
         let activities = e.data.data.Response.activities;
-
         if (activities[0].period != null) {
             sortFetchedActivities(activities);
         }
