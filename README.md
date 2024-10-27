@@ -27,6 +27,6 @@ the options page can be accessed either as a popup by left-clicking on the exten
 
 ## Installation
 
-- download the [latest release](https://github.com/Tecanite/better-d2-lfg-experience/releases/latest) from the releases tab (you might need to download the .crx via "save link as" because of some chrome bullshit
-- enable developer mode on chrome extension page (`<kbd>`Ctrl `</kbd>`+ `<kbd>`Shift `</kbd>` + `<kbd>`E `</kbd>` or [chrome://extensions/](chrome://extensions/) or under &#8942; )
+- download the [latest release](https://github.com/Tecanite/better-d2-lfg-experience/releases/latest) from the releases tab (you might need to download the .crx via "save link as" because of some chrome bullshit)
+- enable developer mode on chrome extension page (<kbd>Ctrl</kbd>+ <kbd>Shift</kbd> + <kbd>E</kbd> or [chrome://extensions/](chrome://extensions/) or under &#8942; )
 - either drag the .crx onto the page or import the .zip as an unpacked extension
