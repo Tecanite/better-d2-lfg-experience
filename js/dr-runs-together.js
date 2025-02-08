@@ -131,6 +131,10 @@ function sortFetchedActivities(activities) {
         }
 
         switch (item.activityDetails.directorActivityHash) {
+            // sd standard / contest / master
+            case 3834447244: case 247869137: case 3521648250:
+                activitiesMap.get("sd").add(item.activityDetails.instanceId);
+                break;
             // vh standard / contest / contest / master
             case 300092127: case 1915770060: case 3492566689: case 4293676253:
                 activitiesMap.get("vh").add(item.activityDetails.instanceId);
