@@ -105,7 +105,11 @@ async function getPlatformAndId(bungieID) {
             id = result.Response[0].membershipId;
             return [platform, id];
         })
-        .catch(error => console.debug("error getting platform and if for bungieID", error))
+        .catch(error => {
+            if (debugEnabled) {
+                console.debug("error getting platform and if for bungieID", error)
+            }
+        })
 }
 
 /**
@@ -141,7 +145,11 @@ async function getEmblemUrl(platform, id) {
             let lastPlayedCharacter = timestamps.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
             return charactersData[lastPlayedCharacter][1].emblemPath;
         })
-        .catch(error => console.debug("error when fetching emblem for sidebar", error));
+        .catch(error => {
+            if (debugEnabled) {
+                console.debug("error when fetching emblem for sidebar", error)
+            }
+        });
 }
 
 

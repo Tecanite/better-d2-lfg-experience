@@ -6,8 +6,10 @@ document.head.appendChild(scriptEl);
 var lastProfileUrl, lastUrl;
 var runsTogetherEnabled;
 
+var debugEnabled = false;
+
 /* get saved settings */
-chrome.storage.sync.get(["migrated", "sidebarEnabled", "sidebarProfiles", "removeKDA", "dynamicLayout", "minimalLayout", "compactLayout", "modernLayout", "enableRunsTogether"])
+chrome.storage.sync.get(["migrated", "sidebarEnabled", "sidebarProfiles", "removeKDA", "dynamicLayout", "minimalLayout", "compactLayout", "modernLayout", "enableRunsTogether", "debugEnabled"])
     .then((settings) => {
         if (settings.migrated == null || settings.migrated == false) {
             return chrome.storage.local.get(["sidebarEnabled", "sidebarProfiles", "removeKDA", "dynamicLayout", "minimalLayout", "compactLayout", "modernLayout", "enableRunsTogether"])
@@ -44,6 +46,7 @@ chrome.storage.sync.get(["migrated", "sidebarEnabled", "sidebarProfiles", "remov
             addSidebar(settings.sidebarProfiles)
         }
         runsTogetherEnabled = settings.enableRunsTogether;
+        debugEnabled = settings.debugEnabled;
 
         /* update layout of page with observer */
         const drLayoutTargetNode = document.getElementById("root");
