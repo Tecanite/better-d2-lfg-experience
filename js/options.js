@@ -33,13 +33,16 @@ const saveOptions = () => {
     var fireteamGrid = document.getElementById("fireteam-grid").checked;
     var fireteamReports = document.getElementById("fireteam-report-buttons").checked;
 
+    // misc
+    var debug = document.getElementById("debug").checked;
+
 
     // saving
     chrome.storage.sync.set({
         migrated: true, sidebarEnabled: sidebarEnabled, sidebarProfiles: profiles,
         enableRunsTogether: enableRunsTogether, ownProfileID: ownProfile,
         removeKDA: removeKDA, dynamicLayout: dynamic, minimalLayout: minimal, compactLayout: compact, modernLayout: modern,
-        fireteamSearchGrid: fireteamGrid, fireteamProfileReports: fireteamReports
+        fireteamSearchGrid: fireteamGrid, fireteamProfileReports: fireteamReports, debugEnabled: debug
     }).then(() => {
         console.debug("Saved Options!");
         const status = document.getElementById("status");
@@ -58,7 +61,7 @@ const restoreOptions = () => {
         migrated: false, sidebarEnabled: false, sidebarProfiles: [],
         enableRunsTogether: false, ownProfileID: "Bungie#ID",
         removeKDA: false, dynamicLayout: false, minimalLayout: false, compactLayout: false, modernLayout: false,
-        fireteamSearchGrid: false, fireteamProfileReports: false
+        fireteamSearchGrid: false, fireteamProfileReports: false, debugEnabled: false
     }).then((result) => {
         if (result.migrated == false) {
             let sync_storage_warning = document.createElement("div");
@@ -111,6 +114,9 @@ const restoreOptions = () => {
         // fireteam search layout options
         document.getElementById("fireteam-grid").checked = result.fireteamSearchGrid;
         document.getElementById("fireteam-report-buttons").checked = result.fireteamProfileReports;
+
+        // misc
+        document.getElementById("debug").checked = result.debugEnabled;
     });
 };
 

@@ -95,16 +95,22 @@ const loadingObserverCallback = (_, observer) => {
         // gotta wait till last request is also handled by our functions
         setTimeout(() => {
             if (ownerID == userID) {
-                console.debug("storing activities:", activitiesMap);
+                if (debugEnabled) {
+                    console.debug("storing activities:", activitiesMap);
+                }
                 // make map serializable
                 activitiesMap.forEach((activitySet, key) => {
                     activitiesMap.set(key, Array.from(activitySet))
                 });
                 chrome.storage.local.set({ drStoredActivities: Object.fromEntries(activitiesMap) }).then(() => {
-                    console.debug("saved activities!");
+                    if (debugEnabled) {
+                        console.debug("saved activities!");
+                    }
                 });
             } else {
-                console.debug("finishing runs together")
+                if (debugEnabled) {
+                    console.debug("finishing runs together")
+                }
                 finishRunsTogether();
             }
         }, 200);
@@ -188,7 +194,9 @@ function sortFetchedActivities(activities) {
                 activitiesMap.get("whisper").add(item.activityDetails.instanceId);
                 break;
             default:
-                console.debug("unknown / new activity which is currently not sorted:", item);
+                if (debugEnabled) {
+                    console.debug("unknown / new activity which is currently not sorted:", item);
+                }
         }
     })
     updateRunsTogether();
@@ -291,7 +299,9 @@ function addRunsTogetherCard() {
         if (cards != null) {
             cards.appendChild(runsTogetherCard);
         } else {
-            console.debug("Could not find card container to add runsTogether card")
+            if (debugEnabled) {
+                console.debug("Could not find card container to add runsTogether card")
+            }
         }
     }
 

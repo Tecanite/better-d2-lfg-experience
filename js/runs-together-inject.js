@@ -39,6 +39,10 @@ window.fetch = async (...args) => {
             window.postMessage({ type: 'fetch', data: data }, '*'); // send to content script
             //window.postMessage({ type: 'fetch', data: URL.createObjectURL(data) }, '*'); // if a big media file, can createObjectURL before send to content script
         })
-        .catch(err => console.error(err));
+        .catch(err => {
+            if (debugEnabled) {
+                console.error(err)
+            }
+        });
     return response;
 };
