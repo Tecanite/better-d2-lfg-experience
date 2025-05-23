@@ -143,12 +143,12 @@ function sortFetchedActivities(activities) {
             case 2004855007: case 2534833093:
                 activitiesMap.get("wr").add(item.activityDetails.instanceId);
                 break;
-            // gotd standard / master
-            case 313828469: case 2716998124:
+            // gotd standard / master / rotn explorer (matchmade) / rotn explorer / rotn eternity / rotn ultimatum
+            case 313828469: case 2716998124: case 4190119662: case 1094262727: case 2961030534: case 124340010:
                 activitiesMap.get("gotd").add(item.activityDetails.instanceId);
                 break;
-            // sow standard / master / master
-            case 1262462921: case 1801496203: case 2296818662:
+            // sow standard / master / master / rotn explorer (matchmade) / rotn explorer / rotn eternity / rotn ultimatum
+            case 1262462921: case 1801496203: case 2296818662: case 943878085: case 1225969316: case 4046934917: case 3339002067:
                 activitiesMap.get("sow").add(item.activityDetails.instanceId);
                 break;
             // dual master / standard / master
@@ -159,8 +159,8 @@ function sortFetchedActivities(activities) {
             case 1112917203: case 3774021532: case 4078656646:
                 activitiesMap.get("goa").add(item.activityDetails.instanceId);
                 break;
-            // proph standard / standard
-            case 1077850348: case 4148187374:
+            // proph standard / standard / rotn explorer (matchmade) / rotn explorer / rotn eternity / rotn ultimatum
+            case 1077850348: case 4148187374: case 1788465402: case 3637651331: case 715153594: case 3193125350:
                 activitiesMap.get("proph").add(item.activityDetails.instanceId);
                 break;
             // poh master/ expert / normal / legend / master / master / standard
