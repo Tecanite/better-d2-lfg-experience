@@ -1,5 +1,3 @@
-var debug = false;
-
 var drStoredActivities;
 var runsTogetherAlertRan = false;
 var ownerID;

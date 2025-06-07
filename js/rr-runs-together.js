@@ -1,5 +1,3 @@
-var debug = false;
-
 var rrStoredActivities;
 var runsTogetherAlertRan = false;
 var ownerID;
