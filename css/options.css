@@ -1,5 +1,65 @@
 body {
-    width: fit-content;
-    background-color: #292a2d;;
-    color: rgb(232,234,237);
+    width: 375px;
+    background-color: #333333;
+    color: #eeeeee;
+}
+
+/* draggable list stuff */
+ul {
+    /* list-style-type: decimal; */
+    padding-left: 0px;
+    /* margin: 0 auto; */
+}
+
+li {
+    display: flex;
+    align-items: center;
+    background: #252526;
+    padding: 4px;
+    margin-bottom: 4px;
+    /* border: 1px solid #ccc; */
+    border-radius: 4px;
+}
+
+li.dragging {
+    opacity: 0.5;
+}
+
+li.add-btn {
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+li.add-btn:hover {
+    background-color: #555555;
+}
+
+input.sidebar-profile {
+    width: 100%;
+    color: #eeeeee;
+    background: transparent;
+    border: none;
+    outline: none;
+}
+
+.content {
+    flex: 1;
+    outline: none;
+    cursor: text;
+}
+
+.drag-handle {
+    cursor: grab;
+    margin-left: 10px;
+    user-select: none;
+}
+
+.delete-btn {
+    margin-left: 10px;
+    background: transparent;
+    border: none;
+    font-size: 16px;
+    color: #c00;
+    cursor: pointer;
 }

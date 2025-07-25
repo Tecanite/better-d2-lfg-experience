@@ -2,19 +2,64 @@
     src: https://developer.chrome.com/docs/extensions/develop/ui/options-page?hl=d
 */
 
-// TODO make player list order changeable
+const sidebarProfileList = document.getElementById('sidebar-profile-list');
+let draggedProfile = null;
+
+function initDragHandles() {
+    const handles = sidebarProfileList.querySelectorAll('.drag-handle');
+    handles.forEach(handle => {
+        handle.addEventListener('dragstart', (e) => {
+            draggedProfile = handle.closest('li');
+            draggedProfile.classList.add('dragging');
+        });
+
+        handle.addEventListener('dragend', () => {
+            if (draggedProfile) {
+                draggedProfile.classList.remove('dragging');
+                draggedProfile = null;
+                saveOptions();
+            }
+        });
+    });
+
+    const profiles = sidebarProfileList.querySelectorAll('li');
+    profiles.forEach(profile => {
+        profile.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            if (!draggedProfile || profile === draggedProfile) return;
+            const rect = profile.getBoundingClientRect();
+            const offset = e.clientY - rect.top;
+            if (offset > rect.height / 2) {
+                profile.after(draggedProfile);
+            } else {
+                profile.before(draggedProfile);
+            }
+        });
+    });
+}
+
+function attachDeleteEvents() {
+    const deleteButtons = sidebarProfileList.querySelectorAll('.delete-btn');
+    deleteButtons.forEach(btn => {
+        btn.onclick = () => {
+            btn.closest('li').remove();
+            saveOptions();
+        };
+    });
+}
+
+
 
 // Saves options to chrome.storage.sync
 const saveOptions = () => {
     // sidebar options
     var sidebarEnabled = document.getElementById("sidebar-toggle").checked;
 
-    let profileList = document.getElementById("rr-sidebar-profiles");
-    let profileElements = profileList.getElementsByTagName("li");
+    let profileElements = sidebarProfileList.getElementsByClassName("sidebar-profile");
     var profiles = [];
     for (let i = 0; i < profileElements.length; i++) {
-        if (profileElements[i].innerHTML != "") {
-            profiles.push(profileElements[i].innerHTML);
+        if (profileElements[i].value != "" && profileElements[i].value != "BungieName#ID") {
+            profiles.push(profileElements[i].value);
         }
     }
 
@@ -45,11 +90,6 @@ const saveOptions = () => {
         fireteamSearchGrid: fireteamGrid, fireteamProfileReports: fireteamReports, debugEnabled: debug
     }).then(() => {
         console.debug("Saved Options!");
-        const status = document.getElementById("status");
-        status.textContent = "Options saved.";
-        setTimeout(() => {
-            status.textContent = "";
-        }, 1000);
     });
 
 };
@@ -59,7 +99,7 @@ const saveOptions = () => {
 const restoreOptions = () => {
     chrome.storage.sync.get({
         migrated: false, sidebarEnabled: false, sidebarProfiles: [],
-        enableRunsTogether: false, ownProfileID: "Bungie#ID",
+        enableRunsTogether: false, ownProfileID: "BungieName#ID",
         removeKDA: false, dynamicLayout: false, minimalLayout: false, compactLayout: false, modernLayout: false,
         fireteamSearchGrid: false, fireteamProfileReports: false, debugEnabled: false
     }).then((result) => {
@@ -84,13 +124,17 @@ const restoreOptions = () => {
         document.getElementById("sidebar-toggle").checked = result.sidebarEnabled;
 
         let sidebarProfiles = result.sidebarProfiles;
-        let profileList = document.getElementById("rr-sidebar-profiles");
         for (let i = 0; i < sidebarProfiles.length; i++) {
-            let profile = document.createElement("li");
-            profile.contentEditable = "true";
-            profile.innerHTML = sidebarProfiles[i];
-            profileList.appendChild(profile);
+            const newItem = document.createElement('li');
+            newItem.innerHTML = `
+                    <div class="content"><input type="text" class="sidebar-profile" value="`+ sidebarProfiles[i] + `"></div>
+                    <span class="drag-handle" draggable="true">⠿</span>
+                    <button class="delete-btn">×</button>
+                `;
+            sidebarProfileList.insertBefore(newItem, document.getElementById("add-btn"));
         }
+        initDragHandles();
+        attachDeleteEvents();
 
         // runs together options
         document.getElementById("runs-together-enable").checked = result.enableRunsTogether;
@@ -117,22 +161,27 @@ const restoreOptions = () => {
 
         // misc
         document.getElementById("debug").checked = result.debugEnabled;
+
+        // trigger save of options on any change of input element
+        let inputs = document.getElementsByTagName("input");
+        for (let input of inputs) {
+            input.onchange = saveOptions;
+        }
     });
 };
 
-
 const addProfile = () => {
-    let sidebarList = document.getElementById("rr-sidebar-profiles");
-    let profile = document.createElement("li");
-    profile.contentEditable = "true";
-    profile.innerHTML = "BungieName#id";
-    sidebarList.appendChild(profile);
-};
-
-const removeLastProfile = () => {
-    let sidebarList = document.getElementById("rr-sidebar-profiles");
-    sidebarList.removeChild(sidebarList.lastChild);
-};
+    const newItem = document.createElement('li');
+    newItem.innerHTML = `
+        <div class="content"><input type="text" class="sidebar-profile" value="BungieName#ID"></div>    
+        <span class="drag-handle" draggable="true">⠿</span>
+        <button class="delete-btn">×</button>
+      `;
+    newItem.querySelector("input.sidebar-profile").addEventListener("change", saveOptions);
+    sidebarProfileList.insertBefore(newItem, document.getElementById('add-btn'));
+    initDragHandles();
+    attachDeleteEvents();
+}
 
 const clearOwnActivityCache = () => {
     console.debug("clearing stored activities...")
@@ -145,8 +194,6 @@ const clearSync = () => {
 }
 
 document.addEventListener("DOMContentLoaded", restoreOptions);
-document.getElementById("save").addEventListener("click", saveOptions);
-document.getElementById("addProfile").addEventListener("click", addProfile);
-document.getElementById("removeProfile").addEventListener("click", removeLastProfile);
+document.getElementById("add-btn").addEventListener("click", addProfile);
 document.getElementById("clearOwnActivityCache").addEventListener("click", clearOwnActivityCache);
 document.getElementById("clearSync").addEventListener("click", clearSync);

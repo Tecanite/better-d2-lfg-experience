@@ -4,6 +4,7 @@
 <html>
 
 <head>
+  <meta charset="UTF-8">
   <title>better-d2-lfg-experience settings</title>
   <link rel="stylesheet" type="text/css" href="../css/options.css" />
 </head>
@@ -13,27 +14,26 @@
   <h2>raid.report and dungeon.report options</h2>
   <h3>sidebar</h3>
   <label>
-    <input type="checkbox" id="sidebar-toggle">
+    <input type="checkbox" id="sidebar-toggle" class="trigger-save">
     enable sidebar
   </label>
   <br>
 
   <h3>sidebar profiles</h3>
-  <button id="addProfile"> add profile </button>
-  <button id="removeProfile"> remove last profile </button>
-  <ul id="rr-sidebar-profiles">
+  <ul id="sidebar-profile-list">
+    <li class="add-btn" id="add-btn">+</li>
   </ul>
 
   <h3>runs together badge</h3>
   <label>
-    <input type="checkbox" id="runs-together-enable">
+    <input type="checkbox" id="runs-together-enable" class="trigger-save">
     enable runs together badge
   </label>
   <br>
   <br>
   <label for="own-bungie-id">
     your Bungie ID:
-    <input type="text" id="own-bungie-id" name="own-bungie-id">
+    <input type="text" id="own-bungie-id" name="own-bungie-id" class="trigger-save">
   </label>
   <div id="runs-together-warn" style="color: red">
     please load your own raid.report and dungeon.report once to cache runs
@@ -41,51 +41,48 @@
 
   <h3>raid.report and dungeon layout</h3>
   <label>
-    <input type="checkbox" id="remove-kda">
+    <input type="checkbox" id="remove-kda" class="trigger-save">
     remove K/D/A-Stats
   </label>
   <br>
   <label>
-    <input type="checkbox" id="layout-dynamic">
+    <input type="checkbox" id="layout-dynamic" class="trigger-save">
     dynamic layout (breaks if window becomes to narrow)
   </label>
   <br>
   <label>
-    <input type="checkbox" id="layout-minimal"> <!--TODO make this option remove weekly clears and idk-->
+    <input type="checkbox" id="layout-minimal" class="trigger-save">
+    <!--TODO make this option remove weekly clears and idk-->
     minimal (WIP)
   </label>
   <br>
   <label>
-    <input type="checkbox" id="layout-compact">
+    <input type="checkbox" id="layout-compact" class="trigger-save">
     compact (WIP)
   </label>
   <br>
   <label>
-    <input type="checkbox" id="layout-modern">
+    <input type="checkbox" id="layout-modern" class="trigger-save">
     modern styling
   </label>
 
   <h2>bungie.net fireteam options</h2>
   <label>
-    <input type="checkbox" id="fireteam-grid">
+    <input type="checkbox" id="fireteam-grid" class="trigger-save">
     enable grid Layout
   </label>
   <br>
   <label>
-    <input type="checkbox" id="fireteam-report-buttons">
+    <input type="checkbox" id="fireteam-report-buttons" class="trigger-save">
     enable raid.report, dungeon.report and raidhub.io shortcuts
   </label>
-  <br>
-  <br>
+  <h3>debug options</h3>
   <label>
-    <input type="checkbox" id="debug">
+    <input type="checkbox" id="debug" class="trigger-save">
     enable debug console logs
   </label>
   <br>
   <br>
-  <div id="status"></div>
-  <button id="save">save</button>
-
   <button id="clearOwnActivityCache">clear stored activity cache</button>
   <button id="clearSync">clear options stored in sync</button>
 
