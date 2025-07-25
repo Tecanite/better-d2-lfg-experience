@@ -63,7 +63,7 @@ window.addEventListener("message", function (e) {
         // reset maps for activities since new profile is loaded
         activitiesMap = new Map(), runsTogether = new Map();
 
-        for (raid_key of raids) {
+        for (const raid_key of raids) {
             activitiesMap.set(raid_key, new Set()), runsTogether.set(raid_key, new Set());
         }
 
