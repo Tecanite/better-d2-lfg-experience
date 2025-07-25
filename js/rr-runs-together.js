@@ -134,21 +134,25 @@ function sortFetchedActivities(activities) {
         }
 
         switch (item.activityDetails.directorActivityHash) {
+            // dp contest / standard
+            case 3896382790: case 1044919065:
+                activitiesMap.get("dp").add(item.activityDetails.instanceId);
+                break;
             // se contest / guided / standard / master
-            case 940375169: case 1541433876: case 2192826039: case 4129614942: 
+            case 940375169: case 1541433876: case 2192826039: case 4129614942:
                 activitiesMap.get("se").add(item.activityDetails.instanceId);
                 break;
             // apparently ce is now a dungeon ¯\_(ツ)_/¯ 
             // ce guided / challenge / master / standard / ??? / contest 
-            case 107319834: case 156253568: case 1507509200: case 1566480315: case 4103176774: case 4179289725: 
+            case 107319834: case 156253568: case 1507509200: case 1566480315: case 4103176774: case 4179289725:
                 activitiesMap.get("ce").add(item.activityDetails.instanceId);
                 break;
             // ron guided / standard (also contest) / master
-            case 1191701339: case 2381413764: case 2918919505: 
+            case 1191701339: case 2381413764: case 2918919505:
                 activitiesMap.get("ron").add(item.activityDetails.instanceId);
                 break;
             // kf challenge / standard / contest / master / master
-            case 1063970578: case 1374392663: case 2897223272: case 2964135793: case 3257594522:  
+            case 1063970578: case 1374392663: case 2897223272: case 2964135793: case 3257594522:
                 activitiesMap.get("kf").add(item.activityDetails.instanceId);
                 break;
             // votd standard / ??? / master / contest / master
@@ -164,7 +168,7 @@ function sortFetchedActivities(activities) {
                 activitiesMap.get("dsc").add(item.activityDetails.instanceId);
                 break;
             // gos standard / guided / ??? / standard / guided
-            case 1042180643: case 2497200493: case 2659723068: case 3458480158: case 3845997235: 
+            case 1042180643: case 2497200493: case 2659723068: case 3458480158: case 3845997235:
                 activitiesMap.get("gos").add(item.activityDetails.instanceId);
                 break;
             //lw normal / standard / level 58 / level 55
@@ -172,11 +176,11 @@ function sortFetchedActivities(activities) {
                 activitiesMap.get("lw").add(item.activityDetails.instanceId);
                 break;
             // pantheon oryx / rhulk / atraks / nezarec
-            case 4169648176: case 4169648177: case 4169648179:  case 4169648182: 
+            case 4169648176: case 4169648177: case 4169648179: case 4169648182:
                 activitiesMap.get("pantheon").add(item.activityDetails.instanceId);
                 break;
             // cos guided / normal
-            case 960175301: case 3333172150: 
+            case 960175301: case 3333172150:
                 activitiesMap.get("cos").add(item.activityDetails.instanceId);
                 break;
             // sotp standard / guided
@@ -184,7 +188,7 @@ function sortFetchedActivities(activities) {
                 activitiesMap.get("sotp").add(item.activityDetails.instanceId);
                 break;
             // sos normal / guided / prestige
-            case 119944200: case 3004605630: case 3213556450: 
+            case 119944200: case 3004605630: case 3213556450:
                 activitiesMap.get("sos").add(item.activityDetails.instanceId);
                 break;
             // eow prestige / guided / normal
@@ -197,7 +201,7 @@ function sortFetchedActivities(activities) {
             case 417231112: case 508802457: case 757116822: case 771164842: case 1685065161: case 1800508819:
             case 2449714930: case 3446541099: case 3857338478: case 3879860661: case 3912437239: case 4206123728:
             // lev guided
-            case 89727599: case 287649202: case 1875726950: case 1699948563:   case 3916343513: case 4039317196:
+            case 89727599: case 287649202: case 1875726950: case 1699948563: case 3916343513: case 4039317196:
                 activitiesMap.get("lev").add(item.activityDetails.instanceId);
                 break;
             default:
@@ -217,7 +221,6 @@ function sortFetchedActivities(activities) {
  */
 function updateRunsTogether() {
     // add observer to finish runs together once site has finished loading
-
     if (!alreadyObservedOnce) {
         alreadyObservedOnce = true;
 
