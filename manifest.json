@@ -3,7 +3,7 @@
     "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwwz/9pV46DnfK6QtSRawszHqBXEJvlPxbCpcqgeMQOOUS+MhmNYYOeU1/gI9M7w1zhSz6BZnaG+iDr9ecIL5FxIAvhZkyeg5rg+2/ddsON+6A5D33ygBXid3E3jKpbJlawmmPzqPSAiz9uNq3HcBnn3ExgoXrJGdg/kaEaFk4lHPO7JNsOentH7LUrnjZVIFGL/Xw2NZe/zQZsWYnutCzx99g8UhS+UiSXmGC+4y/H7beWaKcMHA26pIo2tnbOp4iZhwZfI7K8Z61rfYvxhixSw6Hi/Meh/7VlXUFoEV4KCa6qywC5e/wU8lapTGRyWR7xFpTJXQsRXjDLFQ+pto1QIDAQAB",
     "name": "better-d2-lfg-experience",
     "description": "adds useful features to destiny 2 raid.report, dungeon.report and bungie fireteam search",
-    "version": "0.3.4.2",
+    "version": "0.3.5",
     "permissions": [
         "contextMenus",
         "scripting",
