@@ -71,45 +71,83 @@ function sidebarProfilesAdd(sidebarProfiles) {
 /**
  * This function gets platform and account id of a bungie id.
  * @author Tecanite
- * @name getEmblemUrl
+ * @name getPlatformAndId
  * @param {String} bungieID
  * @returns {[platform:int, id:string]}
  */
 async function getPlatformAndId(bungieID) {
     const splitUsername = bungieID.split("#")
 
-    let myHeaders = new Headers();
-    myHeaders.append("x-api-key", dungeon_report_api_key);
-    myHeaders.append("Content-Type", "application/json");
+    let bungieHeaders = new Headers();
+    bungieHeaders.append("x-api-key", dungeon_report_api_key);
+    bungieHeaders.append("Content-Type", "application/json");
 
-    let raw = JSON.stringify({
-        "displayName": splitUsername[0],
-        "displayNameCode": splitUsername[1]
-    });
-
-    let requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow"
-    };
-    return await fetch(api_url + "/Destiny2/SearchDestinyPlayerByBungieName/All/", requestOptions)
-        .then(response => response.json())
-        .then(result => {
-            let platform, id;
-            if (result.Response[0].crossSaveOverride != 0) {
-                platform = result.Response[0].crossSaveOverride;
-            } else {
-                platform = result.Response[0].membershipType;
+    try {
+        const bungieResponse = await fetch(
+            api_url + "/Destiny2/SearchDestinyPlayerByBungieName/All/",
+            {
+                method: "POST",
+                headers: bungieHeaders,
+                body: JSON.stringify({ "displayName": splitUsername[0], "displayNameCode": splitUsername[1] }),
+                redirect: "follow"
             }
-            id = result.Response[0].membershipId;
-            return [platform, id];
-        })
-        .catch(error => {
+        );
+
+        if (!bungieResponse.ok) {
+            return getPlatformAndIdFromRaidReport(bungieID);
+        }
+
+        const bungieResult = await bungieResponse.json();
+
+        if (bungieResult.ErrorCode != 1 || !bungieResult.Response?.length) {
+            return getPlatformAndIdFromRaidReport(bungieID);
+        }
+
+        const data = bungieResult.Response[0];
+        const platform = data.crossSaveOverride != 0
+            ? data.crossSaveOverride
+            : data.membershipType;
+
+        return [platform, data.membershipId];
+    } catch (error) {
+        if (debugEnabled) {
+            console.debug("error getting platform and id for bungieID", error);
+        }
+        return null;
+    }
+}
+
+/**
+ * This function gets platform and account id of a bungie id from raid.report api as a fallback.
+ * @author Tecanite
+ * @name getPlatformAndIdFromRaidReport
+ * @param {String} bungieID
+ * @returns {[platform:int, id:string]}
+ */
+async function getPlatformAndIdFromRaidReport(bungieID) {
+    try {
+        const rrResponse = await fetch(
+            "https://api.raidreport.dev/search?q=" + encodeURIComponent(bungieID),
+            { method: "GET", headers: new Headers(), redirect: "follow" }
+        );
+        if (!rrResponse.ok) {
             if (debugEnabled) {
-                console.debug("error getting platform and if for bungieID", error)
+                console.debug(`RaidReport API failed: ${rrResponse.status} ${rrResponse.statusText}`);
             }
-        })
+            return null;
+        }
+
+        const rrResult = await rrResponse.json();
+        if (!rrResult.response || rrResult.response.length === 0) {
+            return null;
+        }
+        return [rrResult.response[0].membershipType, rrResult.response[0].membershipId];
+    } catch (rrErr) {
+        if (debugEnabled) {
+            console.debug("raid.report fallback failed", rrErr);
+        }
+        return null;
+    }
 }
 
 /**
