@@ -2,7 +2,6 @@ var runAlertOnce = false;
 var runOnce = false;
 var raidsPerRow = 4;
 
-const raids = ["dp", "se", "ce", "ron", "kf", "votd", "vog", "dsc", "gos", "lw", "pantheon", "cos", "sotp", "sos", "eow", "lev"];
 /**
  * This is the main function to alter the raid.report layout.
  * @name updateLayout

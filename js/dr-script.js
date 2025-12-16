@@ -1,3 +1,5 @@
+const dungeons = ["equi", "sd", "vh", "wr", "gotd", "sow", "dual", "goa", "proph", "poh", "st", "pres", "harb", "zh", "whisper"];
+
 /* add main layout script to page */
 var scriptEl = document.createElement("script");
 scriptEl.src = chrome.runtime.getURL("./js/dr-layout.js");

@@ -3,7 +3,7 @@ var runsTogetherAlertRan = false;
 var ownerID;
 var enableRunsTogether;
 
-var userID, lastUserID;
+var userID;
 var animTimeoutID, saveTimeoutID;
 
 var runsTogetherDone = false;
@@ -135,6 +135,10 @@ function sortFetchedActivities(activities) {
         }
 
         switch (item.activityDetails.directorActivityHash) {
+            // equilibrium standard / contest
+            case 2727361621: case 1754635208:
+                activitiesMap.get("equi").add(item.activityDetails.instanceId);
+                break;
             // sd standard / contest / master
             case 3834447244: case 247869137: case 3521648250:
                 activitiesMap.get("sd").add(item.activityDetails.instanceId);
