@@ -3,7 +3,7 @@ var runsTogetherAlertRan = false;
 var ownerID;
 var enableRunsTogether;
 
-var userID, lastUserID;
+var userID;
 var animTimeoutID, saveTimeoutID;
 
 var runsTogetherDone = false;

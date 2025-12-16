@@ -2,7 +2,6 @@ var runAlertOnce = false;
 var runOnce = false;
 var dungeonsPerRow = 4;
 
-const dungeons = ["sd", "vh", "wr", "gotd", "sow", "dual", "goa", "proph", "poh", "st", "pres", "harb", "zh", "whisper"];
 /**
  * This is the main function to alter the dungeon.report layout.
  * @name updateLayout

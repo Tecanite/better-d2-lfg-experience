@@ -1,3 +1,5 @@
+const raids = ["dp", "se", "ce", "ron", "kf", "votd", "vog", "dsc", "gos", "lw", "pantheon", "cos", "sotp", "sos", "eow", "lev"];
+
 /* add main layout script to page */
 var scriptEl = document.createElement("script");
 scriptEl.src = chrome.runtime.getURL("./js/rr-layout.js");
