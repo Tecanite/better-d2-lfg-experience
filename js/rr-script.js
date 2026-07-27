@@ -1,4 +1,4 @@
-const raids = ["dp", "se", "ce", "ron", "kf", "votd", "vog", "dsc", "gos", "lw", "pantheon", "cos", "sotp", "sos", "eow", "lev"];
+const raids = ["pantheon-mot", "dp", "se", "ce", "ron", "kf", "votd", "vog", "dsc", "gos", "lw", "pantheon", "cos", "sotp", "sos", "eow", "lev"];
 
 /* add main layout script to page */
 var scriptEl = document.createElement("script");
@@ -7,6 +7,7 @@ document.head.appendChild(scriptEl);
 
 var lastProfileUrl, lastUrl;
 var runsTogetherEnabled;
+var runsTogetherDone = false;
 
 var debugEnabled = false;
 

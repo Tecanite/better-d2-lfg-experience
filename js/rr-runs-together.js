@@ -6,7 +6,6 @@ var enableRunsTogether;
 var userID;
 var animTimeoutID, saveTimeoutID;
 
-var runsTogetherDone = false;
 var activitiesMap;
 var runsTogether;
 
@@ -134,8 +133,12 @@ function sortFetchedActivities(activities) {
         }
 
         switch (item.activityDetails.directorActivityHash) {
-            // dp contest / standard
-            case 3896382790: case 1044919065:
+            // calus resplendent / morgeth surpassing / insurrection prime revolutionary
+            case 1516551982: case 2530656885: case 747671496:
+                activitiesMap.get("pantheon-mot").add(item.activityDetails.instanceId);
+                break;
+            // dp contest / standard / epic contest / epic standard 
+            case 3896382790: case 1044919065: case 2586252122: case 3817322389:
                 activitiesMap.get("dp").add(item.activityDetails.instanceId);
                 break;
             // se contest / guided / standard / master
