@@ -7,6 +7,7 @@ document.head.appendChild(scriptEl);
 
 var lastProfileUrl, lastUrl;
 var runsTogetherEnabled;
+var runsTogetherDone = false;
 
 var debugEnabled = false;
 

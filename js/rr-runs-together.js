@@ -126,6 +126,14 @@ function sortFetchedActivities(activities) {
         return;
     }
 
+    if (!activitiesMap) {
+        activitiesMap = new Map(), runsTogether = new Map();
+
+        for (const raid_key of raids) {
+            activitiesMap.set(raid_key, new Set()), runsTogether.set(raid_key, new Set());
+        }
+    }
+
     activities.forEach(function (item, index, object) {
         // filter only completed activities
         if (item.values.completed.basic.value != 1 || item.values.completionReason.basic.value == 2) {
