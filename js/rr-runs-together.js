@@ -12,7 +12,7 @@ var runsTogether;
 var alreadyObservedOnce = false;
 
 var scriptEl = document.createElement("script");
-scriptEl.src = chrome.runtime.getURL("./js/runs-together-inject.js");
+scriptEl.src = chrome.runtime.getURL("./js/intercept-response-inject.js");
 scriptEl.onload = function () {
     this.remove();
 };
@@ -124,6 +124,14 @@ const loadingObserver = new MutationObserver(loadingObserverCallback);
 function sortFetchedActivities(activities) {
     if (!enableRunsTogether || activities == []) {
         return;
+    }
+
+    if (!activitiesMap) {
+        activitiesMap = new Map(), runsTogether = new Map();
+
+        for (const raid_key of raids) {
+            activitiesMap.set(raid_key, new Set()), runsTogether.set(raid_key, new Set());
+        }
     }
 
     activities.forEach(function (item, index, object) {

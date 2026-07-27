@@ -6,14 +6,13 @@ var enableRunsTogether;
 var userID;
 var animTimeoutID, saveTimeoutID;
 
-var runsTogetherDone = false;
 var activitiesMap;
 var runsTogether;
 
 var alreadyObservedOnce = false;
 
 var scriptEl = document.createElement("script");
-scriptEl.src = chrome.runtime.getURL("./js/runs-together-inject.js");
+scriptEl.src = chrome.runtime.getURL("./js/intercept-response-inject.js");
 scriptEl.onload = function () {
     this.remove();
 };
@@ -126,6 +125,14 @@ const loadingObserver = new MutationObserver(loadingObserverCallback);
 function sortFetchedActivities(activities) {
     if (!enableRunsTogether || activities == []) {
         return;
+    }
+
+    if (!activitiesMap) {
+        activitiesMap = new Map(), runsTogether = new Map();
+
+        for (dungeon_key of dungeons) {
+            activitiesMap.set(dungeon_key, new Set()), runsTogether.set(dungeon_key, new Set());
+        }
     }
 
     activities.forEach(function (item, index, object) {
