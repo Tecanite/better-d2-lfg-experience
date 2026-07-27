@@ -13,7 +13,7 @@ var runsTogether;
 var alreadyObservedOnce = false;
 
 var scriptEl = document.createElement("script");
-scriptEl.src = chrome.runtime.getURL("./js/runs-together-inject.js");
+scriptEl.src = chrome.runtime.getURL("./js/intercept-response-inject.js");
 scriptEl.onload = function () {
     this.remove();
 };
